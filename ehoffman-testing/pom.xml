@@ -16,6 +16,15 @@
       <timezone>-8</timezone>
     </developer>
   </developers>
+  <modules>
+    <module>../DynamicModuleAPI</module>
+    <module>../LogBackCapture</module>
+    <module>../FestWebdriver</module>
+    <module>../TestNG-Extensions</module>
+    <module>../ExampleWebApp</module>
+    <module>../WebAppInvoker</module>
+    <module>../WebappInvokerModule</module>
+  </modules>
   <properties>
     <!-- Framework dependency versions -->
     <target.java.version>1.6</target.java.version>
