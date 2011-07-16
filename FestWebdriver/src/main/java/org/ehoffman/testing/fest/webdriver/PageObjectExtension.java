@@ -1,4 +1,4 @@
-package org.github.fest.webdriver;
+package org.ehoffman.testing.fest.webdriver;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -6,8 +6,8 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import static org.ehoffman.testing.fest.webdriver.WebElementAssert.assertThat;
 import static org.fest.assertions.Assertions.assertThat;
-import static org.github.fest.webdriver.WebElementAssert.assertThat;
 
 import org.fest.assertions.AssertExtension;
 import org.openqa.selenium.WebElement;

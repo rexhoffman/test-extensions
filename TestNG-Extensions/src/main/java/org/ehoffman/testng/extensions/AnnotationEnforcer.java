@@ -311,6 +311,7 @@ public class AnnotationEnforcer implements IHookable, ITestListener, IInvokedMet
         FixtureContainer.createServicesIfNeeded(modules);
         firstRun = false;
       }
+      @SuppressWarnings("deprecation")
       MultimoduleCallable callable = new MultimoduleCallable(modules, testResult.getMethod().getMethod(), testResult.getInstance(),
           testResult.getParameters(), destructive, testResult);
       resultFutures.add(service.submit(callable));
@@ -348,6 +349,7 @@ public class AnnotationEnforcer implements IHookable, ITestListener, IInvokedMet
     }
   }
 
+  @SuppressWarnings("deprecation")
   public void run(final IHookCallBack icb, ITestResult testResult) {
     AnnotatedElement element = testResult.getMethod().getMethod();
     Test annotation = (Test) element.getAnnotation(Test.class);
@@ -452,6 +454,7 @@ public class AnnotationEnforcer implements IHookable, ITestListener, IInvokedMet
   /* IInvokedMethodListener */
   /*********************************************************************************/
 
+  @SuppressWarnings("deprecation")
   private void postProcessBrokenTests(IInvokedMethod method, ITestResult testResult) {
     Broken broken = method.getTestMethod().getMethod().getAnnotation(Broken.class);
     if (broken != null) {
@@ -466,6 +469,7 @@ public class AnnotationEnforcer implements IHookable, ITestListener, IInvokedMet
     }
   }
 
+  @SuppressWarnings("deprecation")
   public void afterInvocation(IInvokedMethod method, ITestResult testResult) {
     postProcessBrokenTests(method, testResult);
     Test test = method.getTestMethod().getMethod().getAnnotation(Test.class);

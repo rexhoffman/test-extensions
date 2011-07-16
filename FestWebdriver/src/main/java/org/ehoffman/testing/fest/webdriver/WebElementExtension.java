@@ -1,4 +1,4 @@
-package org.github.fest.webdriver;
+package org.ehoffman.testing.fest.webdriver;
 
 import static org.fest.assertions.Assertions.*;
 
