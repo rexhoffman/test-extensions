@@ -1,59 +1,70 @@
 package org.ehoffman.webapp.invoker;
-import java.io.File;
-import java.io.FileReader;
-import java.io.IOException;
-import java.net.URISyntaxException;
-import java.net.URL;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Enumeration;
+
+import java.util.HashSet;
 import java.util.List;
-import java.util.Properties;
+import java.util.Set;
 
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.webapp.WebAppContext;
+import org.ehoffman.webapp.invoker.lookups.ApplicationLookUpMethod;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class ApplicationUtil {	
 	
-	public static List<Application> discoverApplications() {
-		Enumeration<URL> urls = null;
-		try {
-		  urls = ApplicationUtil.class.getClassLoader().getResources("webapp.properties");
-		} catch (IOException io_exception){
-			throw new RuntimeException("could not determine file of resource, while try to calculate project location", io_exception);
-		}
-		List<Application> applications = new ArrayList<Application>();
-		for (URL url : Collections.list(urls)){
-			try {
-				System.out.println("started by "+url);
-				File basetxt = new File(url.toURI());
-				Properties props = new Properties();
-				props.load(new FileReader(basetxt));
-		    File projectBase =  basetxt.getParentFile().getParentFile().getParentFile();
-		    System.out.println("running for "+projectBase);
-		    applications.add(new Application(projectBase, props));
-			} catch (URISyntaxException exception){
-				throw new RuntimeException("could not determine file of resource, while try to calculate project location");
-			} catch (IOException io_exception){
-				throw new RuntimeException("could not determine file of resource, while try to calculate project location", io_exception);
-			}
-		}
-		return applications;
+  private static final Logger logger = LoggerFactory.getLogger(ApplicationUtil.class);
+  
+  /**
+   * Used to detect applications that may be run or accessed from a test, either in IDE, or via command line.
+   * 
+   * @param classes the list order determines order of precedence, the first @{ApplicationLookUpMethod} to find an Application with a matching name, will be used if that application is used.
+   * @return A set of Applications, ready to be passed to {@link #runApplicationOnOwnServer(Application)}
+   */
+	public static Set<Application> discoverApplications(List<Class<? extends ApplicationLookUpMethod>> classes) {
+	  Set<Application> applications = new HashSet<Application>();
+    for (Class<? extends ApplicationLookUpMethod> clazz : classes){
+      ApplicationLookUpMethod lookUpMethod = null;
+      try {
+        lookUpMethod = clazz.newInstance();
+      } catch (IllegalAccessException e){
+        throw new RuntimeException(e);
+      } catch (InstantiationException e){
+        throw new RuntimeException(e);        
+      }
+      applications.addAll(lookUpMethod.lookup()); //set addAll skips duplicates (which in the case of applications is based on the context root)
+    }
+    return applications;
 	}
 	
-	public static Application discoverApplicationByName(String displayName){
-		for (Application application : discoverApplications()){
-			if (displayName != null && displayName.equals(application.getDisplayName())){
-				return application;
-			}
-		}
-		return null;
+	
+  /**
+   * Used to find a specific applications that may be run or accessed from a test, either in IDE, or via command line.
+   * 
+   * @param classes the list order determines order of precedence, the first @{ApplicationLookUpMethod} to find an Application with a matching name, will be used if that application is used.
+   * @return An application, ready to be passed to {@link #runApplicationOnOwnServer(Application)}
+   */
+	public static Application discoverApplicationByName(List<Class<? extends ApplicationLookUpMethod>> classes, String contextRoot){
+    for (Class<? extends ApplicationLookUpMethod> clazz : classes){
+      ApplicationLookUpMethod lookUpMethod = null;
+      try {
+        lookUpMethod = clazz.newInstance();
+        Application application = lookUpMethod.lookupByName(contextRoot);
+        if (application != null){
+          return application;
+        }
+      } catch (IllegalAccessException e){
+        throw new RuntimeException(e);
+      } catch (InstantiationException e){
+        throw new RuntimeException(e);        
+      }
+    }
+    return null;
 	}
 	
 	public static Server runApplicationOnOwnServer(Application application) throws Exception {
 		Server server = new Server(0);
 		WebAppContext context = new WebAppContext();
-		System.out.println("WebXml "+application.getWebXml().toString());
+		logger.info("WebXml %s", application.getWebXml().toString());
 		context.setDescriptor(application.getWebXml().toString());
 		context.setResourceBase(application.getWebContentDirs().get(0).toString());
 		context.setContextPath("/"+application.getContextRoot());

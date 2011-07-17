@@ -4,21 +4,20 @@
   <modelVersion>4.0.0</modelVersion>
   <parent>
     <groupId>org.ehoffman.testing</groupId>
-    <artifactId>testing-parent</artifactId>
+    <artifactId>parent</artifactId>
     <version>1.0.0-SNAPSHOT</version>
   </parent>
-  <groupId>org.ehoffman.testing.module</groupId>
-  <artifactId>WebAppInvoker</artifactId>
-  <name>${project.artifactId}</name>
-  <inceptionYear>2010</inceptionYear>
-  <description>
-    Some simple extensions to testng for use with maven.
-  </description>
+  <artifactId>WebAppInvokerModule</artifactId>
   <dependencies>
     <dependency>
-      <groupId>org.ehoffman</groupId>
+      <groupId>${groupId}</groupId>
       <artifactId>DynamicModuleAPI</artifactId>
-      <version>2.0.1</version>
+      <version>${version}</version>
+    </dependency>
+    <dependency>
+      <groupId>${groupId}</groupId>
+      <artifactId>WebAppInvoker</artifactId>
+      <version>${version}</version>
     </dependency>
   </dependencies>
 </project>
