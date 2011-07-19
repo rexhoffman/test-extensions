@@ -46,6 +46,7 @@
     <module>../ExampleWebApp</module>
     <module>../WebAppInvoker</module>
     <module>../WebappInvokerModule</module>
+    <module>../WebdriverModule</module>
   </modules>
   <properties>
     <!-- Framework dependency versions -->
