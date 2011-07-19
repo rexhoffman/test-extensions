@@ -4,8 +4,10 @@ import java.net.URL;
 
 public interface Application {
 
-  public URL getRootUrl();
-  
-  public boolean getName();
-  
+  public URL getDefaultRootUrl();
+
+  public URL getSecureRootUrl();
+
+  public String getName();
+
 }

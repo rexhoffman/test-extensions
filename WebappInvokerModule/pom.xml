@@ -10,14 +10,99 @@
   <artifactId>WebAppInvokerModule</artifactId>
   <dependencies>
     <dependency>
-      <groupId>${groupId}</groupId>
+      <groupId>${project.groupId}</groupId>
       <artifactId>DynamicModuleAPI</artifactId>
-      <version>${version}</version>
+      <version>${project.version}</version>
     </dependency>
     <dependency>
-      <groupId>${groupId}</groupId>
+      <groupId>${project.groupId}</groupId>
       <artifactId>WebAppInvoker</artifactId>
-      <version>${version}</version>
+      <version>${project.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>${project.groupId}</groupId>
+      <artifactId>TestNG-Extensions</artifactId>
+      <version>${project.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.easytesting</groupId>
+      <artifactId>fest-assert</artifactId>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>${project.groupId}</groupId>
+      <artifactId>WebdriverModule</artifactId>
+      <version>${project.version}</version>
+      <scope>test</scope>
     </dependency>
   </dependencies>
+    <!-- Hacky Hacky!! This allows m2e to create a project reference while working in eclipse, but would break the build from 
+    command line, so we have alternative config for each environment Right now this only works in eclipse :( -->
+  <profiles>
+    <profile>
+      <id>war_as_jar_for_m2e</id>
+      <activation>
+        <property>
+          <name>m2e.version</name><!-- Activate only when within eclipse -->
+        </property>
+      </activation>
+      <dependencies>
+        <dependency>
+          <groupId>${project.groupId}</groupId>
+          <artifactId>EmbeddedWebapp</artifactId>
+          <version>${project.version}</version>
+          <!-- skipping war packaging -->
+          <scope>test</scope>
+        </dependency>
+      </dependencies>
+    </profile>
+    <profile>
+      <id>war_for_default_build</id>
+      <activation>
+        <property>
+          <name>!m2e.version</name><!-- Activate only when not within eclipse -->
+        </property>
+      </activation>
+      <dependencies>
+        <dependency>
+          <groupId>${project.groupId}</groupId>
+          <artifactId>EmbeddedWebapp</artifactId>
+          <version>${project.version}</version>
+          <type>war</type>
+          <scope>test</scope>
+        </dependency>
+      </dependencies>
+      <build>
+        <plugins>
+          <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-dependency-plugin</artifactId>
+            <executions>
+              <execution>
+                <id>copy-embedded-war-file</id>
+                <phase>generate-resources</phase>
+                <goals>
+                  <goal>copy</goal>
+                </goals>
+                <configuration>
+                  <artifactItems>
+                    <artifactItem>
+                      <groupId>${project.groupId}</groupId>
+                      <artifactId>EmbeddedWebapp</artifactId>
+                      <version>${project.version}</version>
+                      <type>war</type>
+                      <overWrite>true</overWrite>
+                      <outputDirectory>${project.build.directory}/</outputDirectory>
+                      <destFileName>EmbeddedWebapp.war</destFileName>
+                    </artifactItem>
+                  </artifactItems>
+                  <!-- other configurations here -->
+                </configuration>
+              </execution>
+            </executions>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>
+  </profiles>
 </project>
