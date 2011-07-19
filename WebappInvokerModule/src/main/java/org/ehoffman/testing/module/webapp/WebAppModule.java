@@ -13,22 +13,18 @@ public abstract class WebAppModule implements Module<Application> {
 
   public abstract String getWebAppName();
 
-  @Override
   public String getModuleType() {
     return getWebAppName();
   }
 
-  @Override
   public String getName() {
     return getWebAppName();
   }
 
-  @Override
   public Class<? extends Application> getTargetClass() {
     return Application.class;
   }
 
-  @Override
   public Map<String, Class<?>> getDependencyDefinition() {
     return null;
   }
@@ -41,17 +37,14 @@ public abstract class WebAppModule implements Module<Application> {
       this.application.start();
     }
 
-    @Override
     public URL getSecureRootUrl() {
       return this.application.getSecureRootUrl();
     }
 
-    @Override
     public URL getDefaultRootUrl() {
       return this.application.getDefaultRootUrl();
     }
 
-    @Override
     public String getName() {
       return this.application.getContextRoot();
     }
@@ -62,14 +55,12 @@ public abstract class WebAppModule implements Module<Application> {
 
   }
 
-  @Override
   public Application create(Map<String, ?> dependencies) {
     JettyApplication jettyApplication = new JettyApplication(ApplicationUtil.discoverApplicationByName(getWebAppName()));
     jettyApplicationMap.put(this.getClass(), jettyApplication);
     return jettyApplication;
   }
 
-  @Override
   public void destroy() {
     jettyApplicationMap.get(this.getClass()).shutdown();
   }
