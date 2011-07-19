@@ -1,0 +1,102 @@
+package org.ehoffman.testing.module.webdriver;
+
+import java.util.Map;
+
+import org.ehoffman.module.ModuleProvider;
+import org.ehoffman.module.PooledModule;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.firefox.FirefoxDriver;
+import org.openqa.selenium.htmlunit.HtmlUnitDriver;
+
+import com.gargoylesoftware.htmlunit.BrowserVersion;
+
+public class WebDriverModule implements ModuleProvider<WebDriver> {
+
+  public static class Chrome extends WebDriverModule implements PooledModule<WebDriver> {
+    @Override
+    public Object makeObject() throws Exception {
+      ChromeDriver driver = new ChromeDriver();
+      return driver;
+    }
+  }
+
+  public static class Firefox extends WebDriverModule implements PooledModule<WebDriver> {
+    @Override
+    public Object makeObject() throws Exception {
+      FirefoxDriver driver = new FirefoxDriver();
+      return driver;
+    }
+  }
+
+  public static class HtmlUnitFirefox extends WebDriverModule implements PooledModule<WebDriver> {
+    @Override
+    public Object makeObject() throws Exception {
+      HtmlUnitDriver driver = new HtmlUnitDriver(BrowserVersion.FIREFOX_3_6);
+      driver.setJavascriptEnabled(true);
+      return driver;
+    }
+  }
+
+  public static class HtmlUnitIE6 extends WebDriverModule implements PooledModule<WebDriver> {
+    @Override
+    public Object makeObject() throws Exception {
+      HtmlUnitDriver driver = new HtmlUnitDriver(BrowserVersion.INTERNET_EXPLORER_6);
+      driver.setJavascriptEnabled(true);
+      return driver;
+    }
+  }
+
+  public String getName() {
+    return this.getClass().getSimpleName();
+  }
+
+  public Class<? extends WebDriver> getTargetClass() {
+    return WebDriver.class;
+  }
+
+  public Map<String, Class<?>> getDependencyDefinition() {
+    return null;
+  }
+
+  public WebDriver create(Map<String, ?> dependencies) {
+    //not used... we're pooling
+    return null;
+  }
+
+  public void destroy() {
+  }
+
+  @Override
+  public String getModuleType() {
+    return WebDriver.class.getSimpleName();
+  }
+
+  public void destroyObject(Object obj) throws Exception {
+    WebDriver driver = (WebDriver) obj;
+    driver.close();
+  }
+
+  public boolean validateObject(Object obj) {
+    return true;
+  }
+
+  public void activateObject(Object obj) throws Exception {
+  }
+
+  public void passivateObject(Object obj) throws Exception {
+    WebDriver driver = (WebDriver) obj;
+    String currentHandler = driver.getWindowHandle();
+    for (String handle : driver.getWindowHandles()){
+      if (!handle.equals(currentHandler)){
+        driver.switchTo().window(handle);
+        driver.close();
+      }
+    }
+    driver.switchTo().window(currentHandler);
+  }
+
+  public int getMaxPoolElements() {
+    return 3;
+  }
+}

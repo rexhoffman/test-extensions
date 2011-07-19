@@ -151,5 +151,34 @@ public class Application {
     return null;
   }
 
+  @Override
+  public int hashCode() {
+    final int prime = 31;
+    int result = 1;
+    result = prime * result + ((contextRoot == null) ? 0 : contextRoot.hashCode());
+    return result;
+  }
+
+  @Override
+  public boolean equals(Object obj) {
+    if (this == obj) {
+      return true;
+    }
+    if (obj == null) {
+      return false;
+    }
+    if (getClass() != obj.getClass()) {
+      return false;
+    }
+    Application other = (Application) obj;
+    if (contextRoot == null) {
+      if (other.contextRoot != null) {
+        return false;
+      }
+    } else if (!contextRoot.equals(other.contextRoot)) {
+      return false;
+    }
+    return true;
+  }
 
 }

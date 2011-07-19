@@ -1,5 +1,6 @@
 package org.ehoffman.webapp.invoker;
 
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -7,12 +8,32 @@ import java.util.Set;
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.webapp.WebAppContext;
 import org.ehoffman.webapp.invoker.lookups.ApplicationLookUpMethod;
+import org.ehoffman.webapp.invoker.lookups.EclipseProjectWithMarkingProperty;
+import org.ehoffman.webapp.invoker.lookups.ScanTargetDir;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class ApplicationUtil {
 
   private static final Logger logger = LoggerFactory.getLogger(ApplicationUtil.class);
+
+  private static List<Class<? extends ApplicationLookUpMethod>> lookupMethods = new ArrayList<Class<? extends ApplicationLookUpMethod>>();
+  static {
+    if (System.getProperty("java.class.path").contains("org.testng.eclipse")){ //running in eclipse with testng
+      lookupMethods.add(EclipseProjectWithMarkingProperty.class);
+    }
+    lookupMethods.add(ScanTargetDir.class);
+  }
+
+  /**
+   * Used to detect applications that may be run or accessed from a test, either in IDE, or via command line.
+   * 
+   * @param classes the list order determines order of precedence, the first @{ApplicationLookUpMethod} to find an Application with a matching name, will be used if that application is used.
+   * @return A set of Applications, ready to be passed to {@link #runApplicationOnOwnServer(Application)}
+   */
+  public static Set<Application> discoverApplications() {
+    return discoverApplications(lookupMethods);
+  }
 
   /**
    * Used to detect applications that may be run or accessed from a test, either in IDE, or via command line.
@@ -35,6 +56,18 @@ public class ApplicationUtil {
     }
     return applications;
   }
+
+
+  /**
+   * Used to find a specific applications that may be run or accessed from a test, either in IDE, or via command line.
+   * 
+   * @param classes the list order determines order of precedence, the first @{ApplicationLookUpMethod} to find an Application with a matching name, will be used if that application is used.
+   * @return An application, ready to be passed to {@link #runApplicationOnOwnServer(Application)}
+   */
+  public static Application discoverApplicationByName(String contextRoot){
+    return discoverApplicationByName(lookupMethods, contextRoot);
+  }
+
 
 
   /**
