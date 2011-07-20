@@ -1,4 +1,4 @@
-Pretty straight forward maven projects, build with ehoffman-parent/pom.xml and a maven 3 install:
+Pretty straight forward maven projects, build with pom.xml and a maven 3 install:
 
 End results: you'll be able to easily write tests that start up web applications in jetty (either by detecting a marking webapp.properties file in an open webapp project and running it exploded, or by scanning the target/ dir for .war files.
 
