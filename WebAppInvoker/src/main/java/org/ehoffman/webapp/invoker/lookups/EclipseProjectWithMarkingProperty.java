@@ -19,7 +19,22 @@ import org.slf4j.LoggerFactory;
 public class EclipseProjectWithMarkingProperty implements ApplicationLookUpMethod {
 
   private static final Logger logger = LoggerFactory.getLogger(EclipseProjectWithMarkingProperty.class);
-  
+
+  protected static final String[] defaultLocations = new String[] { "/src/main/webapp/", "/WebContent/" };
+
+
+  private File[] findDefaultContentLocations(File projectDir){
+    List<File> output = new ArrayList<File>();
+    for (String location : defaultLocations){
+      File file = new File(projectDir, location);
+      if (file != null && file.exists() && file.isDirectory()){
+        output.add(file);
+      }
+    }
+    return output.toArray(new File[output.size()]);
+  }
+
+
   @Override
   public List<Application> lookup() {
     Enumeration<URL> urls = null;
@@ -37,7 +52,8 @@ public class EclipseProjectWithMarkingProperty implements ApplicationLookUpMetho
         props.load(new FileReader(basetxt));
         File projectBase =  basetxt.getParentFile().getParentFile().getParentFile();
         logger.info("running for "+projectBase);
-        applications.add(new Application(projectBase, props));
+        logger.info("Context root "+props.getProperty("contextRoot"));
+        applications.add(Application.buildExploded(findDefaultContentLocations(projectBase)).setContextRoot(props.getProperty("contextRoot")).build());
       } catch (URISyntaxException exception){
         throw new RuntimeException("could not determine file of resource, while try to calculate project location");
       } catch (IOException io_exception){

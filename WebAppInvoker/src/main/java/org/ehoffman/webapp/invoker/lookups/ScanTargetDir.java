@@ -23,7 +23,7 @@ public class ScanTargetDir implements ApplicationLookUpMethod {
     List<Application> applications = new ArrayList<Application>();
     for (String fileName : warsNames) {
       if (fileName.toLowerCase().endsWith(".war")) {
-        applications.add(new Application(new File(file, fileName)));
+        applications.add(Application.buildWar(new File(file, fileName)).build());
       }
     }
     return applications;
@@ -37,7 +37,7 @@ public class ScanTargetDir implements ApplicationLookUpMethod {
     for (String name : warsNames) {
       logger.info("looking at: " + name);
       if (name.toLowerCase().contains(contextRoot.toLowerCase()) && name.toLowerCase().endsWith(".war")) {
-        return new Application(new File(file, name));
+        return Application.buildWar(new File(file, name)).build();
       }
     }
     return null;

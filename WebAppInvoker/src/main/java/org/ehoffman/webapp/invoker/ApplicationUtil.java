@@ -5,17 +5,13 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import org.eclipse.jetty.server.Server;
-import org.eclipse.jetty.webapp.WebAppContext;
 import org.ehoffman.webapp.invoker.lookups.ApplicationLookUpMethod;
 import org.ehoffman.webapp.invoker.lookups.EclipseProjectWithMarkingProperty;
 import org.ehoffman.webapp.invoker.lookups.ScanTargetDir;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 public class ApplicationUtil {
 
-  private static final Logger logger = LoggerFactory.getLogger(ApplicationUtil.class);
+  //private static final Logger logger = LoggerFactory.getLogger(ApplicationUtil.class);
 
   private static List<Class<? extends ApplicationLookUpMethod>> lookupMethods = new ArrayList<Class<? extends ApplicationLookUpMethod>>();
   static {
@@ -93,24 +89,4 @@ public class ApplicationUtil {
     }
     return null;
   }
-
-  public static Server runApplicationOnOwnServer(Application application) throws Exception {
-    Server server = new Server(0);
-    WebAppContext context = new WebAppContext();
-    logger.info("App is "+(application.isExploded()?"":"not ")+"exploded");
-    if (application.isExploded()){
-      logger.info("WebXml %s", application.getWebXml().toString());
-      context.setDescriptor(application.getWebXml().toString());
-      context.setResourceBase(application.getWebContentDirs().get(0).toString());
-      context.setParentLoaderPriority(true);
-    } else {
-      context.setWar(application.getWarFile().getAbsolutePath());
-      context.setParentLoaderPriority(false);
-    }
-    server.setHandler(context);
-    context.setContextPath("/"+application.getContextRoot());
-    server.start();
-    return server;
-  }
-
 }

@@ -4,106 +4,174 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Properties;
 
 import org.eclipse.jetty.server.Connector;
 import org.eclipse.jetty.server.Server;
+import org.eclipse.jetty.webapp.WebAppContext;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class Application {
-  private static final String[] defaultLocations = new String[] { "/src/main/webapp/", "/WebContent/" };
-  private static final String webXmlSubLocation = "WEB-INF/web.xml";
-  private File webXml = null;
-  private File warFile = null;
-  private final Properties props;
-  private List<File> webContent;
+  private static final Logger logger = LoggerFactory.getLogger(Application.class);
 
-  //derived
-  private String contextRoot;
-  private Server server;
+  protected static final String webXmlSubLocation = "/WEB-INF/web.xml";
+  protected File webXml = null;
+  protected File warFile = null;
+  protected List<File> webContent;
+  protected boolean built = false;
+  protected String contextRoot;
+  protected Server server;
 
-
-  public Application(File rootLocation) {
-    this(rootLocation, new Properties(), defaultLocations);
+  public static WarBuilder buildWar(File warFile){
+    return new WarBuilder(warFile);
   }
 
-  public Application(File rootLocation, Properties props) {
-    this(rootLocation, props, defaultLocations);
+  public static ExplodedBuilder buildExploded(File ... contentDirectories){
+    return new ExplodedBuilder(contentDirectories);
   }
 
-  public Application(File rootLocation, String... webResourceLocations) {
-    this(rootLocation, new Properties(), webResourceLocations);
-  }
+  public static class WarBuilder{
+    private final File warFile;
+    private String contextRoot;
 
-  public Application(File rootLocation, Properties props, String... webResourceLocations) {
-    if (rootLocation.isDirectory()){
-      this.webContent = calcWebContent(rootLocation, defaultLocations);
-    }
-    if (rootLocation.isFile()){
-      if (rootLocation.getAbsolutePath().endsWith(".war")){
-        this.warFile = rootLocation;
+    public WarBuilder(File warFile){
+      if (warFile.isFile() && (warFile.getAbsolutePath().endsWith(".war"))){
+        this.warFile = warFile;
+      } else {
+        throw new RuntimeException("File not found or does not end in .war, file: "+warFile.getAbsolutePath());
       }
-    }
-    this.props = props;
-    this.contextRoot = ((String) this.props.get("contextRoot"));
-    if (contextRoot == null && warFile != null){
       String fileName = warFile.getName().toLowerCase();
       contextRoot = fileName.substring(0, fileName.indexOf(".war"));
     }
-  }
 
-  private void addDir(List<File> output, File root, String subpath) {
-    File webappRoot = new File(root.getAbsolutePath() + subpath);
-    if (webappRoot != null) {
-      output.add(webappRoot);
-      File webXml = new File(root.getAbsolutePath() + subpath + webXmlSubLocation);
-      if (webXml != null && webXml.isFile() && this.webXml == null) {
-        this.webXml = webXml;
-      }
+    public WarBuilder setContextRoot(String contextRoot){
+      this.contextRoot = contextRoot;
+      return this;
+    }
+
+    public Application build(){
+      Application application = new Application();
+      application.contextRoot = this.contextRoot;
+      application.warFile = this.warFile;
+      return application;
     }
   }
 
+  public static class ExplodedBuilder{
+    private File webXml;
+    private final List<File> contentDirs = new ArrayList<File>();
+    private String contextRoot;
+
+    /**
+     * Checks to see if the directory root, has a web.xml in ./WEB-INF/web.xml and sets it in this builder if it does.
+     * @param root
+     */
+    private void checkForWebXml(File root) {
+      File webappRoot = new File(root.getAbsolutePath());
+      if (webappRoot != null) {
+        File webXml = new File(root.getAbsolutePath() + webXmlSubLocation);
+        logger.info("Checking to see if a web.xml exists here: "+webXml.toString());
+        if (webXml != null && webXml.isFile() && this.webXml == null) {
+          logger.info("Setting web.xml to "+webXml.toString());
+          this.webXml = webXml;
+        }
+      }
+    }
+
+    public ExplodedBuilder(File ... contentDirectories ){
+      addContentDirectory(contentDirectories);
+      contextRoot = "";
+    }
+
+    public ExplodedBuilder addContentDirectory(File ... contentDirectories){
+      for (File contentDirectory : contentDirectories){
+        logger.info("Attempting to add content directory "+contentDirectory.toString());
+        if (contentDirectory.isDirectory()){
+          contentDirs.add(contentDirectory);
+          checkForWebXml(contentDirectory);
+        }
+      }
+      return this;
+    }
+
+
+    public ExplodedBuilder addWebXml(File webXml){
+      if (webXml.canRead() && webXml.isFile()){
+        this.webXml = webXml;
+      }
+      return this;
+    }
+
+    public ExplodedBuilder setContextRoot(String contextRoot){
+      this.contextRoot = contextRoot;
+      return this;
+    }
+
+    public Application build(){
+      Application application =  new Application();
+      application.contextRoot = this.contextRoot;
+      application.webXml = this.webXml;
+      application.webContent = this.contentDirs;
+      return application;
+    }
+  }
+
+  private Application() {
+  }
+
+  /**
+   * Status method, only callable if {@link #build()} has been called.
+   * 
+   * @return
+   */
   public List<File> getWebContentDirs() {
     return webContent;
   }
 
+  /**
+   * Status method, only callable if {@link #build()} has been called.
+   * 
+   * @return
+   */
   public File getWebXml() {
     return webXml;
   }
 
+  /**
+   * Status method, only callable if {@link #build()} has been called.
+   * 
+   * @return
+   */
   public String getContextRoot() {
+    if (contextRoot == null){
+      contextRoot = "";
+    }
     return contextRoot;
   }
 
+  /**
+   * Status method, only callable if {@link #build()} has been called.
+   * 
+   * @return
+   */
   public File getWarFile(){
     return warFile;
   }
 
-  private List<File> calcWebContent(File rootLocation, String... webResourceLocations) {
-    File root = rootLocation;
-    List<File> output = new ArrayList<File>();
-    for (String location : webResourceLocations) {
-      addDir(output, root, location);
-    }
-    try {
-      //InputStream stream = new FileInputStream(getWebXml());
-      //this.displayName = XpathValueExtractor.getDisplayName(stream);
-    } catch (Exception e){
-      throw new RuntimeException("Please ensure you set a display name in your web.xml", e);
-    }
-    return output;
-  }
-
+  /**
+   * Status method, only callable if {@link #build()} has been called.
+   * 
+   * @return
+   */
   public boolean isExploded(){
     return (warFile == null);
   }
 
-  void setServer(Server server){
-    this.server = server;
-  }
-
   public void start(){
     try {
-      this.server = ApplicationUtil.runApplicationOnOwnServer(this);
+      if (this.server == null){
+        this.server = runApplicationOnOwnServer();
+      }
     } catch (Exception e){
       throw new RuntimeException("Error starting server",e);
     }
@@ -117,6 +185,17 @@ public class Application {
     }
   }
 
+  private String getUrlPartContextRoot(){
+    String out = getContextRoot();
+    if (out.length() != 0 && !out.startsWith("/")){
+      out = "/"+out;
+    }
+    if (out.endsWith("/")){
+      out = out.substring(0, out.length()-1);
+    }
+    return out;
+  }
+
   public URL getDefaultRootUrl(){
     if (server == null){
       start();
@@ -125,7 +204,7 @@ public class Application {
     for (Connector connector : connectors){
       if (connector.getLocalPort() > 0){
         try {
-          return new URL("http://"+"localhost"+":"+connector.getLocalPort()+"/"+this.getContextRoot()+"/");
+          return new URL("http://"+"localhost"+":"+connector.getLocalPort()+this.getUrlPartContextRoot()+"/");
         } catch (MalformedURLException mal){
           throw new RuntimeException("jetty connector not valid", mal);
         }
@@ -142,7 +221,7 @@ public class Application {
     for (Connector connector : connectors){
       if (connector.getConfidentialPort() > 0){
         try {
-          return new URL("https://"+"localhost"+":"+connector.getConfidentialPort()+"/"+this.getContextRoot()+"/");
+          return new URL("https://"+"localhost"+":"+connector.getConfidentialPort()+"/"+this.getUrlPartContextRoot()+"/");
         } catch (MalformedURLException mal){
           throw new RuntimeException("jetty connector not valid", mal);
         }
@@ -179,6 +258,33 @@ public class Application {
       return false;
     }
     return true;
+  }
+
+  private Server runApplicationOnOwnServer() throws Exception {
+    Server server = new Server(0);
+    WebAppContext context = new WebAppContext();
+    logger.info("App is "+(this.isExploded()?"":"not ")+"exploded");
+    if (this.isExploded()){
+      logger.info("WebXml %s", this.getWebXml().toString());
+      context.setDescriptor(this.getWebXml().toString());
+      if (this.getWebContentDirs() != null && this.getWebContentDirs().size() > 0){
+        context.setResourceBase(this.getWebContentDirs().get(0).toString());
+      }
+      context.setParentLoaderPriority(true);
+    } else {
+      context.setWar(this.getWarFile().getAbsolutePath());
+      context.setParentLoaderPriority(false);
+    }
+    server.setHandler(context);
+    if (this.getContextRoot() != null && this.getContextRoot().length() > 0){
+      if (this.getContextRoot().startsWith("/")){
+        context.setContextPath(this.getContextRoot());
+      } else {
+        context.setContextPath("/"+this.getContextRoot());
+      }
+    }
+    server.start();
+    return server;
   }
 
 }

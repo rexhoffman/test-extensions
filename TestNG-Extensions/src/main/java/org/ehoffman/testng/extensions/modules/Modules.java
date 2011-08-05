@@ -14,10 +14,14 @@ import org.ehoffman.module.Module;
 import org.ehoffman.module.ModuleGroup;
 import org.ehoffman.module.ModuleProvider;
 import org.ehoffman.testng.extensions.services.HotSwappableProxy;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class Modules {
 
   private static final ConcurrentMap<Class<? extends Module<?>>, Module<?>> reusableThreadSafeModules = new ConcurrentHashMap<Class<? extends Module<?>>, Module<?>>();
+  private static final Logger logger = LoggerFactory.getLogger(Modules.class);
+
 
   static <T extends Module<?>> T getInstance(Class<T> moduleClass) {
     T module = null;
@@ -47,7 +51,7 @@ public class Modules {
     }
     return module;
   }
-  
+
   private static Collection<Set<Class<? extends Module<?>>>> mergeListsOfSameModuleType(Collection<Class<? extends Module<?>>> input){
     Map<String, Set<Class<? extends Module<?>>>> output = new HashMap<String, Set<Class<? extends Module<?>>>>();
     if (input != null){
@@ -65,7 +69,7 @@ public class Modules {
     }
     return output.values();
   }
-  
+
   /**
    * @param provider a class should implement ModuleGroup or Module, not just ModuleProvider, which acts a common marking super interface.
    * A module represents a single, atomic piece of a test fixture.
@@ -85,7 +89,7 @@ public class Modules {
         List<Class<? extends ModuleProvider<?>>> classes = ((ModuleGroup<?>)provider.newInstance()).getModuleClasses();
         if (classes != null){
           for (Class<? extends ModuleProvider<?>> _provider : classes){
-             modules.addAll(getAllPossibleModules(_provider));
+            modules.addAll(getAllPossibleModules(_provider));
           }
         }
       } catch (IllegalAccessException e){
@@ -106,10 +110,10 @@ public class Modules {
     for (Class<? extends ModuleProvider<?>> provider : providers){
       modules.addAll(getAllPossibleModules(provider));
     }
-    System.out.println("All modules: "+modules);
+    logger.info("All modules: "+modules);
     return modules;
   }
-  
+
   public static Iterator<Set<Class<? extends Module<?>>>> getDotProductModuleCombinations(Collection<Class<? extends ModuleProvider<?>>> moduleClasses, boolean destructive) {
     Collection<Set<Class<? extends Module<?>>>> listOfOptions = mergeListsOfSameModuleType(getAllPossibleModules(moduleClasses));
     return new DotProductIterator<Class<? extends Module<?>>>(listOfOptions);
@@ -134,7 +138,7 @@ public class Modules {
       }
     }
   }
-  
+
   public static void destroyAll(){
     for (Module<?> module : reusableThreadSafeModules.values()){
       HotSwappableProxy proxy = FixtureContainer.getServices().get(module.getModuleType());
@@ -142,7 +146,7 @@ public class Modules {
       module.destroy();
     }
   }
-  
+
   public static void destroyAll(Set<? extends Module<?>> modules){
     if (modules != null){
       for (Module<?> module : modules){

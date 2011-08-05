@@ -1,39 +1,47 @@
 package org.ehoffman.testng.tests;
 
+import static org.fest.assertions.Assertions.assertThat;
+
 import java.util.HashMap;
 import java.util.Map;
 
 import org.ehoffman.module.Module;
 import org.ehoffman.testng.extensions.Fixture;
 import org.ehoffman.testng.extensions.modules.FixtureContainer;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.testng.annotations.Listeners;
 import org.testng.annotations.Test;
 
-import static org.fest.assertions.Assertions.*;
-
 @Listeners(MyEnforcer.class)
 public class TestNiceMessageOnDependencyNotSet {
+  private static Logger logger = LoggerFactory.getLogger(TestNiceMessageOnDependencyNotSet.class);
 
   public static class TestModule implements Module<IntegerHolder>{
 
+    @Override
     public String getModuleType() {
       return this.getClass().getSimpleName();
     }
 
+    @Override
     public String getName() {
       return this.getClass().getSimpleName();
     }
 
+    @Override
     public Class<? extends IntegerHolder> getTargetClass() {
       return IntegerHolder.class;
     }
 
+    @Override
     public Map<String, Class<?>> getDependencyDefinition() {
       Map<String, Class<?>> dependencyDefinitions = new HashMap<String, Class<?>>();
       dependencyDefinitions.put("DNE",IntegerHolder.class);
       return dependencyDefinitions;
     }
 
+    @Override
     public IntegerHolder create(Map<String, ?> dependencies) {
       IntegerHolder holder = (IntegerHolder)dependencies.get("DNE");
       IntegerHolder output = new IntegerHolder();
@@ -41,6 +49,7 @@ public class TestNiceMessageOnDependencyNotSet {
       return output;
     }
 
+    @Override
     public void destroy() {
     }
   }
@@ -50,7 +59,7 @@ public class TestNiceMessageOnDependencyNotSet {
   public void niceDependencyNotDefinedErrorMessage(){
     IntegerHolder holder = FixtureContainer.getService(TestNiceMessageOnDependencyNotSet.TestModule.class);
     try {
-      System.out.println(holder.getInteger());
+      logger.info(""+holder.getInteger());
     } catch (RuntimeException e){
       assertThat(e.getMessage()).contains("Module TestModule has missing dependencies.  They are {DNE=class org.ehoffman.testng.tests.IntegerHolder}");
     }

@@ -1,21 +1,5 @@
 package org.ehoffman.testng.extensions;
 
-import org.testng.IReporter;
-import org.testng.ISuite;
-import org.testng.ISuiteResult;
-import org.testng.ITestContext;
-import org.testng.ITestResult;
-import org.testng.collections.Lists;
-import org.testng.collections.Maps;
-import org.testng.internal.Utils;
-import org.testng.internal.annotations.Sets;
-import org.testng.reporters.XMLConstants;
-import org.testng.reporters.XMLStringBuffer;
-import org.testng.xml.XmlSuite;
-
-import eu.medsea.mimeutil.MimeType;
-import eu.medsea.mimeutil.MimeUtil2;
-
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -32,15 +16,32 @@ import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
 
+import org.testng.IReporter;
+import org.testng.ISuite;
+import org.testng.ISuiteResult;
+import org.testng.ITestContext;
+import org.testng.ITestResult;
+import org.testng.collections.Lists;
+import org.testng.collections.Maps;
+import org.testng.internal.Utils;
+import org.testng.internal.annotations.Sets;
+import org.testng.reporters.XMLConstants;
+import org.testng.reporters.XMLStringBuffer;
+import org.testng.xml.XmlSuite;
+
+import eu.medsea.mimeutil.MimeType;
+import eu.medsea.mimeutil.MimeUtil2;
+
 public class JUnitReportReporter implements IReporter {
-  
+
   MimeUtil2 mimeUtil = new MimeUtil2();
-  
+
   public JUnitReportReporter(){
     mimeUtil.registerMimeDetector("eu.medsea.mimeutil.detector.MagicMimeMimeDetector");
     mimeUtil.registerMimeDetector("eu.medsea.mimeutil.detector.ExtensionMimeDetector");
   }
-  
+
+  @Override
   @SuppressWarnings("deprecation")
   public void generateReport(List<XmlSuite> xmlSuites, List<ISuite> suites, String defaultOutputDirectory) {
     String outputDirectory = defaultOutputDirectory + File.separator + "junitreport";
@@ -102,11 +103,11 @@ public class JUnitReportReporter implements IReporter {
             CharSequence sequence = (CharSequence) attribute;
             p2.setProperty(name, sequence.toString());
           } else if (byte[].class.isAssignableFrom(attribute.getClass())) {
-            byte[] fileBytes = (byte[]) attribute;            
-            boolean isImage = isAnImage(fileBytes);              
+            byte[] fileBytes = (byte[]) attribute;
+            boolean isImage = isAnImage(fileBytes);
             File outDir = makeContentDir(outputDirectory);
-            String filePart = "_"+System.currentTimeMillis()+"_"+name; 
-            File file = new File(outDir, Utils.replaceSpecialCharacters(filePart));            
+            String filePart = "_"+System.currentTimeMillis()+"_"+name;
+            File file = new File(outDir, Utils.replaceSpecialCharacters(filePart));
             FileOutputStream fos = null;
             try {
               fos = new FileOutputStream(file);
@@ -170,7 +171,7 @@ public class JUnitReportReporter implements IReporter {
           xsb.push(testTag.errorTag, p);
           xsb.addCDATA(testTag.stackTrace);
           xsb.pop(testTag.errorTag);
-          
+
           xsb.pop("testcase");
         }
       }
@@ -179,12 +180,8 @@ public class JUnitReportReporter implements IReporter {
       String fileName = "TEST-" + cls.getName() + ".xml";
       Utils.writeFile(outputDirectory, fileName, xsb.toXML());
     }
-
-//    System.out.println(xsb.toXML());
-//    System.out.println("");
-
   }
-  
+
   private File makeContentDir(String outputDirectory){
     File outDir = new File(outputDirectory+File.separator+"content"+File.separator);
     if (!outDir.exists()) {
@@ -192,12 +189,14 @@ public class JUnitReportReporter implements IReporter {
     }
     return outDir;
   }
-  
+
   private boolean isAnImage(byte[] fileBytes){
     Collection<?> mimeTypes = mimeUtil.getMimeTypes(fileBytes);
     for (Object o : mimeTypes){
       MimeType mimeType = (MimeType) o;
-      if (mimeType.getMediaType().contains("image")) return true;
+      if (mimeType.getMediaType().contains("image")) {
+        return true;
+      }
     }
     return false;
   }

@@ -89,7 +89,7 @@ public class AnnotationEnforcer implements IHookable, ITestListener, IInvokedMet
   private static Class<? extends Annotation> knownBreak;
 
   private static boolean ideMode = false;
-  
+
   /**
    * contains the union of {@link AnnotationTransformer#unit_test_groups} and
    * {@link AnnotationTransformer#integration_test_groups}, with an additional
@@ -101,7 +101,7 @@ public class AnnotationEnforcer implements IHookable, ITestListener, IInvokedMet
     validGroups = new ArrayList<String>();
     validGroups.addAll(Arrays.asList(unit_test_groups));
     validGroups.addAll(Arrays.asList(integration_test_groups));
-    System.out.println("Valid groups: " + validGroups);
+    logger.info("Valid groups: " + validGroups);
   }
 
   protected static void configureAnnotationEnforcer(Boolean runKnownBreaks, Class<? extends Annotation> brokenAnnotation, String[] unitTestGroups,
@@ -218,8 +218,9 @@ public class AnnotationEnforcer implements IHookable, ITestListener, IInvokedMet
   private boolean inGroups(String[] groups, List<String> groupsToRun) {
     for (String group : groups) {
       for (String groupToRun : groupsToRun) {
-        if (group.trim().equalsIgnoreCase(groupToRun.trim()))
+        if (group.trim().equalsIgnoreCase(groupToRun.trim())) {
           return true;
+        }
       }
     }
     return false;
@@ -235,7 +236,9 @@ public class AnnotationEnforcer implements IHookable, ITestListener, IInvokedMet
    *          the element on which this annotation resides.
    */
   private boolean shouldSkip(Test annotation, AnnotatedElement element) {
-    if (ideMode) return false;
+    if (ideMode) {
+      return false;
+    }
     if (knownBreak != null && element.getAnnotation(knownBreak) != null) {
       verifyBrokenAnnotation(element.getAnnotation(knownBreak));
       if (!run_known_breaks) {
@@ -263,7 +266,7 @@ public class AnnotationEnforcer implements IHookable, ITestListener, IInvokedMet
   }
 
   private static final String INDIVIDUAL_RESULTS = "individual_Results";
-  
+
   private void processResults(ITestResult result, List<TestResult> individualResults) {
     List<TestResult> failures = new ArrayList<TestResult>();
     for (TestResult iresult : individualResults) {
@@ -288,9 +291,9 @@ public class AnnotationEnforcer implements IHookable, ITestListener, IInvokedMet
       return null;
     }
   }
-  
+
   private static final String logAttributeName = "Log";
-  
+
   private void runMultpleTimesWithFixture(final IHookCallBack icb, ITestResult testResult, Fixture fixture) {
     ExecutorService exService;
     if (getMaxThreadCount() == null){
@@ -349,11 +352,14 @@ public class AnnotationEnforcer implements IHookable, ITestListener, IInvokedMet
     }
   }
 
+  @Override
   @SuppressWarnings("deprecation")
   public void run(final IHookCallBack icb, ITestResult testResult) {
     AnnotatedElement element = testResult.getMethod().getMethod();
-    Test annotation = (Test) element.getAnnotation(Test.class);
-    if (!ideMode) checkMethodGroupsAreAllCorrect(annotation.groups(), element.toString());
+    Test annotation = element.getAnnotation(Test.class);
+    if (!ideMode) {
+      checkMethodGroupsAreAllCorrect(annotation.groups(), element.toString());
+    }
     if (!shouldSkip(annotation, element)) {
       Fixture fixture = testResult.getMethod().getMethod().getAnnotation(Fixture.class);
       if (fixture != null) {
@@ -418,13 +424,14 @@ public class AnnotationEnforcer implements IHookable, ITestListener, IInvokedMet
       }
     }
   }
-  
-  
+
+
+  @Override
   public void onFinish(ITestContext context) {
     explodeIResultMap(context.getFailedTests());
     explodeIResultMap(context.getFailedButWithinSuccessPercentageTests());
     explodeIResultMap(context.getPassedTests());
-    System.out.println("New Passed Tests: "+context.getPassedTests());
+    logger.info("New Passed Tests: "+context.getPassedTests());
     explodeIResultMap(context.getSkippedTests());
     Modules.destroyAll();
     FactoryUtil.destroy();
@@ -432,21 +439,27 @@ public class AnnotationEnforcer implements IHookable, ITestListener, IInvokedMet
   }
 
 
+  @Override
   public void onStart(ITestContext arg0) {
   }
 
+  @Override
   public void onTestFailedButWithinSuccessPercentage(ITestResult arg0) {
   }
 
+  @Override
   public void onTestFailure(ITestResult arg0) {
   }
 
+  @Override
   public void onTestSkipped(ITestResult result) {
   }
 
+  @Override
   public void onTestStart(ITestResult arg0) {
   }
 
+  @Override
   public void onTestSuccess(ITestResult result) {
   }
 
@@ -469,6 +482,7 @@ public class AnnotationEnforcer implements IHookable, ITestListener, IInvokedMet
     }
   }
 
+  @Override
   @SuppressWarnings("deprecation")
   public void afterInvocation(IInvokedMethod method, ITestResult testResult) {
     postProcessBrokenTests(method, testResult);
@@ -478,6 +492,7 @@ public class AnnotationEnforcer implements IHookable, ITestListener, IInvokedMet
     }
   }
 
+  @Override
   public void beforeInvocation(IInvokedMethod arg0, ITestResult arg1) {
   }
 
@@ -528,6 +543,7 @@ public class AnnotationEnforcer implements IHookable, ITestListener, IInvokedMet
    * @see IAnnotationTransformer#transform(ITestAnnotation, Class, Constructor,
    *      Method)
    */
+  @Override
   public void transform(ITestAnnotation annotation, @SuppressWarnings("rawtypes") Class testClass, @SuppressWarnings("rawtypes") Constructor constructor, Method testMethod) {
     AnnotatedElement element = testClass;
     if (element == null) {
@@ -541,11 +557,12 @@ public class AnnotationEnforcer implements IHookable, ITestListener, IInvokedMet
     disableTestIfNotMeantToRun(annotation, element);
   }
 
-  
+
   /**
    * IReport Implementation.  Rock it.
    */
+  @Override
   public void generateReport(List<XmlSuite> xmlSuites, List<ISuite> suites, String outputDirectory) {
-    new JUnitReportReporter().generateReport(xmlSuites, suites, outputDirectory);    
+    new JUnitReportReporter().generateReport(xmlSuites, suites, outputDirectory);
   }
 }

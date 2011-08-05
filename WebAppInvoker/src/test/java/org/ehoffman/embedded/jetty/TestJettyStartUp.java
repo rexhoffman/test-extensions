@@ -49,11 +49,11 @@ public class TestJettyStartUp {
     Application application = ApplicationUtil.discoverApplicationByName(methods, "EmbeddedWebapp");
     application.start();
     URL url = application.getDefaultRootUrl();
-    assertThat(read(url).toString()).contains("Rex says that the time is now : ");
+    assertThat(read(url).toString()).contains("the time is now : ");
     application.shutdown();
     assertThat(application.getDefaultRootUrl()).isNull();
     try {
-      assertThat(read(url).toString()).doesNotContain("Rex says that the time is now : ");
+      assertThat(read(url).toString()).doesNotContain("the time is now : ");
     } catch (RuntimeException e){
       assertThat(e).hasMessage("Couldn't read landing page:"+url.toString());
     }
