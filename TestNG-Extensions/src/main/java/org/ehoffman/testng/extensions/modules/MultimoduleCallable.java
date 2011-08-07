@@ -13,12 +13,12 @@ import org.testng.ITestResult;
 
 public class MultimoduleCallable implements Callable<TestResult> {
   private static Logger logger = LoggerFactory.getLogger(MultimoduleCallable.class);
-  private Set<Class<? extends Module<?>>> modulesList;
-  private Method                        method;
-  private Object                        target;
-  private Object[]                      arguments;
-  private boolean                       destructive;
-  private ITestResult                   parentResult;
+  private final Set<Class<? extends Module<?>>> modulesList;
+  private final Method                        method;
+  private final Object                        target;
+  private final Object[]                      arguments;
+  private final boolean                       destructive;
+  private final ITestResult                   parentResult;
 
   public MultimoduleCallable(Set<Class<? extends Module<?>>> modulesList, Method method, Object target, Object[] arguments,
       boolean destructive, ITestResult parentResult) {
@@ -30,6 +30,7 @@ public class MultimoduleCallable implements Callable<TestResult> {
     this.parentResult = parentResult;
   }
 
+  @Override
   public TestResult call() {
     TestResult result = new TestResult(modulesList, parentResult);
     Set<Module<?>> modules = null;
@@ -38,7 +39,7 @@ public class MultimoduleCallable implements Callable<TestResult> {
       FixtureContainer.setModuleClassesAndTestResult(modulesList, result);
       result.start();
       LogbackCapture.start();
-      method.invoke(target, arguments);      
+      method.invoke(target, arguments);
     } catch (Throwable t) {
       if (t.getClass().isAssignableFrom(InvocationTargetException.class) && t.getCause() != null){
         t = t.getCause();
@@ -46,14 +47,15 @@ public class MultimoduleCallable implements Callable<TestResult> {
       result.setStatus(ITestResult.FAILURE);
       result.setThrowable(t);
     } finally {
-      result.setAttribute("Log",LogbackCapture.stop());
+      String log = LogbackCapture.stop();
+      result.setAttribute("Log",log);
       result.stop();
-      logger.info("unsetting modules");
+      logger.trace("unsetting modules");
       Modules.unsetServiceTargetModule(FixtureContainer.getServices().values());
       if (destructive){
         Modules.destroyAll(modules);
       }
-      logger.info("unset all modules");
+      logger.trace("unset all modules");
     }
     return result;
   }

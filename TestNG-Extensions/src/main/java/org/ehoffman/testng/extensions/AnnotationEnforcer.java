@@ -29,6 +29,8 @@ import org.ehoffman.testng.extensions.modules.MultiResultException;
 import org.ehoffman.testng.extensions.modules.MultimoduleCallable;
 import org.ehoffman.testng.extensions.modules.TestResult;
 import org.ehoffman.testng.extensions.services.FactoryUtil;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.testng.IAnnotationTransformer;
 import org.testng.IHookCallBack;
 import org.testng.IHookable;
@@ -43,12 +45,11 @@ import org.testng.ITestNGMethod;
 import org.testng.ITestResult;
 import org.testng.annotations.ITestAnnotation;
 import org.testng.annotations.Test;
-import org.testng.log4testng.Logger;
 import org.testng.xml.XmlSuite;
 
 public class AnnotationEnforcer implements IHookable, ITestListener, IInvokedMethodListener, IAnnotationTransformer, IReporter {
 
-  private static final Logger logger = Logger.getLogger(AnnotationEnforcer.class);
+  private static final Logger logger = LoggerFactory.getLogger(AnnotationEnforcer.class);
 
   protected void verifyBrokenAnnotation(Annotation brokenAnnotation) {
   }
@@ -343,7 +344,7 @@ public class AnnotationEnforcer implements IHookable, ITestListener, IInvokedMet
     if (broken != null) {
       testResult.setAttribute("Known Break", true);
       testResult.setAttribute("True Status", "SUCCESS");
-      if (!testResult.isSuccess()) {
+      if (!testResult.isSuccess() && testResult.getStatus()!=ITestResult.SKIP) {
         logger.error("\n@Broken method: " + method.toString() + " will be marked as a skip.  Fix this test\n");
         testResult.setAttribute("True Status", "FAILURE");
         testResult.setStatus(ITestResult.SKIP);
@@ -431,7 +432,7 @@ public class AnnotationEnforcer implements IHookable, ITestListener, IInvokedMet
     explodeIResultMap(context.getFailedTests());
     explodeIResultMap(context.getFailedButWithinSuccessPercentageTests());
     explodeIResultMap(context.getPassedTests());
-    logger.info("New Passed Tests: "+context.getPassedTests());
+    logger.trace("New Passed Tests: "+context.getPassedTests());
     explodeIResultMap(context.getSkippedTests());
     Modules.destroyAll();
     FactoryUtil.destroy();
@@ -473,8 +474,7 @@ public class AnnotationEnforcer implements IHookable, ITestListener, IInvokedMet
     if (broken != null) {
       testResult.setAttribute("Known Break", true);
       testResult.setAttribute("True Status", "SUCCESS");
-      if (!testResult.isSuccess()) {
-        logger.error("\n@Broken method: " + method.getTestMethod().getMethod().toString() + " will be marked as a skip.  Fix this test\n");
+      if (!testResult.isSuccess() && testResult.getStatus()!=ITestResult.SKIP) {
         testResult.setAttribute("True Status", "FAILURE");
         testResult.setStatus(ITestResult.SKIP);
         testResult.setThrowable(null);

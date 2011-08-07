@@ -28,11 +28,8 @@ public class FrameworkTest {
   @Test(groups = { "unit","remote-integration" })
   @Fixture(factory = {CountModule.class, SimpleModule.class}, destructive = false)
   public void sharedTest() throws Exception {
-    logger.info(this.getClass().getClassLoader().getClass().getName());
-    logger.info(""+System.getProperty("java.class.path").contains("org.testng.eclipse"));
+    logger.info("sharedTest "+FixtureContainer.getModuleClassesSimpleName());
     Object o = FixtureContainer.getService(SimpleModule.class);
-    logger.info(System.getProperties().toString());
-    logger.info("Class is "+o.getClass().getSimpleName() + " and modules are: " + FixtureContainer.getModuleClassesSimpleName());
     Integer fixture = ((IntegerHolder)o).getInteger();
     assertThat(fixture).isEqualTo(42);
     results.add("sharedTest");
@@ -40,18 +37,20 @@ public class FrameworkTest {
 
   @Test(groups = { "remote-integration" })
   public void sharedTest2() {
+    logger.info("SharedTest2");
     results.add("sharedTest2");
   }
 
   @Test(groups = "remote-integration")
   public void remote1() {
-    logger.info(System.getenv().toString());
+    logger.info("remote1");
     // assertThat(AnnotationEnforcer.isIntegrationTestPhase()).as("This test should not be run during the unit phase").isTrue();
     results.add("remote1");
   }
 
   @Test(groups = "unit")
   public void unit1() {
+    logger.info("unit1");
     results.add("unit1");
     // assertThat(AnnotationEnforcer.isIntegrationTestPhase()).as("This test should not be run during the integration phase").isFalse();
   }
@@ -59,6 +58,7 @@ public class FrameworkTest {
   @Test(groups = { "remote-integration", "unit" })
   @Broken(developer = "rex hoffman", issueInTracker = "???")
   public void shared3Broken() {
+    logger.info("shared3broken");
     results.add("shared3Broken");
     assertThat(false).as("This test should not be run when known breaks is set to false").isTrue();
   }

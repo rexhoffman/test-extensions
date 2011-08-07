@@ -29,10 +29,12 @@ public class LogbackCapture {
    * defaults to "[%p] %m%n" layout pattern
    */
   public static void start() {
-    if (INSTANCE.get() != null) throw new IllegalStateException("already started");
+    if (INSTANCE.get() != null) {
+      throw new IllegalStateException("already started");
+    }
     INSTANCE.set(new LogbackCapture("", Level.INFO, "[%p] %c.%M %m\n"));
   }
-  
+
   /**
    * Start capturing.
    * @param loggerName if null, defaults to the root logger
@@ -40,14 +42,18 @@ public class LogbackCapture {
    * @param layoutPattern if null, defaults to "[%p] %m%n"
    */
   public static void start(String loggerName, Level level, String layoutPattern) {
-    if (INSTANCE.get() != null) throw new IllegalStateException("already started");
+    if (INSTANCE.get() != null) {
+      throw new IllegalStateException("already started");
+    }
     INSTANCE.set(new LogbackCapture(loggerName, level, layoutPattern));
   }
 
   /** Stop capturing and return the logs. */
   public static String stop() {
     LogbackCapture instance = INSTANCE.get();
-    if (instance == null) throw new IllegalStateException("was not running");
+    if (instance == null) {
+      throw new IllegalStateException("was not running");
+    }
     final String result = instance.stopInstance();
     INSTANCE.remove();
     return result;
@@ -71,34 +77,42 @@ public class LogbackCapture {
   private String stopInstance() {
     appender.stop();
     //try {
-      String out = logs.toString(); 
-      logs.reset();
-      return out;
+    String out = logs.toString();
+    logs.reset();
+    return out;
     //} catch (final UnsupportedEncodingException cantHappen) {
     // return null;
     //}
   }
 
   private static Logger getLogbackLogger(String name, Level level) {
-    if (name == null || "".equals(name)) name = ROOT_LOGGER_NAME;
-    if (level == null) level = ALL;
-    
+    if (name == null || "".equals(name)) {
+      name = ROOT_LOGGER_NAME;
+    }
+    if (level == null) {
+      level = ALL;
+    }
+
     //resets logger context
     LoggerContext loggerContext =
-      (LoggerContext) LoggerFactory.getILoggerFactory();
-    loggerContext.stop();
-    loggerContext.start();
-    
+        (LoggerContext) LoggerFactory.getILoggerFactory();
+    if (!loggerContext.isStarted()){
+      loggerContext.start();
+    }
+    //loggerContext.stop();
+
     loggerContext.getLogger(name);
-    
+
     Logger logger = ContextSelectorStaticBinder.getSingleton()
-      .getContextSelector().getDefaultLoggerContext().getLogger(name);
+        .getContextSelector().getDefaultLoggerContext().getLogger(name);
     logger.setLevel(level);
     return logger;
   }
 
   private static Encoder<ILoggingEvent> buildEncoder(String layoutPattern) {
-    if (layoutPattern == null) layoutPattern = "[%p] %c.%M %m\n";
+    if (layoutPattern == null) {
+      layoutPattern = "[%p] %c.%M %m\n";
+    }
     PatternLayoutEncoder encoder = new PatternLayoutEncoder();
     encoder.setPattern(layoutPattern);
     //encoder.setCharset(Charset.forName("UTF-16"));
