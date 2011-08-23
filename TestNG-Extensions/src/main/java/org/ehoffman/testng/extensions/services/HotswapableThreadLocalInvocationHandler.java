@@ -91,6 +91,11 @@ public class HotswapableThreadLocalInvocationHandler implements InvocationHandle
     }
     return missing;
   }
+  
+  private String getName(){
+	  return module.get().getClass().getSimpleName();
+  }
+  
  
   private void createIfHolderInstanceNotSet() throws Exception {
     if (holderOfInstance.get() == null) {
@@ -105,10 +110,10 @@ public class HotswapableThreadLocalInvocationHandler implements InvocationHandle
         //Checks for missing dependencies and halts processing if they are found
         Map<String, Class<?>> missingDependencies = calcMissingDependencies(module.get().getDependencyDefinition(), dependencies);
         if (missingDependencies.size() != 0){
-          throw new RuntimeException("Module "+module.get().getName()+" has missing dependencies.  They are "+missingDependencies);
+          throw new RuntimeException("Module "+getName()+" has missing dependencies.  They are "+missingDependencies);
         }
         
-        logger.debug("About to build services for "+module.get().getName()+" with dependencies "+dependencies);
+        logger.debug("About to build services for "+getName()+" with dependencies "+dependencies);
         if (PooledModule.class.isAssignableFrom(module.get().getClass())){
           holderOfPool.set((ObjectPool)FactoryUtil.buildObject(module.get(), dependencies));
           holderOfInstance.set(holderOfPool.get().borrowObject());

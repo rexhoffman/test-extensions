@@ -67,7 +67,6 @@ public class WebDriverModule implements ModuleProvider<WebDriver> {
   public void destroy() {
   }
 
-  @Override
   public String getModuleType() {
     return WebDriver.class.getSimpleName();
   }

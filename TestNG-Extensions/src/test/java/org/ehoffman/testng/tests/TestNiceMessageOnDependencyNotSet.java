@@ -25,11 +25,6 @@ public class TestNiceMessageOnDependencyNotSet {
     }
 
     @Override
-    public String getName() {
-      return this.getClass().getSimpleName();
-    }
-
-    @Override
     public Class<? extends IntegerHolder> getTargetClass() {
       return IntegerHolder.class;
     }

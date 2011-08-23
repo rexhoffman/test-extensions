@@ -19,11 +19,6 @@ public abstract class WebAppModule implements Module<Application> {
   }
 
   @Override
-  public String getName() {
-    return getWebAppName();
-  }
-
-  @Override
   public Class<? extends Application> getTargetClass() {
     return Application.class;
   }

@@ -18,10 +18,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class Modules {
-
   private static final ConcurrentMap<Class<? extends Module<?>>, Module<?>> reusableThreadSafeModules = new ConcurrentHashMap<Class<? extends Module<?>>, Module<?>>();
   private static final Logger logger = LoggerFactory.getLogger(Modules.class);
-
 
   static <T extends Module<?>> T getInstance(Class<T> moduleClass) {
     T module = null;

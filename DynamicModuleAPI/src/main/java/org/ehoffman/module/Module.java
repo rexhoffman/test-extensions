@@ -12,12 +12,30 @@ import java.util.Map;
  * @author rexhoffman
  */
 public interface Module<T> extends ModuleProvider<T> {
-  String getName();
+	
+  /**
+   * This is a key that is used to determine which modules are interchangeable in testing 
+   * @return
+   */
+  public String getModuleType();
   
+  /**
+   * This is the class that the TestNG-Extensions library, 
+   * @return
+   */
   Class<? extends T> getTargetClass();
 
+  /**
+   * 
+   * @return
+   */
   Map<String, Class<?>> getDependencyDefinition();
   
+  /**
+   * 
+   * @param dependencies
+   * @return
+   */
   T create(Map<String, ?> dependencies);
 
   /**
