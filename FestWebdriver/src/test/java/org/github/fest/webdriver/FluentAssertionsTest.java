@@ -148,7 +148,7 @@ public class FluentAssertionsTest     {
       } catch (Throwable t){
         assertThat(t).hasNoCause().isExactlyInstanceOf(AssertionError.class);
         assertThat(t.getMessage()).contains(new WebElementExtension.WebElementDescription(element).value());
-        assertThat(t.getMessage()).contains("should have a width of 61 but was 60");
+        assertThat(t.getMessage()).contains("expecting actual value not to be null");
       }
 	}
 	

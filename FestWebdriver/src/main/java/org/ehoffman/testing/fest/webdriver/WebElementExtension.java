@@ -8,7 +8,6 @@ import org.fest.assertions.Description;
 import org.fest.assertions.GenericAssert;
 import org.openqa.selenium.Dimension;
 import org.openqa.selenium.WebElement;
-import org.testng.internal.Nullable;
 
 public class WebElementExtension extends GenericAssert<WebElementExtension, WebElement> {
   private final WebElement      element;
