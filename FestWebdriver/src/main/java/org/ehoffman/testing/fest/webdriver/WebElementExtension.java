@@ -142,16 +142,34 @@ public class WebElementExtension extends GenericAssert<WebElementExtension, WebE
     return this;
   }
 
+  /**
+   * Uses the {@link WebElement#getAttribute(String)} to look the the attributes value.  The attribute input is taken as is, and no case-changes are made.
+   * 
+   * Ignores case differences in values if they exist.
+   * 
+   * @param attribute
+   * @param value
+   * @return
+   */
   public WebElementExtension hasAttributeWithValue(String attribute, String value) {
     isNotNull();
     assertThat(value).as("Do not use hasAttributeWithValue for values or null or empty String, use doesNotHaveAttribute").isNotNull().isNotSameAs("");
-    assertThat(element.getAttribute(attribute.toLowerCase())).as(getShouldText() + "have attribute with the name of \"" + attribute + "\" with a value of \"" + value+"\"").isEqualTo(value);
+    assertThat(element.getAttribute(attribute)).as(getShouldText() + "have attribute with the name of \"" + attribute + "\" with a value of \"" + value+"\"").isEqualToIgnoringCase(value);
     return this;
   }
 
+  /**
+   * Uses the {@link WebElement#getAttribute(String)} to look the the attributes value.  The attribute input is taken as is, and no case-changes are made.
+   * 
+   * Ignores case differences in values if they exist.
+   * 
+   * @param attribute
+   * @param value
+   * @return
+   */
   public WebElementExtension hasAttributeWithValue(String attribute, Boolean value) {
     isNotNull();
-    assertThat(value).as("Do not use hasAttributeWithValue for values or null, use doesNotHaveAttribute").isNull();
+    assertThat(value).as("Do not use hasAttributeWithValue for values or null, use doesNotHaveAttribute").isNotNull();
     hasAttributeWithValue(attribute, value.toString().toLowerCase());
     return this;
   }

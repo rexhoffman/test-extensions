@@ -61,7 +61,7 @@ public class FakeWebElement implements WebElement {
 
 	@Override
 	public boolean isEnabled() {
-		return (getAttribute("disabled") == null) || ("disabled".compareTo(getAttribute("disabled")) != 0);
+		return (getAttribute("disabled") == null) || ("true".compareToIgnoreCase(getAttribute("disabled")) != 0);
 	}
 
 	@Override

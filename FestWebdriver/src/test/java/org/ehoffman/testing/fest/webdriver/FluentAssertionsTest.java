@@ -8,11 +8,13 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.Random;
 import java.util.concurrent.atomic.AtomicReference;
 
 import org.apache.commons.io.IOUtils;
 import org.ehoffman.testing.fest.webdriver.WebElementExtension;
 import org.openqa.selenium.By;
+import org.openqa.selenium.Dimension;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.firefox.FirefoxDriver;
@@ -26,13 +28,13 @@ public class FluentAssertionsTest     {
   
 	@Test
 	public void testWithFakeWebElements() throws Throwable{
-		FakeWebElement element = new FakeWebElement("input", "", new HashMap<String,String>(){{put("name","input1"); put("type","text");}}, new HashMap<String,String>(){{put("displayed","true");put("height","20");put("width","60");put("visibility","visible");}});
+		FakeWebElement element = new FakeWebElement("input", "", new HashMap<String,String>(){{put("name","input1"); put("type","text"); put("value","default value"); put("disabled", "false");}}, new HashMap<String,String>(){{put("displayed","true");put("height","20");put("width","60");put("visibility","visible");}});
 		assertsAroundWebElementInput1(element);
-		element = new FakeWebElement("a", "Click Me!!!", new HashMap<String,String>(){{put("id","linky"); put("text","Click Me!!!");}}, new HashMap<String,String>(){{put("displayed","true");put("visibility","visible");}});
+		element = new FakeWebElement("a", "Click Me!!!", new HashMap<String,String>(){{put("id","linky"); put("text","Click Me!!!"); put("disabled", "false");}}, new HashMap<String,String>(){{put("displayed","true");put("visibility","visible");}});
 		assertsAroundWebElementLinky(element);
-        element = new FakeWebElement("input", "", new HashMap<String,String>(){{put("name","input2"); put("type","text"); put("value","default value1");}}, new HashMap<String,String>(){{put("displayed","false");put("height","20");put("width","60");put("visibility","hidden");}});
+        element = new FakeWebElement("input", "", new HashMap<String,String>(){{put("name","input2"); put("type","text"); put("value","default value1");  put("disabled", "FALSE");}}, new HashMap<String,String>(){{put("displayed","false");put("height","20");put("width","60");put("visibility","hidden");}});
         assertsAroundWebInput2Hidden(element);
-        element = new FakeWebElement("input", "", new HashMap<String,String>(){{put("name","input3"); put("type","text"); put("value","default value2"); put("disabled", "disabled");}}, new HashMap<String,String>(){{put("displayed","true");put("height","20");put("width","60");put("visibility","visible");}});
+        element = new FakeWebElement("input", "", new HashMap<String,String>(){{put("name","input3"); put("type","text"); put("value","default value2"); put("disabled", "true");}}, new HashMap<String,String>(){{put("displayed","true");put("height","20");put("width","60");put("visibility","visible");}});
         assertsAroundWebInput3Disabled(element);
 	}
 
@@ -77,9 +79,15 @@ public class FluentAssertionsTest     {
       }      
     }
 	
+	private int randomNonZeroInt(){
+	  Random r = new Random();
+	  return r.nextInt(1000)+1*(r.nextBoolean()?1:-1);
+	}
+	
+	
 	private void assertsAroundWebElementInput1(WebElement element) throws Exception {
 	    //positive
-		assertThat(element).isNotNull().hasTagName("input").isDisplayed().isEnabled().hasName("input1").isNotHidden().hasAttributeWithValue("type", "text").hasHeight(20).hasWidth(60);
+		assertThat(element).isNotNull().hasTagName("input").isDisplayed().isEnabled().hasName("input1").isNotHidden().hasAttributeWithValue("type", "text").hasHeight(20).hasWidth(60).hasSize(new Dimension(60,20)).hasValue("default value");
 		
 		//negative tests
 		//Test WebElementDescription is used and that null checks are inherited.
@@ -154,8 +162,26 @@ public class FluentAssertionsTest     {
           assertThat(t.getMessage()).contains(new WebElementExtension.WebElementDescription(element).value());
           assertThat(t.getMessage()).contains("should have a width of 61 but was 60");
         }
+                
+        try {
+          assertThat(element).hasValue("some value");
+        } catch (Throwable t){
+          assertThat(t).hasNoCause().isExactlyInstanceOf(AssertionError.class);
+          assertThat(t.getMessage()).contains(new WebElementExtension.WebElementDescription(element).value());
+          assertThat(t.getMessage()).contains("should have attribute with the name of \"value\" with a value of \"some value\"");
+        }
         
-        
+        for (int i = 1; i < 20; i++){
+          Dimension d = new Dimension(60+randomNonZeroInt(),20+randomNonZeroInt());
+          try {
+            assertThat(element).hasSize(d);
+          } catch (Throwable t){
+            assertThat(t).hasNoCause().isExactlyInstanceOf(AssertionError.class);
+            assertThat(t.getMessage()).contains(new WebElementExtension.WebElementDescription(element).value());
+            assertThat(t.getMessage()).contains("have dimensions of " + d + "but has dimensions of " + element.getSize());
+          }
+  	    }
+ 
         try {
           assertThat((WebElement)null).hasWidth(21);
         } catch (Throwable t){
@@ -163,7 +189,7 @@ public class FluentAssertionsTest     {
           assertThat(t.getMessage()).contains(new WebElementExtension.WebElementDescription(null).value());
           assertThat(t.getMessage()).contains("expecting actual value not to be null");
         }
-        
+ 
 	}
 	
 	private void assertsAroundWebElementLinky(WebElement element) throws Exception {
@@ -178,11 +204,11 @@ public class FluentAssertionsTest     {
 	}
 	
 	private void assertsAroundWebInput2Hidden(WebElement element) throws Exception {
-      assertThat(element).isNotNull().hasTagName("input").isHidden().isNotDisplayed().hasName("input2").hasAttributeWithValue("type", "text").hasHeight(20).hasWidth(60);
+      assertThat(element).isNotNull().hasTagName("input").isHidden().isNotDisplayed().hasName("input2").hasAttributeWithValue("type", "text").hasHeight(20).hasWidth(60).hasAttributeWithValue("disabled", Boolean.FALSE);
     }    
 	
 	private void assertsAroundWebInput3Disabled(WebElement element) throws Exception {
-      assertThat(element).isNotNull().hasTagName("input").isNotHidden().isDisplayed().hasName("input3").hasAttributeWithValue("type", "text").isNotEnabled();
+      assertThat(element).isNotNull().hasTagName("input").isNotHidden().isDisplayed().hasName("input3").hasAttributeWithValue("type", "text").hasAttributeWithValue("disabled", Boolean.TRUE).isNotEnabled();
       try {
         assertThat(element).isEnabled();
       } catch (Throwable t){
