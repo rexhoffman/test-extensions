@@ -1,4 +1,4 @@
-package org.github.fest.webdriver;
+package org.ehoffman.testing.fest.webdriver;
 
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;

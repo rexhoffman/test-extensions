@@ -53,113 +53,136 @@ public class WebElementExtension extends GenericAssert<WebElementExtension, WebE
   }
 
   public WebElementExtension isSelected() {
+    isNotNull();
     assertThat(element.isSelected()).as(getShouldText() + "be selected").isTrue();
     return this;
   }
 
   public WebElementExtension isNotSelected() {
+    isNotNull();
     assertThat(element.isSelected()).as(getShouldText() + "not be selected").isFalse();
     return this;
   }
 
   public WebElementExtension isEnabled() {
+    isNotNull();
     assertThat(element.isEnabled()).as(getShouldText() + "be enabled").isTrue();
     return this;
   }
 
   public WebElementExtension isNotEnabled() {
+    isNotNull();
     assertThat(element.isEnabled()).as(getShouldText() + "not be enabled").isFalse();
     return this;
   }
 
   public WebElementExtension hasTagName(String tagName) {
+    isNotNull();
     assertThat(element.getTagName()).as(getShouldText() + "have expected tag name").isEqualToIgnoringCase(tagName);
     return this;
   }
 
   public WebElementExtension isDisplayed() {
+    isNotNull();
     assertThat(element.isDisplayed()).as(getShouldText() + "be displayed").isTrue();
     return this;
   }
 
   public WebElementExtension isNotDisplayed() {
+    isNotNull();
     assertThat(element.isDisplayed()).as(getShouldText() + "not be displayed").isFalse();
     return this;
   }
 
   public WebElementExtension hasHeight(Integer height) {
+    isNotNull();
+    assertThat(element.getSize()).as(getShouldText()+" have a non-null size bean property").isNotNull();
     assertThat(element.getSize().getHeight()).as(getShouldText() + "have a height of " + height + " but was " + element.getSize().getHeight()).isEqualTo(height);
     return this;
   }
-
+  
   public WebElementExtension hasWidth(Integer width) {
+    isNotNull();
+    assertThat(element.getSize()).as(getShouldText()+" have a non-null size bean property").isNotNull();
     assertThat(element.getSize().getWidth()).as(getShouldText() + "have a width of " + width + " but was " + element.getSize().getWidth()).isEqualTo(width);
     return this;
   }
 
   public WebElementExtension hasSize(Dimension dimension) {
+    isNotNull();
+    assertThat(element.getSize()).as(getShouldText()+" have a non-null size bean property").isNotNull();
     assertThat(element.getSize().toString()).as(getShouldText() + "have dimensions of " + dimension + "but has dimensions of " + element.getSize()).isEqualTo(dimension.toString());
     return this;
   }
   
   public WebElementExtension doesNotHaveCssPropertyWithValue(String cssProperty){
+    isNotNull();
     assertThat(element.getCssValue(cssProperty)).as(getShouldText() + "have not have a css property with the name of " + cssProperty ).isNullOrEmpty();
     return this;
   }
 
   public WebElementExtension hasCssPropertyWithValue(String cssProperty, String value) {
+    isNotNull();
     assertThat(value).as("Do not use hasCssPropertyWithValue for values or null or empty String, use doesNotCssProperty").isNotNull().isNotEmpty();
     assertThat(element.getCssValue(cssProperty)).as(getShouldText() + "have css property with the name of " + cssProperty + " with a current computed value of " + value).isNotNull().isNotEmpty().isEqualTo(value);
     return this;
   }
   
   public WebElementExtension doesNotHaveAttribute(String attribute) {
+    isNotNull();
     assertThat(booleanParameters).as("hasAttribute() is a meaningless inspection for boolean parameters").excludes(attribute);
     assertThat(element.getAttribute(attribute.toLowerCase())).as(getShouldText() + "have not have an attribute with the name of " + attribute).isNotSameAs("");
     return this;
   }
 
   public WebElementExtension hasAttribute(String attribute) {
+    isNotNull();
     assertThat(booleanParameters).as("hasAttribute() is a meaningless inspection for boolean parameters").excludes(attribute);
     assertThat(element.getAttribute(attribute.toLowerCase())).as(getShouldText() + "have attribute with the name of " + attribute).isNotNull().isNotSameAs("");
     return this;
   }
 
   public WebElementExtension hasAttributeWithValue(String attribute, String value) {
+    isNotNull();
     assertThat(value).as("Do not use hasAttributeWithValue for values or null or empty String, use doesNotHaveAttribute").isNotNull().isNotSameAs("");
     assertThat(element.getAttribute(attribute.toLowerCase())).as(getShouldText() + "have attribute with the name of \"" + attribute + "\" with a value of \"" + value+"\"").isEqualTo(value);
     return this;
   }
 
   public WebElementExtension hasAttributeWithValue(String attribute, Boolean value) {
+    isNotNull();
     assertThat(value).as("Do not use hasAttributeWithValue for values or null, use doesNotHaveAttribute").isNull();
     hasAttributeWithValue(attribute, value.toString().toLowerCase());
     return this;
   }
 
   public WebElementExtension isHidden() {
+    isNotNull();
     assertThat(element.getCssValue("visibility")).as(getShouldText() + "have css property \"visibility\" with a value of either hidden or collapsed").isIn(Arrays.asList("hidden", "collapse"));
     return this;
   }
 
   public WebElementExtension isNotHidden() {
+    isNotNull();
     hasCssPropertyWithValue("visibility", "visible");
     return this;
   }
 
   public WebElementExtension hasName(String name) {
+    isNotNull();
     hasAttributeWithValue("name", name);
     return this;
   }
 
   public WebElementExtension hasValue(String value) {
+    isNotNull();
     hasAttributeWithValue("value", value);
     return this;
   }
 
   public WebElementExtension textContains(String value) {
+    isNotNull();
     assertThat(element.getText()).as(getShouldText() + "contain inner text like \"" + value + "\"").contains(value);
     return this;
   }
-
 }

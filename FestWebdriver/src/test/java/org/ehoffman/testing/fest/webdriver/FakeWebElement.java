@@ -1,4 +1,4 @@
-package org.github.fest.webdriver;
+package org.ehoffman.testing.fest.webdriver;
 
 import java.util.HashMap;
 import java.util.List;
@@ -61,7 +61,7 @@ public class FakeWebElement implements WebElement {
 
 	@Override
 	public boolean isEnabled() {
-		return !(new Boolean(getAttribute("disabled")).booleanValue());
+		return (getAttribute("disabled") == null) || ("disabled".compareTo(getAttribute("disabled")) != 0);
 	}
 
 	@Override

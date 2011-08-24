@@ -1,4 +1,4 @@
-package org.github.fest.webdriver;
+package org.ehoffman.testing.fest.webdriver;
 
 import static org.ehoffman.testing.fest.webdriver.WebElementAssert.assertThat;
 
@@ -6,6 +6,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.concurrent.atomic.AtomicReference;
 
@@ -29,6 +30,10 @@ public class FluentAssertionsTest     {
 		assertsAroundWebElementInput1(element);
 		element = new FakeWebElement("a", "Click Me!!!", new HashMap<String,String>(){{put("id","linky"); put("text","Click Me!!!");}}, new HashMap<String,String>(){{put("displayed","true");put("visibility","visible");}});
 		assertsAroundWebElementLinky(element);
+        element = new FakeWebElement("input", "", new HashMap<String,String>(){{put("name","input2"); put("type","text"); put("value","default value1");}}, new HashMap<String,String>(){{put("displayed","false");put("height","20");put("width","60");put("visibility","hidden");}});
+        assertsAroundWebInput2Hidden(element);
+        element = new FakeWebElement("input", "", new HashMap<String,String>(){{put("name","input3"); put("type","text"); put("value","default value2"); put("disabled", "disabled");}}, new HashMap<String,String>(){{put("displayed","true");put("height","20");put("width","60");put("visibility","visible");}});
+        assertsAroundWebInput3Disabled(element);
 	}
 
 	private static File copyFileToTemp(String name) throws IOException {
@@ -50,6 +55,7 @@ public class FluentAssertionsTest     {
         assertsAroundWebElementInput1(driver.findElement(By.id("input1")));
         assertsAroundWebElementLinky(driver.findElement(By.id("linky")));
         assertsAroundWebInput2Hidden(driver.findElement(By.id("input2hidden")));
+        assertsAroundWebInput3Disabled(driver.findElement(By.id("input3disabled")));
       } finally {
         driver.close();
       }      
@@ -65,6 +71,7 @@ public class FluentAssertionsTest     {
         assertsAroundWebElementInput1(driver.findElement(By.id("input1")));
         assertsAroundWebElementLinky(driver.findElement(By.id("linky")));
         assertsAroundWebInput2Hidden(driver.findElement(By.id("input2hidden")));
+        assertsAroundWebInput3Disabled(driver.findElement(By.id("input3disabled")));
       } finally {
         driver.close();
       }      
@@ -72,7 +79,7 @@ public class FluentAssertionsTest     {
 	
 	private void assertsAroundWebElementInput1(WebElement element) throws Exception {
 	    //positive
-		assertThat(element).isNotNull().hasTagName("input").isDisplayed().hasName("input1").isNotHidden().hasAttributeWithValue("type", "text").hasHeight(20).hasWidth(60);
+		assertThat(element).isNotNull().hasTagName("input").isDisplayed().isEnabled().hasName("input1").isNotHidden().hasAttributeWithValue("type", "text").hasHeight(20).hasWidth(60);
 		
 		//negative tests
 		//Test WebElementDescription is used and that null checks are inherited.
@@ -98,6 +105,14 @@ public class FluentAssertionsTest     {
           assertThat(t).hasNoCause().isExactlyInstanceOf(AssertionError.class);
           assertThat(t.getMessage()).contains(new WebElementExtension.WebElementDescription(element).value());
           assertThat(t.getMessage()).contains("should not be displayed");
+        }
+
+        try {
+          assertThat(element).isNotEnabled();
+        } catch (Throwable t){
+          assertThat(t).hasNoCause().isExactlyInstanceOf(AssertionError.class);
+          assertThat(t.getMessage()).contains(new WebElementExtension.WebElementDescription(element).value());
+          assertThat(t.getMessage()).contains("should not be enabled");
         }
         
         try {
@@ -139,6 +154,16 @@ public class FluentAssertionsTest     {
           assertThat(t.getMessage()).contains(new WebElementExtension.WebElementDescription(element).value());
           assertThat(t.getMessage()).contains("should have a width of 61 but was 60");
         }
+        
+        
+        try {
+          assertThat((WebElement)null).hasWidth(21);
+        } catch (Throwable t){
+          assertThat(t).hasNoCause().isExactlyInstanceOf(AssertionError.class);
+          assertThat(t.getMessage()).contains(new WebElementExtension.WebElementDescription(null).value());
+          assertThat(t.getMessage()).contains("expecting actual value not to be null");
+        }
+        
 	}
 	
 	private void assertsAroundWebElementLinky(WebElement element) throws Exception {
@@ -153,6 +178,18 @@ public class FluentAssertionsTest     {
 	}
 	
 	private void assertsAroundWebInput2Hidden(WebElement element) throws Exception {
-      assertThat(element).isNotNull().hasTagName("input").isNotDisplayed().hasName("input2").isHidden().hasAttributeWithValue("type", "text").hasHeight(20).hasWidth(60);
+      assertThat(element).isNotNull().hasTagName("input").isHidden().isNotDisplayed().hasName("input2").hasAttributeWithValue("type", "text").hasHeight(20).hasWidth(60);
     }    
+	
+	private void assertsAroundWebInput3Disabled(WebElement element) throws Exception {
+      assertThat(element).isNotNull().hasTagName("input").isNotHidden().isDisplayed().hasName("input3").hasAttributeWithValue("type", "text").isNotEnabled();
+      try {
+        assertThat(element).isEnabled();
+      } catch (Throwable t){
+        assertThat(t).hasNoCause().isExactlyInstanceOf(AssertionError.class);
+        assertThat(t.getMessage()).contains(new WebElementExtension.WebElementDescription(element).value());
+        assertThat(t.getMessage()).contains("should be enabled");
+      }
+    }
+	
 }
