@@ -31,8 +31,8 @@ public class SimpleModule implements Module<IntegerHolder> {
   public void destroy() {
   }
 
-  public List<Class<? extends ModuleProvider>> getModuleClasses() {
-    List<Class<? extends ModuleProvider>> list = new ArrayList<Class<? extends ModuleProvider>>();
+  public List<Class<? extends ModuleProvider<?>>> getModuleClasses() {
+    List<Class<? extends ModuleProvider<?>>> list = new ArrayList<Class<? extends ModuleProvider<?>>>();
     list.add(SimpleModule.class);
     return list;
   }

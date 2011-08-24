@@ -69,6 +69,42 @@ public class FluentAssertionsTest     {
       return page;
     }
     
+    /** 
+     * Test bean to compare against page objects
+     */
+    public static class O1 {
+      public String getSelected(){return "three";}
+      public String getInput2hidden(){return "default value1";}
+      public String getInput3disabled(){return "default value2";}
+      public String getNot_selected(){return "two";}
+      public String getLinky(){return null;}
+      public String getInput1(){return "default value";}
+    }
+    
+    /** 
+     * Test bean to compare against page objects
+     */
+    public static class O2 {
+      public String getSelected(){return "three";}
+      public String getInput2hidden(){return "default value1";}
+      public String getInput3disabled(){return "default value2";}
+      public String getNot_selected(){return "two";}
+      public String getLinky(){return null;}
+      //public String getInput1(){return "default value";}
+    };
+    
+    /** 
+     * Test bean to compare against page objects
+     */
+    public static class O3 {
+      public String getSelected(){return "three";}
+      public String getInput2hidden(){return "default value1";}
+      public String getInput3disabled(){return "wrong value2";}
+      public String getNot_selected(){return "two";}
+      public String getLinky(){return null;}
+      public String getInput1(){return "default value";}
+    }
+    
     
     @Test(description="Checks all the assertion methods on the PageObjectExtension class")
     public void pageObjectAssertionsTest(){
@@ -76,6 +112,7 @@ public class FluentAssertionsTest     {
       WebElement input2hidden = page.getInput2hidden();
       try {
         assertThatPageObject(page).allWebElementsDisplayed();
+        assertThat("Should not be reachable").isNull();
       } catch (Throwable t){
         assertThat(t).hasNoCause().isExactlyInstanceOf(AssertionError.class);
         assertThat(t.getMessage()).contains(new WebElementExtension.WebElementDescription(input2hidden).value());
@@ -88,6 +125,7 @@ public class FluentAssertionsTest     {
       WebElement input3disabled = page.getInput3disabled();
       try {
         assertThatPageObject(page).allWebElementsEnabled();
+        assertThat("Should not be reachable").isNull();
       } catch (Throwable t){
         assertThat(t).hasNoCause().isExactlyInstanceOf(AssertionError.class);
         assertThat(t.getMessage()).contains(new WebElementExtension.WebElementDescription(input3disabled).value());
@@ -99,6 +137,7 @@ public class FluentAssertionsTest     {
       page.setInput3disabled(null);
       try {
         assertThatPageObject(page).allWebElementsEnabled();
+        assertThat("Should not be reachable").isNull();
       } catch (Throwable t){
         assertThat(t).hasNoCause().isExactlyInstanceOf(AssertionError.class);
         assertThat(t.getMessage()).contains(new WebElementExtension.WebElementDescription(null).value());
@@ -116,44 +155,23 @@ public class FluentAssertionsTest     {
       map.put("input1","default value");
       assertThatPageObject(page).isEqualViaReflectiveMapComparison(map);
       
-      @SuppressWarnings("unused")
-      Object o = new Object(){
-        public String getSelected(){return "three";}
-        public String getInput2hidden(){return "default value1";}
-        public String getInput3disabled(){return "default value2";}
-        public String getNot_selected(){return "two";}
-        public String getLinky(){return null;}
-        public String getInput1(){return "default value";}
-      };
+      Object o = new O1();
       assertThatPageObject(page).isEqualViaReflectiveBeanComparison(o);
       
-      @SuppressWarnings("unused")
-      Object incomplete = new Object(){
-        public String getSelected(){return "three";}
-        public String getInput2hidden(){return "default value1";}
-        public String getInput3disabled(){return "default value2";}
-        public String getNot_selected(){return "two";}
-        public String getLinky(){return null;}
-        //public String getInput1(){return "default value";}
-      };
+
+      Object incomplete = new O2();
       try {
         assertThatPageObject(page).isEqualViaReflectiveBeanComparison(incomplete);
+        assertThat("Should not be reachable").isNull();
       } catch (Throwable t){
         assertThat(t).hasNoCause().isExactlyInstanceOf(AssertionError.class);
         assertThat(t.getMessage()).contains("expected:<['selected', 'input2hidden', 'input3disabled', 'not_selected', 'linky']> but was:<['selected', 'input2hidden', 'input3disabled', 'not_selected', 'linky', 'input1']>");
       }
       
-      @SuppressWarnings("unused")
-      Object wrongValue = new Object(){
-        public String getSelected(){return "three";}
-        public String getInput2hidden(){return "default value1";}
-        public String getInput3disabled(){return "wrong value2";}
-        public String getNot_selected(){return "two";}
-        public String getLinky(){return null;}
-        public String getInput1(){return "default value";}
-      };
+      Object wrongValue = new O3();
       try {
         assertThatPageObject(page).isEqualViaReflectiveBeanComparison(wrongValue);
+        assertThat("Should not be reachable").isNull();
       } catch (Throwable t){
         assertThat(t).hasNoCause().isExactlyInstanceOf(AssertionError.class);
         assertThat(t.getMessage()).contains(new WebElementExtension.WebElementDescription(page.getInput3disabled()).value());
@@ -232,12 +250,13 @@ public class FluentAssertionsTest     {
 	 */
 	private void assertsAroundWebElementInput1(WebElement element)  {
 	    //positive
-		assertThat(element).isNotNull().hasTagName("input").isDisplayed().isEnabled().hasName("input1").isNotHidden().hasAttributeWithValue("type", "text").hasHeight(20).hasWidth(60).hasSize(new Dimension(60,20)).hasValue("default value").doesNotHaveCssPropertyWithValue("background-image", "image.jpg");
+		assertThat(element).isNotNull().hasTagName("input").isDisplayed().isEnabled().hasName("input1").isNotHidden().hasAttribute("type").hasAttributeWithValue("type", "text").hasHeight(20).hasWidth(60).hasSize(new Dimension(60,20)).hasValue("default value").doesNotHaveCssPropertyWithValue("background-image", "image.jpg");
 		
 		//negative tests
 		//Test WebElementDescription is used and that null checks are inherited.
 		try {
 		  assertThat(element).isNull();
+	      assertThat("Should not be reachable").isNull();
 		} catch (Throwable t){
 		  assertThat(t).hasNoCause().isExactlyInstanceOf(AssertionError.class);
 		  assertThat(t.getMessage()).contains(new WebElementExtension.WebElementDescription(element).value());
@@ -246,6 +265,7 @@ public class FluentAssertionsTest     {
 		
 		try {
           assertThat(element).hasTagName("a");
+          assertThat("Should not be reachable").isNull();
         } catch (Throwable t){
           assertThat(t).hasNoCause().isExactlyInstanceOf(AssertionError.class);
           assertThat(t.getMessage()).contains(new WebElementExtension.WebElementDescription(element).value());
@@ -254,6 +274,7 @@ public class FluentAssertionsTest     {
 		
         try {
           assertThat(element).isNotDisplayed();
+          assertThat("Should not be reachable").isNull();
         } catch (Throwable t){
           assertThat(t).hasNoCause().isExactlyInstanceOf(AssertionError.class);
           assertThat(t.getMessage()).contains(new WebElementExtension.WebElementDescription(element).value());
@@ -262,6 +283,7 @@ public class FluentAssertionsTest     {
 
         try {
           assertThat(element).isNotEnabled();
+          assertThat("Should not be reachable").isNull();
         } catch (Throwable t){
           assertThat(t).hasNoCause().isExactlyInstanceOf(AssertionError.class);
           assertThat(t.getMessage()).contains(new WebElementExtension.WebElementDescription(element).value());
@@ -270,6 +292,7 @@ public class FluentAssertionsTest     {
         
         try {
           assertThat(element).hasName("input");
+          assertThat("Should not be reachable").isNull();
         } catch (Throwable t){
           assertThat(t).hasNoCause().isExactlyInstanceOf(AssertionError.class);
           assertThat(t.getMessage()).contains(new WebElementExtension.WebElementDescription(element).value());
@@ -278,6 +301,7 @@ public class FluentAssertionsTest     {
         
         try {
           assertThat(element).isHidden();
+          assertThat("Should not be reachable").isNull();
         } catch (Throwable t){
           assertThat(t).hasNoCause().isExactlyInstanceOf(AssertionError.class);
           assertThat(t.getMessage()).contains(new WebElementExtension.WebElementDescription(element).value());
@@ -286,6 +310,7 @@ public class FluentAssertionsTest     {
         
         try {
           assertThat(element).hasAttributeWithValue("type", "purplepeopleeater");
+          assertThat("Should not be reachable").isNull();
         } catch (Throwable t){
           assertThat(t).hasNoCause().isExactlyInstanceOf(AssertionError.class);
           assertThat(t.getMessage()).contains(new WebElementExtension.WebElementDescription(element).value());
@@ -294,14 +319,16 @@ public class FluentAssertionsTest     {
         
         try {
           assertThat(element).hasHeight(21);
+          assertThat("Should not be reachable").isNull();
         } catch (Throwable t){
           assertThat(t).hasNoCause().isExactlyInstanceOf(AssertionError.class);
           assertThat(t.getMessage()).contains(new WebElementExtension.WebElementDescription(element).value());
           assertThat(t.getMessage()).contains("should have a height of 21 but was 20");
         }
-        
+
         try {
           assertThat(element).hasWidth(61);
+          assertThat("Should not be reachable").isNull();
         } catch (Throwable t){
           assertThat(t).hasNoCause().isExactlyInstanceOf(AssertionError.class);
           assertThat(t.getMessage()).contains(new WebElementExtension.WebElementDescription(element).value());
@@ -310,6 +337,7 @@ public class FluentAssertionsTest     {
                 
         try {
           assertThat(element).hasValue("some value");
+          assertThat("Should not be reachable").isNull();
         } catch (Throwable t){
           assertThat(t).hasNoCause().isExactlyInstanceOf(AssertionError.class);
           assertThat(t.getMessage()).contains(new WebElementExtension.WebElementDescription(element).value());
@@ -318,6 +346,7 @@ public class FluentAssertionsTest     {
         
         try {
           assertThat(element).doesNotHaveCssPropertyWithValue("color", "#00c000");//green
+          assertThat("Should not be reachable").isNull();
         } catch (Throwable t){
           assertThat(t).hasNoCause().isExactlyInstanceOf(AssertionError.class);
           assertThat(t.getMessage()).contains(new WebElementExtension.WebElementDescription(element).value());
@@ -328,6 +357,7 @@ public class FluentAssertionsTest     {
           Dimension d = new Dimension(60+randomNonZeroInt(),20+randomNonZeroInt());
           try {
             assertThat(element).hasSize(d);
+            assertThat("Should not be reachable").isNull();
           } catch (Throwable t){
             assertThat(t).hasNoCause().isExactlyInstanceOf(AssertionError.class);
             assertThat(t.getMessage()).contains(new WebElementExtension.WebElementDescription(element).value());
@@ -337,6 +367,7 @@ public class FluentAssertionsTest     {
  
         try {
           assertThat((WebElement)null).hasWidth(21);
+          assertThat("Should not be reachable").isNull();
         } catch (Throwable t){
           assertThat(t).hasNoCause().isExactlyInstanceOf(AssertionError.class);
           assertThat(t.getMessage()).contains(new WebElementExtension.WebElementDescription(null).value());
@@ -359,10 +390,11 @@ public class FluentAssertionsTest     {
       assertThat(element).isNotNull().hasTagName("a").isDisplayed().doesNotHaveAttribute("name").isNotHidden().textContains("Click Me!!!");
       try {
         assertThat(element).hasAttribute("name");
+        assertThat("Should not be reachable").isNull();
       } catch (Throwable t){
         assertThat(t).hasNoCause().isExactlyInstanceOf(AssertionError.class);
         assertThat(t.getMessage()).contains(new WebElementExtension.WebElementDescription(element).value());
-        assertThat(t.getMessage()).contains("expecting actual value not to be null");
+        assertThat(t.getMessage()).contains("should have attribute with the name of name");
       }
 	}
 	
@@ -391,6 +423,7 @@ public class FluentAssertionsTest     {
       assertThat(element).isNotNull().hasTagName("input").isNotHidden().isDisplayed().hasName("input3").hasAttributeWithValue("type", "text").hasAttributeWithValue("disabled", Boolean.TRUE).isNotEnabled();
       try {
         assertThat(element).isEnabled();
+        assertThat("Should not be reachable").isNull();
       } catch (Throwable t){
         assertThat(t).hasNoCause().isExactlyInstanceOf(AssertionError.class);
         assertThat(t.getMessage()).contains(new WebElementExtension.WebElementDescription(element).value());
@@ -408,6 +441,7 @@ public class FluentAssertionsTest     {
       assertThat(selected).isSelected();
       try {
         assertThat(selected).isNotSelected();
+        assertThat("Should not be reachable").isNull();
       } catch (Throwable t){
         assertThat(t).hasNoCause().isExactlyInstanceOf(AssertionError.class);
         assertThat(t.getMessage()).contains(new WebElementExtension.WebElementDescription(selected).value());
@@ -416,6 +450,7 @@ public class FluentAssertionsTest     {
       assertThat(notselected).isNotSelected();
       try {
         assertThat(notselected).isSelected();
+        assertThat("Should not be reachable").isNull();
       } catch (Throwable t){
         assertThat(t).hasNoCause().isExactlyInstanceOf(AssertionError.class);
         assertThat(t.getMessage()).contains(new WebElementExtension.WebElementDescription(notselected).value());

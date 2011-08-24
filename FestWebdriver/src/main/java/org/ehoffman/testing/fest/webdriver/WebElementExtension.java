@@ -132,14 +132,22 @@ public class WebElementExtension extends GenericAssert<WebElementExtension, WebE
   public WebElementExtension doesNotHaveAttribute(String attribute) {
     isNotNull();
     assertThat(booleanParameters).as("hasAttribute() is a meaningless inspection for boolean parameters").excludes(attribute);
-    assertThat(element.getAttribute(attribute.toLowerCase())).as(getShouldText() + "have not have an attribute with the name of " + attribute).isNotSameAs("");
+    assertThat(element.getAttribute(attribute)).as(getShouldText() + "should not have an attribute with the name of " + attribute).isNullOrEmpty();
     return this;
   }
 
+  /**
+   * Uses the {@link WebElement#getAttribute(String)} to look the the attributes value.  The attribute input is taken as is, and no case-changes are made.
+   * 
+   * Ignores case differences in values if they exist.
+   * 
+   * @param attribute
+   * @return
+   */
   public WebElementExtension hasAttribute(String attribute) {
     isNotNull();
     assertThat(booleanParameters).as("hasAttribute() is a meaningless inspection for boolean parameters").excludes(attribute);
-    assertThat(element.getAttribute(attribute.toLowerCase())).as(getShouldText() + "have attribute with the name of " + attribute).isNotNull().isNotSameAs("");
+    assertThat(element.getAttribute(attribute)).as(getShouldText() + "have attribute with the name of " + attribute).isNotNull().isNotEqualTo("");
     return this;
   }
 
@@ -154,7 +162,7 @@ public class WebElementExtension extends GenericAssert<WebElementExtension, WebE
    */
   public WebElementExtension hasAttributeWithValue(String attribute, String value) {
     isNotNull();
-    assertThat(value).as("Do not use hasAttributeWithValue for values or null or empty String, use doesNotHaveAttribute").isNotNull().isNotSameAs("");
+    assertThat(value).as("Do not use hasAttributeWithValue for values or null or empty String, use doesNotHaveAttribute").isNotNull().isNotEqualTo("");
     assertThat(element.getAttribute(attribute)).as(getShouldText() + "have attribute with the name of \"" + attribute + "\" with a value of \"" + value+"\"").isEqualToIgnoringCase(value);
     return this;
   }

@@ -1,7 +1,6 @@
 package org.ehoffman.testing.fest.webdriver;
 
 import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -9,6 +8,7 @@ import java.util.Map.Entry;
 import static org.ehoffman.testing.fest.webdriver.WebElementAssert.assertThat;
 import static org.fest.assertions.Assertions.assertThat;
 
+import org.apache.commons.beanutils.PropertyUtils;
 import org.fest.assertions.GenericAssert;
 import org.openqa.selenium.WebElement;
 
@@ -25,19 +25,22 @@ public class PageObjectExtension extends GenericAssert<PageObjectExtension, Obje
   
   private Map<String, WebElement> extractWebElementMap(){
     Map<String, WebElement> extractedElementMap = new HashMap<String, WebElement>();
-    for (Method method : object.getClass().getMethods()){
-      if (WebElement.class.isAssignableFrom(method.getReturnType()) &&
-          method.getParameterTypes().length == 0 &&
-          method.getName().startsWith("get")){
-          WebElement element = null;
-          try{
-            element = (WebElement) method.invoke(object, new Object[]{});
-          } catch (IllegalAccessException access){
-          } catch (InvocationTargetException target){
-          } catch (IllegalArgumentException argument){
-          }
-          extractedElementMap.put(method.getName().substring("get".length()).toLowerCase(), element);
-      }
+    try {
+      @SuppressWarnings("unchecked")
+      Map<String, Object> map = PropertyUtils.describe(object);
+      for (Entry<String, Object> entry : map.entrySet()){
+        Object returned = entry.getValue();
+        if (WebElement.class.isAssignableFrom(PropertyUtils.getPropertyType(object, entry.getKey()))){
+          System.out.println("Putting " +entry);
+          extractedElementMap.put(entry.getKey(),(WebElement)returned);
+        }
+      } 
+    } catch (IllegalAccessException e1) {
+      throw new RuntimeException("This should not be reachable",e1);
+    } catch (InvocationTargetException e1) {
+      throw new RuntimeException("This should not be reachable",e1);
+    } catch (NoSuchMethodException e1) {
+      throw new RuntimeException("This should not be reachable",e1);
     }
     return extractedElementMap;
   }
@@ -71,20 +74,21 @@ public class PageObjectExtension extends GenericAssert<PageObjectExtension, Obje
 
   private Map<String, String> extractBeanValues(Object object){
     Map<String, String> extractedBeanMap = new HashMap<String, String>();
-    for (Method method : object.getClass().getMethods()){
-      if (method.getReturnType() != null &&
-          method.getParameterTypes().length == 0 &&
-          method.getName().startsWith("get") &&
-          method.getName().compareTo("getClass") != 0){
-        Object returned = null;
-        try{
-          returned = method.invoke(object, new Object[]{});
-        } catch (IllegalAccessException access){
-        } catch (InvocationTargetException target){
-        } catch (IllegalArgumentException argument){
+    try {
+      @SuppressWarnings("unchecked")
+      Map<String, Object> map = PropertyUtils.describe(object);
+      for (Entry<String, Object> entry : map.entrySet()){
+        Object returned = entry.getValue();
+        if (returned == null || !Class.class.isAssignableFrom(returned.getClass())){
+          extractedBeanMap.put(entry.getKey(),(returned!=null?returned.toString():(String)null));
         }
-        extractedBeanMap.put(method.getName().substring("get".length()).toLowerCase(), (returned!=null?returned.toString():(String)null));
       }
+    } catch (IllegalAccessException e1) {
+      throw new RuntimeException("This should not be reachable",e1);
+    } catch (InvocationTargetException e1) {
+      throw new RuntimeException("This should not be reachable",e1);
+    } catch (NoSuchMethodException e1) {
+      throw new RuntimeException("This should not be reachable",e1);
     }
     return extractedBeanMap;
   }
