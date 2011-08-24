@@ -9,6 +9,11 @@ import org.openqa.selenium.Dimension;
 import org.openqa.selenium.Point;
 import org.openqa.selenium.WebElement;
 
+/**
+ * A Mock implementation of WebElement for testing purposes
+ * 
+ * @author rexhoffman
+ */
 public class FakeWebElement implements WebElement {
 
 	private Map<String, String> properties;
@@ -16,7 +21,12 @@ public class FakeWebElement implements WebElement {
 	private String tag;
 	private String text;
 	
-	
+	/**
+	 * @param tag the html tag type
+	 * @param text inner text of the html element
+	 * @param properties attributes on the tag
+	 * @param cssProperties css properties of the element
+	 */
 	public FakeWebElement(String tag, String text, Map<String, String> properties, Map<String, String>  cssProperties){
 	  this.properties = new HashMap<String, String>(properties);
 	  this.cssProperties = new HashMap<String, String>(cssProperties);
@@ -56,7 +66,7 @@ public class FakeWebElement implements WebElement {
 
 	@Override
 	public boolean isSelected() {
-		return new Boolean(getAttribute("selected")).booleanValue();
+		return  (getAttribute("selected") != null) && ("true".compareToIgnoreCase(getAttribute("selected")) == 0);
 	}
 
 	@Override

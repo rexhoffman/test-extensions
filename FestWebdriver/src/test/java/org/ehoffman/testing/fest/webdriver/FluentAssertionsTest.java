@@ -1,6 +1,7 @@
 package org.ehoffman.testing.fest.webdriver;
 
 import static org.ehoffman.testing.fest.webdriver.WebElementAssert.assertThat;
+import static org.ehoffman.testing.fest.webdriver.WebElementAssert.assertThatPageObject;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -12,15 +13,20 @@ import java.util.concurrent.atomic.AtomicReference;
 
 import org.apache.commons.io.IOUtils;
 import org.ehoffman.testing.fest.webdriver.WebElementExtension;
-import org.openqa.selenium.By;
 import org.openqa.selenium.Dimension;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.htmlunit.HtmlUnitDriver;
+import org.openqa.selenium.support.PageFactory;
 import org.testng.annotations.Test;
 
 
+/**
+ * Tests the WebElementExtension class
+ * 
+ * @author rexhoffman
+ */
 public class FluentAssertionsTest     {
     
     static AtomicReference<File> aFile = new AtomicReference<File>();
@@ -28,14 +34,20 @@ public class FluentAssertionsTest     {
 	@SuppressWarnings("serial")
     @Test
 	public void testWithFakeWebElements() throws Throwable{
-		FakeWebElement element = new FakeWebElement("input", "", new HashMap<String,String>(){{put("name","input1"); put("type","text"); put("value","default value"); put("disabled", "false");}}, new HashMap<String,String>(){{put("color","#00c000"); put("displayed","true");put("height","20");put("width","60");put("visibility","visible");}});
-		assertsAroundWebElementInput1(element);
-		element = new FakeWebElement("a", "Click Me!!!", new HashMap<String,String>(){{put("id","linky"); put("text","Click Me!!!"); put("disabled", "false");}}, new HashMap<String,String>(){{put("displayed","true");put("visibility","visible");}});
-		assertsAroundWebElementLinky(element);
-        element = new FakeWebElement("input", "", new HashMap<String,String>(){{put("name","input2"); put("type","text"); put("value","default value1");  put("disabled", "FALSE");}}, new HashMap<String,String>(){{put("displayed","false");put("height","20");put("width","60");put("visibility","hidden");}});
-        assertsAroundWebInput2Hidden(element);
-        element = new FakeWebElement("input", "", new HashMap<String,String>(){{put("name","input3"); put("type","text"); put("value","default value2"); put("disabled", "true");}}, new HashMap<String,String>(){{put("displayed","true");put("height","20");put("width","60");put("visibility","visible");}});
-        assertsAroundWebInput3Disabled(element);
+        WebElement input1 = new FakeWebElement("input", "", new HashMap<String,String>(){{put("name","input1"); put("type","text"); put("value","default value"); put("disabled", "false");}}, new HashMap<String,String>(){{put("color","#00c000"); put("displayed","true");put("height","20");put("width","60");put("visibility","visible");}});
+        WebElement input2hidden = new FakeWebElement("input", "", new HashMap<String,String>(){{put("name","input2"); put("type","text"); put("value","default value1");  put("disabled", "FALSE");}}, new HashMap<String,String>(){{put("displayed","false");put("height","20");put("width","60");put("visibility","hidden");}});
+        WebElement input3disabled = new FakeWebElement("input", "", new HashMap<String,String>(){{put("name","input3"); put("type","text"); put("value","default value2"); put("disabled", "true");}}, new HashMap<String,String>(){{put("displayed","true");put("height","20");put("width","60");put("visibility","visible");}});
+        WebElement linky = new FakeWebElement("a", "Click Me!!!", new HashMap<String,String>(){{put("id","linky"); put("text","Click Me!!!"); put("disabled", "false");}}, new HashMap<String,String>(){{put("displayed","true");put("visibility","visible");}});
+        WebElement selected = new FakeWebElement("option","Three",new HashMap<String,String>(){{put("value","three"); put("selected","true");}}, new HashMap<String,String>(){{put("displayed","true");put("visibility","visible");}});
+        WebElement not_selected = new FakeWebElement("option","Two",new HashMap<String,String>(){{put("value","two"); put("selected","false");}}, new HashMap<String,String>(){{put("displayed","true");put("visibility","visible");}});
+        IndexPage page = new IndexPage(new HtmlUnitDriver(){public String getTitle(){return "Awesome Page";}});
+        page.setInput1(input1);
+        page.setInput2hidden(input2hidden);
+        page.setInput3disabled(input3disabled);
+        page.setLinky(linky);
+        page.setSelected(selected);
+        page.setNot_selected(not_selected);
+        verifyIndexPage(page);
 	}
 
 	private static File copyFileToTemp(String name) throws IOException {
@@ -54,11 +66,8 @@ public class FluentAssertionsTest     {
       WebDriver driver = new FirefoxDriver();
       try {
         driver.navigate().to(indexFile.toURI().toURL());
-        assertsAroundWebElementInput1(driver.findElement(By.id("input1")));
-        assertsAroundWebElementLinky(driver.findElement(By.id("linky")));
-        assertsAroundWebInput2Hidden(driver.findElement(By.id("input2hidden")));
-        assertsAroundWebInput3Disabled(driver.findElement(By.id("input3disabled")));
-        assertsAroundSelectableOptions(driver.findElement(By.id("selected")),driver.findElement(By.id("not_selected")));
+        IndexPage page = PageFactory.initElements(driver, IndexPage.class);
+        verifyIndexPage(page);
       } finally {
         driver.close();
       }      
@@ -71,15 +80,21 @@ public class FluentAssertionsTest     {
       driver.setJavascriptEnabled(true);
       try {
         driver.navigate().to(indexFile.toURI().toURL());
-        assertsAroundWebElementInput1(driver.findElement(By.id("input1")));
-        assertsAroundWebElementLinky(driver.findElement(By.id("linky")));
-        assertsAroundWebInput2Hidden(driver.findElement(By.id("input2hidden")));
-        assertsAroundWebInput3Disabled(driver.findElement(By.id("input3disabled")));
-        assertsAroundSelectableOptions(driver.findElement(By.id("selected")),driver.findElement(By.id("not_selected")));
+        IndexPage page = PageFactory.initElements(driver, IndexPage.class);
+        verifyIndexPage(page);
       } finally {
         driver.close();
       }      
     }
+	
+	private void verifyIndexPage(IndexPage page) {
+      assertThatPageObject(page).allWebElementsNotNull();
+      assertsAroundWebElementInput1(page.getInput1());
+      assertsAroundWebElementLinky(page.getLinky());
+      assertsAroundWebInput2Hidden(page.getInput2hidden());
+      assertsAroundWebInput3Disabled(page.getInput3disabled());
+      assertsAroundSelectableOptions(page.getSelected(), page.getNot_selected());
+	}
 	
 	private int randomNonZeroInt(){
 	  Random r = new Random();
@@ -87,7 +102,7 @@ public class FluentAssertionsTest     {
 	}
 	
 	
-	private void assertsAroundWebElementInput1(WebElement element) throws Exception {
+	private void assertsAroundWebElementInput1(WebElement element)  {
 	    //positive
 		assertThat(element).isNotNull().hasTagName("input").isDisplayed().isEnabled().hasName("input1").isNotHidden().hasAttributeWithValue("type", "text").hasHeight(20).hasWidth(60).hasSize(new Dimension(60,20)).hasValue("default value").doesNotHaveCssPropertyWithValue("background-image", "image.jpg");
 		
@@ -202,7 +217,7 @@ public class FluentAssertionsTest     {
  
 	}
 	
-	private void assertsAroundWebElementLinky(WebElement element) throws Exception {
+	private void assertsAroundWebElementLinky(WebElement element) {
       assertThat(element).isNotNull().hasTagName("a").isDisplayed().doesNotHaveAttribute("name").isNotHidden().textContains("Click Me!!!");
       try {
         assertThat(element).hasAttribute("name");
@@ -213,11 +228,11 @@ public class FluentAssertionsTest     {
       }
 	}
 	
-	private void assertsAroundWebInput2Hidden(WebElement element) throws Exception {
+	private void assertsAroundWebInput2Hidden(WebElement element) {
       assertThat(element).isNotNull().hasTagName("input").isHidden().isNotDisplayed().hasName("input2").hasAttributeWithValue("type", "text").hasHeight(20).hasWidth(60).hasAttributeWithValue("disabled", Boolean.FALSE);
     }    
 	
-	private void assertsAroundWebInput3Disabled(WebElement element) throws Exception {
+	private void assertsAroundWebInput3Disabled(WebElement element) {
       assertThat(element).isNotNull().hasTagName("input").isNotHidden().isDisplayed().hasName("input3").hasAttributeWithValue("type", "text").hasAttributeWithValue("disabled", Boolean.TRUE).isNotEnabled();
       try {
         assertThat(element).isEnabled();
@@ -228,7 +243,7 @@ public class FluentAssertionsTest     {
       }
     }
 	
-	private void assertsAroundSelectableOptions(WebElement selected, WebElement notselected) throws Exception {
+	private void assertsAroundSelectableOptions(WebElement selected, WebElement notselected) {
       assertThat(selected).isSelected();
       try {
         assertThat(selected).isNotSelected();
