@@ -115,9 +115,10 @@ public class WebElementExtension extends GenericAssert<WebElementExtension, WebE
     return this;
   }
   
-  public WebElementExtension doesNotHaveCssPropertyWithValue(String cssProperty){
+  public WebElementExtension doesNotHaveCssPropertyWithValue(String cssProperty, String value){
     isNotNull();
-    assertThat(element.getCssValue(cssProperty)).as(getShouldText() + "have not have a css property with the name of " + cssProperty ).isNullOrEmpty();
+    if (element.getCssValue(cssProperty) == null) return this;
+    assertThat(element.getCssValue(cssProperty).toLowerCase()).as(getShouldText() + "have not have a css property with the name of " + cssProperty + " and a value of "+value ).isNotEqualTo(value.toLowerCase());
     return this;
   }
 

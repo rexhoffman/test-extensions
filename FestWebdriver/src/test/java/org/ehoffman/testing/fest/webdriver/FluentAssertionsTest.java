@@ -6,7 +6,6 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.Random;
 import java.util.concurrent.atomic.AtomicReference;
@@ -26,9 +25,10 @@ public class FluentAssertionsTest     {
     
     static AtomicReference<File> aFile = new AtomicReference<File>();
   
-	@Test
+	@SuppressWarnings("serial")
+    @Test
 	public void testWithFakeWebElements() throws Throwable{
-		FakeWebElement element = new FakeWebElement("input", "", new HashMap<String,String>(){{put("name","input1"); put("type","text"); put("value","default value"); put("disabled", "false");}}, new HashMap<String,String>(){{put("displayed","true");put("height","20");put("width","60");put("visibility","visible");}});
+		FakeWebElement element = new FakeWebElement("input", "", new HashMap<String,String>(){{put("name","input1"); put("type","text"); put("value","default value"); put("disabled", "false");}}, new HashMap<String,String>(){{put("color","#00c000"); put("displayed","true");put("height","20");put("width","60");put("visibility","visible");}});
 		assertsAroundWebElementInput1(element);
 		element = new FakeWebElement("a", "Click Me!!!", new HashMap<String,String>(){{put("id","linky"); put("text","Click Me!!!"); put("disabled", "false");}}, new HashMap<String,String>(){{put("displayed","true");put("visibility","visible");}});
 		assertsAroundWebElementLinky(element);
@@ -58,6 +58,7 @@ public class FluentAssertionsTest     {
         assertsAroundWebElementLinky(driver.findElement(By.id("linky")));
         assertsAroundWebInput2Hidden(driver.findElement(By.id("input2hidden")));
         assertsAroundWebInput3Disabled(driver.findElement(By.id("input3disabled")));
+        assertsAroundSelectableOptions(driver.findElement(By.id("selected")),driver.findElement(By.id("not_selected")));
       } finally {
         driver.close();
       }      
@@ -74,6 +75,7 @@ public class FluentAssertionsTest     {
         assertsAroundWebElementLinky(driver.findElement(By.id("linky")));
         assertsAroundWebInput2Hidden(driver.findElement(By.id("input2hidden")));
         assertsAroundWebInput3Disabled(driver.findElement(By.id("input3disabled")));
+        assertsAroundSelectableOptions(driver.findElement(By.id("selected")),driver.findElement(By.id("not_selected")));
       } finally {
         driver.close();
       }      
@@ -87,7 +89,7 @@ public class FluentAssertionsTest     {
 	
 	private void assertsAroundWebElementInput1(WebElement element) throws Exception {
 	    //positive
-		assertThat(element).isNotNull().hasTagName("input").isDisplayed().isEnabled().hasName("input1").isNotHidden().hasAttributeWithValue("type", "text").hasHeight(20).hasWidth(60).hasSize(new Dimension(60,20)).hasValue("default value");
+		assertThat(element).isNotNull().hasTagName("input").isDisplayed().isEnabled().hasName("input1").isNotHidden().hasAttributeWithValue("type", "text").hasHeight(20).hasWidth(60).hasSize(new Dimension(60,20)).hasValue("default value").doesNotHaveCssPropertyWithValue("background-image", "image.jpg");
 		
 		//negative tests
 		//Test WebElementDescription is used and that null checks are inherited.
@@ -171,6 +173,14 @@ public class FluentAssertionsTest     {
           assertThat(t.getMessage()).contains("should have attribute with the name of \"value\" with a value of \"some value\"");
         }
         
+        try {
+          assertThat(element).doesNotHaveCssPropertyWithValue("color", "#00c000");//green
+        } catch (Throwable t){
+          assertThat(t).hasNoCause().isExactlyInstanceOf(AssertionError.class);
+          assertThat(t.getMessage()).contains(new WebElementExtension.WebElementDescription(element).value());
+          assertThat(t.getMessage()).contains("should have not have a css property with the name of color and a value of #00c000");
+        }
+        
         for (int i = 1; i < 20; i++){
           Dimension d = new Dimension(60+randomNonZeroInt(),20+randomNonZeroInt());
           try {
@@ -215,6 +225,25 @@ public class FluentAssertionsTest     {
         assertThat(t).hasNoCause().isExactlyInstanceOf(AssertionError.class);
         assertThat(t.getMessage()).contains(new WebElementExtension.WebElementDescription(element).value());
         assertThat(t.getMessage()).contains("should be enabled");
+      }
+    }
+	
+	private void assertsAroundSelectableOptions(WebElement selected, WebElement notselected) throws Exception {
+      assertThat(selected).isSelected();
+      try {
+        assertThat(selected).isNotSelected();
+      } catch (Throwable t){
+        assertThat(t).hasNoCause().isExactlyInstanceOf(AssertionError.class);
+        assertThat(t.getMessage()).contains(new WebElementExtension.WebElementDescription(selected).value());
+        assertThat(t.getMessage()).contains("should not be selected");
+      }
+      assertThat(notselected).isNotSelected();
+      try {
+        assertThat(notselected).isSelected();
+      } catch (Throwable t){
+        assertThat(t).hasNoCause().isExactlyInstanceOf(AssertionError.class);
+        assertThat(t.getMessage()).contains(new WebElementExtension.WebElementDescription(notselected).value());
+        assertThat(t.getMessage()).contains("should be selected");
       }
     }
 	
