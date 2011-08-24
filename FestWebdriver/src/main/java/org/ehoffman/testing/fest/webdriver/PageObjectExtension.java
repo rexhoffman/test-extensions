@@ -9,15 +9,16 @@ import java.util.Map.Entry;
 import static org.ehoffman.testing.fest.webdriver.WebElementAssert.assertThat;
 import static org.fest.assertions.Assertions.assertThat;
 
-import org.fest.assertions.AssertExtension;
+import org.fest.assertions.GenericAssert;
 import org.openqa.selenium.WebElement;
 
-public class PageObjectExtension implements AssertExtension{
+public class PageObjectExtension extends GenericAssert<PageObjectExtension, Object> {
 
   private Object object;
   private Map<String, WebElement> extractedElementMap;
   
   public PageObjectExtension(Object pageObject){
+    super(PageObjectExtension.class, pageObject);
     this.object = pageObject;
     this.extractedElementMap = extractWebElementMap();
   }
@@ -42,22 +43,34 @@ public class PageObjectExtension implements AssertExtension{
   }
   
   public PageObjectExtension allWebElementsNotNull(){
-    assertThat(extractedElementMap.values()).excludes((Object)null);
+    for (Entry<String, WebElement> element : extractedElementMap.entrySet()){
+      assertThat(element.getValue()).isNotNull();
+    }
     return this;
   }
   
-  public PageObjectExtension allWebElementsDisplayedAndVisibile(){
-    assertThat(extractedElementMap.values()).excludes((Object)null);
-    return this;
-  }
-  
-  public PageObjectExtension isEqualViaReflectiveBeanComparison(Object o){
-    isEqualViaReflectiveBeanComparison(extractBeanValues(o));
+  public PageObjectExtension allWebElementsEnabled(){
+    for (Entry<String, WebElement> element : extractedElementMap.entrySet()){
+      assertThat(element.getValue()).isNotNull().isEnabled();
+    }
     return this;
   }
 
-  private Map<String, Object> extractBeanValues(Object object){
-    Map<String, Object> extractedBeanMap = new HashMap<String, Object>();
+  public PageObjectExtension allWebElementsDisplayed(){
+    for (Entry<String, WebElement> element : extractedElementMap.entrySet()){
+      assertThat(element.getValue()).isNotNull().isDisplayed();
+    }
+    return this;
+  }
+
+  
+  public PageObjectExtension isEqualViaReflectiveBeanComparison(Object o){
+    isEqualViaReflectiveMapComparison(extractBeanValues(o));
+    return this;
+  }
+
+  private Map<String, String> extractBeanValues(Object object){
+    Map<String, String> extractedBeanMap = new HashMap<String, String>();
     for (Method method : object.getClass().getMethods()){
       if (method.getReturnType() != null &&
           method.getParameterTypes().length == 0 &&
@@ -70,16 +83,22 @@ public class PageObjectExtension implements AssertExtension{
         } catch (InvocationTargetException target){
         } catch (IllegalArgumentException argument){
         }
-        extractedBeanMap.put(method.getName().substring("get".length()).toLowerCase(), returned);
+        extractedBeanMap.put(method.getName().substring("get".length()).toLowerCase(), (returned!=null?returned.toString():(String)null));
       }
     }
     return extractedBeanMap;
   }
   
-  public PageObjectExtension isEqualViaReflectiveBeanComparison(Map<String, Object> map){
+  public PageObjectExtension isEqualViaReflectiveMapComparison(Map<String, String> map){
     assertThat(extractedElementMap.keySet()).isEqualTo(map.keySet());
     for (Entry<String, WebElement> entry : extractedElementMap.entrySet()){
-      assertThat(entry.getValue()).hasValue(""+map.get(entry.getKey()));
+      String value = map.get(entry.getKey());
+      WebElement element = entry.getValue();
+      if (value == null){
+        assertThat(element).doesNotHaveAttribute("value");
+      } else {
+        assertThat(element).hasValue(value);
+      }
     }
     return this;
   }

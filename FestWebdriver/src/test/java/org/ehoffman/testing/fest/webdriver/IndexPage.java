@@ -30,6 +30,16 @@ public class IndexPage {
   @FindBy(id = "not_selected")
   private WebElement not_selected;
 
+  private Integer someOtherBeanProperty;
+
+  public Integer getSomeOtherBeanProperty() {
+    return someOtherBeanProperty;
+  }
+
+  public void setSomeOtherBeanProperty(Integer someOtherBeanProperty) {
+    this.someOtherBeanProperty = someOtherBeanProperty;
+  }
+
   public WebElement getInput1() {
     return input1;
   }
