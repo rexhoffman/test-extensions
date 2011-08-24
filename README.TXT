@@ -41,4 +41,4 @@ So this test is actually run twice, once in Firefox, and once in HtmlUnit (becau
 Because these tests can be easily run and debugged in eclipse, method byte code replacement (stuff that's been around since jdk 1.4) can be used while debugging to work on methods either in the application or test (after popping it of the execution stack)
 
 
-One caveat, if you try to run 'mvn site:site' on it's own it will fail, you must run "mvn install site:site" as some of the later builds rely on copying the EmbeddedWebapp War in to there target directory before running the webbapp in Jetty.
+One caveat, if you try to run 'mvn site:site' on it's own it will fail, you must run "mvn install site:site" as some of the later builds rely on copying the EmbeddedWebapp War in to their target directory before running the webbapp in Jetty.
