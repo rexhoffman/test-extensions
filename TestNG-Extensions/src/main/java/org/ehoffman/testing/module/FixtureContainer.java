@@ -123,6 +123,9 @@ public class FixtureContainer {
   }
 
   public static Set<String> getModuleClassesSimpleName() {
+    if (moduleClasses.get() == null){
+      throw new RuntimeException("The FixtureRunnerMethodInterceptor is not configure as a TestNG Listener method.");
+    }
     Set<String> output = new HashSet<String>(moduleClasses.get().size());
     for (Class<? extends Module<?>> clazz : moduleClasses.get()) {
       output.add(clazz.getSimpleName());

@@ -7,23 +7,26 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
-import org.ehoffman.testing.testng.FixtureRunnerMethodInterceptor;
-import org.ehoffman.testng.extensions.AnnotationEnforcer;
+import org.ehoffman.testing.module.FixtureContainer;
 import org.ehoffman.testng.extensions.Broken;
 import org.ehoffman.testng.extensions.Fixture;
-import org.ehoffman.testing.module.FixtureContainer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.testng.annotations.AfterSuite;
 import org.testng.annotations.Listeners;
 import org.testng.annotations.Test;
 
-@Listeners({FixtureRunnerMethodInterceptor.class, AnnotationEnforcer.class})
+@Listeners({MyEnforcer.class})
 public class FrameworkTest {
   private static Set<String> results = Collections.synchronizedSet(new HashSet<String>());
   private static Set<String> expectedForUnitTests = new HashSet<String>(Arrays.asList("sharedTest","unit1"));
   private static Set<String> expectedForIntegrationTests = new HashSet<String>(Arrays.asList("sharedTest", "sharedTest2", "remote1"));
-
+  private static Set<String> all = new HashSet<String>();
+  static{
+    all.addAll(expectedForIntegrationTests);
+    all.addAll(expectedForUnitTests);
+  }
+  
   private static final Logger logger = LoggerFactory.getLogger(FrameworkTest.class);
 
   @Test(groups = { "unit","remote-integration" })
@@ -42,7 +45,7 @@ public class FrameworkTest {
     results.add("sharedTest2");
   }
 
-  @Test(groups = "remote-integration")
+  @Test(groups = {"remote-integration"})
   public void remote1() {
     logger.info("remote1");
     // assertThat(AnnotationEnforcer.isIntegrationTestPhase()).as("This test should not be run during the unit phase").isTrue();
@@ -56,7 +59,7 @@ public class FrameworkTest {
     // assertThat(AnnotationEnforcer.isIntegrationTestPhase()).as("This test should not be run during the integration phase").isFalse();
   }
 
-  @Test(groups = { "remote-integration", "unit" })
+  @Test(groups = { "remote-integration", "unit"})
   @Broken(developer = "rex hoffman", issueInTracker = "???")
   public void shared3Broken() {
     logger.info("shared3broken");
@@ -66,12 +69,15 @@ public class FrameworkTest {
 
   @AfterSuite()
   public void verifyTestMethods() {
-    if (!AnnotationEnforcer.isIntegrationTestPhase()) {
-      logger.info("unit: " + results);
-      assertThat(results).containsOnly(expectedForUnitTests.toArray()).as("Should contain only the expected tests");
-    } else {
+    if (MyEnforcer.isIdeMode()){
+      logger.info("all: " + results);
+      assertThat(results).containsOnly(all.toArray()).as("Should contain only the expected tests");
+    } else if (MyEnforcer.isIntegrationPhase()) {
       logger.info("integration: " + results);
       assertThat(results).containsOnly(expectedForIntegrationTests.toArray()).as("Should contain only the expected tests");
+    } else {
+      logger.info("unit: " + results);
+      assertThat(results).containsOnly(expectedForUnitTests.toArray()).as("Should contain only the expected tests");
     }
   }
 

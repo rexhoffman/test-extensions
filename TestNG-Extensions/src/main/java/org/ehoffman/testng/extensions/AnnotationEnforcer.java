@@ -29,8 +29,6 @@ public class AnnotationEnforcer implements ITestListener, IInvokedMethodListener
 
   private static final Logger logger = LoggerFactory.getLogger(AnnotationEnforcer.class);
 
-  protected void verifyBrokenAnnotation(Annotation brokenAnnotation) {
-  }
 
   /**
    * Contains the value of the System property "integration_phase", converted to
@@ -38,11 +36,6 @@ public class AnnotationEnforcer implements ITestListener, IInvokedMethodListener
    */
   protected static boolean integration_phase;
 
-  /**
-   * Contains the value of the System property "run_known_breaks" converted to a
-   * boolean, the default is true.
-   */
-  protected static boolean run_known_breaks;
   /**
    * Will be populated with the contents of the system property
    * "unit_test_groups", split on the "," character.
@@ -55,17 +48,6 @@ public class AnnotationEnforcer implements ITestListener, IInvokedMethodListener
    */
   protected static String[] integration_test_groups;
 
-  /**
-   * Will contain the class representing a annotation used to mark known breaks,
-   * it will attempt to look up a class with a name contained in the
-   * "known_break_property" system property.
-   * 
-   * It may also be null.
-   * 
-   * A String that does not evaluate to a class with result in a runtime
-   * exception.
-   */
-  private static Class<? extends Annotation> knownBreak;
 
   private static boolean ideMode = false;
 
@@ -85,16 +67,6 @@ public class AnnotationEnforcer implements ITestListener, IInvokedMethodListener
 
   protected static void configureAnnotationEnforcer(Boolean runKnownBreaks, Class<? extends Annotation> brokenAnnotation, String[] unitTestGroups,
       String[] integrationTestGroups, Boolean integrationsPhase) {
-    if (runKnownBreaks != null) {
-      AnnotationEnforcer.run_known_breaks = runKnownBreaks;
-    } else {
-      AnnotationEnforcer.run_known_breaks = (System.getProperty("run_known_breaks") != null);
-    }
-    if (brokenAnnotation != null) {
-      AnnotationEnforcer.knownBreak = brokenAnnotation;
-    } else {
-      AnnotationEnforcer.knownBreak = Broken.class;
-    }
     if (unitTestGroups != null) {
       AnnotationEnforcer.unit_test_groups = unitTestGroups;
     } else {
@@ -218,12 +190,6 @@ public class AnnotationEnforcer implements ITestListener, IInvokedMethodListener
     if (ideMode) {
       return false;
     }
-    if (knownBreak != null && element.getAnnotation(knownBreak) != null) {
-      verifyBrokenAnnotation(element.getAnnotation(knownBreak));
-      if (!run_known_breaks) {
-        return true;
-      }
-    }
     if (integration_phase && !inGroups(annotation.groups(), Arrays.asList(integration_test_groups))) {
       return true;
     }
@@ -254,9 +220,6 @@ public class AnnotationEnforcer implements ITestListener, IInvokedMethodListener
 
   @Override
   public void onFinish(ITestContext context) {
-    logger.trace("New Passed Tests: "+context.getPassedTests());
-    FixtureContainer.destroyAll();
-    FactoryUtil.destroy();
     failIfIncorrectGroups();
   }
 
@@ -283,38 +246,6 @@ public class AnnotationEnforcer implements ITestListener, IInvokedMethodListener
 
   @Override
   public void onTestSuccess(ITestResult result) {
-  }
-
-  /*********************************************************************************/
-  /* IInvokedMethodListener */
-  /*********************************************************************************/
-
-  @SuppressWarnings("deprecation")
-  private void postProcessBrokenTests(IInvokedMethod method, ITestResult testResult) {
-    Broken broken = method.getTestMethod().getMethod().getAnnotation(Broken.class);
-    if (broken != null) {
-      testResult.setAttribute("Known Break", true);
-      testResult.setAttribute("True Status", "SUCCESS");
-      if (!testResult.isSuccess() && testResult.getStatus()!=ITestResult.SKIP) {
-        testResult.setAttribute("True Status", "FAILURE");
-        testResult.setStatus(ITestResult.SKIP);
-        testResult.setThrowable(null);
-      }
-    }
-  }
-
-  @Override
-  @SuppressWarnings("deprecation")
-  public void afterInvocation(IInvokedMethod method, ITestResult testResult) {
-    postProcessBrokenTests(method, testResult);
-    Test test = method.getTestMethod().getMethod().getAnnotation(Test.class);
-    if (test != null && shouldSkip(test, method.getTestMethod().getMethod())) {
-      testResult.setStatus(ITestResult.SKIP);
-    }
-  }
-
-  @Override
-  public void beforeInvocation(IInvokedMethod arg0, ITestResult arg1) {
   }
 
   /*********************************************************************************/
@@ -345,13 +276,6 @@ public class AnnotationEnforcer implements ITestListener, IInvokedMethodListener
    *          the element on which this annotation resides.
    */
   private void disableTestIfNotMeantToRun(ITestAnnotation annotation, AnnotatedElement element) {
-    if (knownBreak != null && element.getAnnotation(knownBreak) != null) {
-      if (!run_known_breaks) {
-        disable(annotation, element);
-      } else {
-        annotation.setSkipFailedInvocations(true);
-      }
-    }
     if (integration_phase && !inGroups(annotation.getGroups(), Arrays.asList(integration_test_groups))) {
       disable(annotation, element);
     }
@@ -385,5 +309,17 @@ public class AnnotationEnforcer implements ITestListener, IInvokedMethodListener
   @Override
   public void generateReport(List<XmlSuite> xmlSuites, List<ISuite> suites, String outputDirectory) {
     new JUnitReportReporter().generateReport(xmlSuites, suites, outputDirectory);
+  }
+
+  @Override
+  public void beforeInvocation(IInvokedMethod method, ITestResult testResult) {
+    // TODO Auto-generated method stub
+    
+  }
+
+  @Override
+  public void afterInvocation(IInvokedMethod method, ITestResult testResult) {
+    // TODO Auto-generated method stub
+    
   }
 }

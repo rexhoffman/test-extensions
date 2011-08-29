@@ -6,7 +6,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.ehoffman.module.Module;
-import org.ehoffman.testing.testng.FixtureRunnerMethodInterceptor;
 import org.ehoffman.testng.extensions.Fixture;
 import org.ehoffman.testing.module.FixtureContainer;
 import org.slf4j.Logger;
@@ -14,7 +13,7 @@ import org.slf4j.LoggerFactory;
 import org.testng.annotations.Listeners;
 import org.testng.annotations.Test;
 
-@Listeners(FixtureRunnerMethodInterceptor.class)
+@Listeners(MyEnforcer.class)
 public class TestNiceMessageOnDependencyNotSet {
   private static Logger logger = LoggerFactory.getLogger(TestNiceMessageOnDependencyNotSet.class);
 
