@@ -1,4 +1,4 @@
-package org.ehoffman.testing.module;
+package org.ehoffman.testing.fixture;
 
 import java.util.ArrayList;
 import java.util.Collection;

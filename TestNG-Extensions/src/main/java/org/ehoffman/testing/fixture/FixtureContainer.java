@@ -1,4 +1,4 @@
-package org.ehoffman.testing.module;
+package org.ehoffman.testing.fixture;
 
 import java.util.Collection;
 import java.util.Collections;
@@ -13,20 +13,19 @@ import java.util.Set;
 
 import org.ehoffman.module.Module;
 import org.ehoffman.module.ModuleProvider;
-import org.ehoffman.testing.module.Modules;
-import org.ehoffman.testng.extensions.services.HotSwappableProxy;
-import org.ehoffman.testng.extensions.services.HotswapableThreadLocalInvocationHandler;
-import org.ehoffman.testng.extensions.services.HotswappableThreadLocalProxyFactory;
+import org.ehoffman.testing.fixture.services.HotSwappableProxy;
+import org.ehoffman.testing.fixture.services.HotswapableThreadLocalInvocationHandler;
+import org.ehoffman.testing.fixture.services.HotswappableThreadLocalProxyFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class FixtureContainer {
-  private static final Logger                                               logger                    = LoggerFactory.getLogger(Modules.class);
+  private static final Logger                                               logger                    = LoggerFactory.getLogger(FixtureContainer.class);
   private static final ConcurrentMap<Class<? extends Module<?>>, Module<?>> reusableThreadSafeModules = new ConcurrentHashMap<Class<? extends Module<?>>, Module<?>>();
   private static final ConcurrentMap<String, HotSwappableProxy>             fixtureServices           = new ConcurrentHashMap<String, HotSwappableProxy>();
   private static ThreadLocal<Set<Class<? extends Module<?>>>>               moduleClasses             = new ThreadLocal<Set<Class<? extends Module<?>>>>();
 
-  public static Iterator<Set<Class<? extends Module<?>>>> getDotProductModuleCombinations(Collection<Class<? extends ModuleProvider<?>>> moduleClasses, boolean destructive) {
+  static Iterator<Set<Class<? extends Module<?>>>> getDotProductModuleCombinations(Collection<Class<? extends ModuleProvider<?>>> moduleClasses, boolean destructive) {
     Collection<Set<Class<? extends Module<?>>>> listOfOptions = mergeListsOfSameModuleType(ModuleUtil.getAllPossibleModules(moduleClasses));
     return new DotProductIterator<Class<? extends Module<?>>>(listOfOptions);
   }
@@ -62,13 +61,13 @@ public class FixtureContainer {
     return module;
   }
 
-  public static void destroyAll(){
+  static void destroyAll(){
     for (Module<?> module : reusableThreadSafeModules.values()){
       module.destroy();
     }
   }
   
-  public static Collection<Set<Class<? extends Module<?>>>> mergeListsOfSameModuleType(Collection<Class<? extends Module<?>>> input) {
+  static Collection<Set<Class<? extends Module<?>>>> mergeListsOfSameModuleType(Collection<Class<? extends Module<?>>> input) {
     Map<String, Set<Class<? extends Module<?>>>> output = new HashMap<String, Set<Class<? extends Module<?>>>>();
     if (input != null) {
       for (Class<? extends Module<?>> clazz : input) {
@@ -86,7 +85,7 @@ public class FixtureContainer {
     return output.values();
   }
 
-  public static void createServiceIfNeeded(Class<? extends Module<?>> moduleClass) {
+  static void createServiceIfNeeded(Class<? extends Module<?>> moduleClass) {
     Module<?> module = getModuleFromClass(moduleClass, false);
     String serviceName = module.getModuleType();
     HotSwappableProxy proxy = fixtureServices.get(serviceName);
@@ -96,7 +95,7 @@ public class FixtureContainer {
     }
   }
 
-  public static void createServicesIfNeeded(Set<Class<? extends Module<?>>> moduleClasses) {
+  static void createServicesIfNeeded(Set<Class<? extends Module<?>>> moduleClasses) {
     for (Class<? extends Module<?>> moduleClass : moduleClasses) {
       createServiceIfNeeded(moduleClass);
     }
@@ -133,7 +132,7 @@ public class FixtureContainer {
     return Collections.unmodifiableSet(output);
   }
 
-  public static void wipeFixture() {
+  static void wipeFixture() {
     for (Entry<String, HotSwappableProxy> serviceEntry : fixtureServices.entrySet()) {
       serviceEntry.getValue().setProxyTargetModule(null);
     }
@@ -152,7 +151,7 @@ public class FixtureContainer {
    * 
    * @param moduleClasses
    */
-  public static void setModuleClasses(Set<Class<? extends Module<?>>> moduleClasses, boolean destructive) {
+  static void setModuleClasses(Set<Class<? extends Module<?>>> moduleClasses, boolean destructive) {
     createServicesIfNeeded(moduleClasses);
     FixtureContainer.moduleClasses.set(moduleClasses);
     for (Class<? extends Module<?>> moduleClass : moduleClasses) {

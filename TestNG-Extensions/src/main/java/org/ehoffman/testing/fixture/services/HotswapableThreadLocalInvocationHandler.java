@@ -1,4 +1,4 @@
-package org.ehoffman.testng.extensions.services;
+package org.ehoffman.testing.fixture.services;
 
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
@@ -12,7 +12,7 @@ import net.sf.cglib.proxy.MethodProxy;
 import org.apache.commons.pool.ObjectPool;
 import org.ehoffman.module.Module;
 import org.ehoffman.module.PooledModule;
-import org.ehoffman.testing.module.FixtureContainer;
+import org.ehoffman.testing.fixture.FixtureContainer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

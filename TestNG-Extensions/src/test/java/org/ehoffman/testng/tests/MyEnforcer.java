@@ -2,9 +2,9 @@ package org.ehoffman.testng.tests;
 
 import java.util.Arrays;
 
-import org.ehoffman.testing.module.ExtensibleTestNGListener;
+import org.ehoffman.testing.fixture.FixtureInterceptor;
 import org.ehoffman.testing.testng.BrokenInterceptor;
-import org.ehoffman.testing.testng.FixtureInterceptor;
+import org.ehoffman.testing.testng.ExtensibleTestNGListener;
 import org.ehoffman.testing.testng.GroupsInterceptor;
 import org.ehoffman.testng.extensions.Broken;
 

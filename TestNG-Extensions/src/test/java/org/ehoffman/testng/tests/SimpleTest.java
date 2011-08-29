@@ -2,7 +2,7 @@ package org.ehoffman.testng.tests;
 
 import static org.fest.assertions.Assertions.assertThat;
 
-import org.ehoffman.testing.module.FixtureContainer;
+import org.ehoffman.testing.fixture.FixtureContainer;
 import org.ehoffman.testng.extensions.Fixture;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

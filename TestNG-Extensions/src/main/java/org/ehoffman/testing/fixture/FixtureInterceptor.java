@@ -1,4 +1,4 @@
-package org.ehoffman.testing.testng;
+package org.ehoffman.testing.fixture;
 
 import java.lang.reflect.Method;
 import java.util.ArrayList;
@@ -13,10 +13,9 @@ import java.util.Set;
 
 import org.ehoffman.module.Module;
 import org.ehoffman.module.ModuleProvider;
-import org.ehoffman.testing.module.FixtureContainer;
-import org.ehoffman.testing.module.Interceptor;
+import org.ehoffman.testing.fixture.services.FactoryUtil;
+import org.ehoffman.testing.testng.Interceptor;
 import org.ehoffman.testng.extensions.Fixture;
-import org.ehoffman.testng.extensions.services.FactoryUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.testng.IMethodInstance;
@@ -62,7 +61,7 @@ public class FixtureInterceptor implements Interceptor {
     logger.info("added all "+testNGMethodToSetOfModuleClassesForSingleInvocation);
     return output;
   }
-  
+
 
 
   @Override

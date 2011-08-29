@@ -6,8 +6,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.ehoffman.module.Module;
+import org.ehoffman.testing.fixture.FixtureContainer;
 import org.ehoffman.testng.extensions.Fixture;
-import org.ehoffman.testing.module.FixtureContainer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.testng.annotations.Listeners;

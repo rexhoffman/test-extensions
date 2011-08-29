@@ -1,4 +1,4 @@
-package org.ehoffman.testng.extensions.services;
+package org.ehoffman.testing.fixture.services;
 
 import java.lang.reflect.Proxy;
 

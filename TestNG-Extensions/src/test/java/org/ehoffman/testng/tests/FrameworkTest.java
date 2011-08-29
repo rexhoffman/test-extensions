@@ -7,7 +7,7 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
-import org.ehoffman.testing.module.FixtureContainer;
+import org.ehoffman.testing.fixture.FixtureContainer;
 import org.ehoffman.testng.extensions.Broken;
 import org.ehoffman.testng.extensions.Fixture;
 import org.slf4j.Logger;
