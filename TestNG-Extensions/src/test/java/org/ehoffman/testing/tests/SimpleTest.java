@@ -11,7 +11,7 @@ import org.slf4j.LoggerFactory;
 import org.testng.annotations.Listeners;
 import org.testng.annotations.Test;
 
-@Listeners(MyAnnotationEnforcer.class)
+@Listeners({MyAnnotationEnforcer.class})
 public class SimpleTest {
   
   private static final Logger logger = LoggerFactory.getLogger(FrameworkTest.class);

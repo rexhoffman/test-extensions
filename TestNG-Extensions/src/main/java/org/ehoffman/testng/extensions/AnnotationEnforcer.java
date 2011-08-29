@@ -70,7 +70,7 @@ public class AnnotationEnforcer extends ExtensibleTestNGListener {
     logger.info("Valid groups: " + validGroups);
   }
 
-  protected static void configureAnnotationEnforcer(Boolean runKnownBreaks, Class<? extends Annotation> brokenAnnotation, String[] unitTestGroups, String[] integrationTestGroups, Boolean integrationsPhase) {
+  protected static void configureAnnotationEnforcer(Boolean runKnownBreaks, Class<? extends Annotation> brokenAnnotation, String[] unitTestGroups, String[] integrationTestGroups, Boolean integrationsPhase, Class<? extends AnnotationEnforcer> clazz) {
     if (runKnownBreaks != null) {
       AnnotationEnforcer.run_known_breaks = runKnownBreaks;
     } else {
@@ -107,7 +107,7 @@ public class AnnotationEnforcer extends ExtensibleTestNGListener {
       AnnotationEnforcer.integrationPhase = Boolean.valueOf(System.getProperty("integration_phase"));
     }
     ideMode =  Boolean.valueOf(System.getProperty("java.class.path").contains("org.testng.eclipse"));
-    ExtensibleTestNGListener.setInterceptors(Arrays.asList(
+    ExtensibleTestNGListener.setInterceptors(clazz, Arrays.asList(
         new LogBackInterceptor(),
         new BrokenInterceptor(run_known_breaks, knownBreakAnnotation, ideMode),
         new GroupsInterceptor(unit_test_groups, integration_test_groups, integrationPhase, ideMode),

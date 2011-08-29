@@ -1,6 +1,8 @@
 package org.ehoffman.testing.testng;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -16,17 +18,20 @@ public class ExtensibleTestNGListener implements IMethodInterceptor, IInvokedMet
   
   private static Logger logger = LoggerFactory.getLogger(ExtensibleTestNGListener.class);
   
-  private static List<? extends Interceptor> interceptors;
+  private static Map<Class<? extends ExtensibleTestNGListener>, List<? extends Interceptor>> clazzToInterceptors = new HashMap<Class<? extends ExtensibleTestNGListener>, List<? extends Interceptor>>();
   
-  public static void setInterceptors(List<? extends Interceptor> interceptors){
-    ExtensibleTestNGListener.interceptors = interceptors;
+  public static void setInterceptors(Class<? extends ExtensibleTestNGListener> clazz, List<? extends Interceptor> interceptors){
+    clazzToInterceptors.put(clazz, interceptors);
   }
   
+  private List<? extends Interceptor> getInterceptors(){
+    return clazzToInterceptors.get(this.getClass());
+  }
   
   @Override
   public List<IMethodInstance> intercept(List<IMethodInstance> methods, ITestContext context){
     List<IMethodInstance> output = methods;
-    for (Interceptor interceptor : interceptors){
+    for (Interceptor interceptor : getInterceptors()){
       output = interceptor.intercept(output);
     }
     return output;
@@ -35,7 +40,7 @@ public class ExtensibleTestNGListener implements IMethodInterceptor, IInvokedMet
 
   @Override
   public void beforeInvocation(IInvokedMethod method, ITestResult testResult) {
-    for (Interceptor interceptor : interceptors){
+    for (Interceptor interceptor : getInterceptors()){
       interceptor.beforeInvocation(testResult);
     }
 
@@ -43,7 +48,7 @@ public class ExtensibleTestNGListener implements IMethodInterceptor, IInvokedMet
 
   @Override
   public void afterInvocation(IInvokedMethod method, ITestResult testResult) {
-    for (Interceptor interceptor : interceptors){
+    for (Interceptor interceptor : getInterceptors()){
       interceptor.afterInvocation(testResult);
     }
   }
@@ -54,13 +59,13 @@ public class ExtensibleTestNGListener implements IMethodInterceptor, IInvokedMet
   public void onFinish(ITestContext context) {
     StringBuilder errors = new StringBuilder();
     boolean error = false;
-    for (Interceptor interceptor : interceptors){
+    for (Interceptor interceptor : getInterceptors()){
       for (String message : interceptor.getConfigErrorMessages()){
         errors.append(message).append("\n");
         error = true;
       }
     }
-    for (Interceptor interceptor : interceptors){
+    for (Interceptor interceptor : getInterceptors()){
       interceptor.shutdown();
     }
     if (error){

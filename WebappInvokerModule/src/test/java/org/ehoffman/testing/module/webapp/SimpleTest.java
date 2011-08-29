@@ -2,9 +2,9 @@ package org.ehoffman.testing.module.webapp;
 
 import static org.ehoffman.testing.fest.webdriver.WebElementAssert.assertThat;
 
+import org.ehoffman.testing.fixture.FixtureContainer;
 import org.ehoffman.testing.module.webdriver.WebDriverModule;
 import org.ehoffman.testng.extensions.Fixture;
-import org.ehoffman.testng.extensions.modules.FixtureContainer;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.testng.annotations.Listeners;

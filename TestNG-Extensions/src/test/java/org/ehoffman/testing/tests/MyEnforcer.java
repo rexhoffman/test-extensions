@@ -16,7 +16,7 @@ public class MyEnforcer extends ExtensibleTestNGListener {
   
   static {
     ideMode = false;
-    ExtensibleTestNGListener.setInterceptors(Arrays.asList(
+    ExtensibleTestNGListener.setInterceptors(MyEnforcer.class, Arrays.asList(
     new LogBackInterceptor(),
     new BrokenInterceptor(runBrokenTests, Broken.class, ideMode),
     new GroupsInterceptor(new String[] {"unit","functional"}, new String[] {"remote-integration"}, integrationPhase, ideMode),
