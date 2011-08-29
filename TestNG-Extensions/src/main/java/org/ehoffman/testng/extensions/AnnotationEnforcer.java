@@ -9,6 +9,7 @@ import org.ehoffman.testing.fixture.FixtureInterceptor;
 import org.ehoffman.testing.testng.BrokenInterceptor;
 import org.ehoffman.testing.testng.ExtensibleTestNGListener;
 import org.ehoffman.testing.testng.GroupsInterceptor;
+import org.ehoffman.testing.testng.LogBackInterceptor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -107,6 +108,7 @@ public class AnnotationEnforcer extends ExtensibleTestNGListener {
     }
     ideMode =  Boolean.valueOf(System.getProperty("java.class.path").contains("org.testng.eclipse"));
     ExtensibleTestNGListener.setInterceptors(Arrays.asList(
+        new LogBackInterceptor(),
         new BrokenInterceptor(run_known_breaks, knownBreakAnnotation, ideMode),
         new GroupsInterceptor(unit_test_groups, integration_test_groups, integrationPhase, ideMode),
         new FixtureInterceptor()));

@@ -1,4 +1,4 @@
-package org.ehoffman.testng.tests;
+package org.ehoffman.testing.tests;
 
 public class IntegerHolder {
   private Integer integer;

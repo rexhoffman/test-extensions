@@ -1,4 +1,4 @@
-package org.ehoffman.testng.tests;
+package org.ehoffman.testing.tests;
 
 import static org.fest.assertions.Assertions.*;
 

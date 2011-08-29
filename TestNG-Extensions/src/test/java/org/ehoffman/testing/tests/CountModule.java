@@ -1,4 +1,4 @@
-package org.ehoffman.testng.tests;
+package org.ehoffman.testing.tests;
 
 import java.lang.reflect.Method;
 import java.util.ArrayList;

@@ -1,4 +1,4 @@
-package org.ehoffman.testng.tests;
+package org.ehoffman.testing.tests;
 
 import java.util.Arrays;
 
@@ -6,6 +6,7 @@ import org.ehoffman.testing.fixture.FixtureInterceptor;
 import org.ehoffman.testing.testng.BrokenInterceptor;
 import org.ehoffman.testing.testng.ExtensibleTestNGListener;
 import org.ehoffman.testing.testng.GroupsInterceptor;
+import org.ehoffman.testing.testng.LogBackInterceptor;
 import org.ehoffman.testng.extensions.Broken;
 
 public class MyEnforcer extends ExtensibleTestNGListener {
@@ -14,8 +15,9 @@ public class MyEnforcer extends ExtensibleTestNGListener {
   private static boolean runBrokenTests = false; 
   
   static {
-    ideMode = true;
+    ideMode = false;
     ExtensibleTestNGListener.setInterceptors(Arrays.asList(
+    new LogBackInterceptor(),
     new BrokenInterceptor(runBrokenTests, Broken.class, ideMode),
     new GroupsInterceptor(new String[] {"unit","functional"}, new String[] {"remote-integration"}, integrationPhase, ideMode),
     new FixtureInterceptor()));

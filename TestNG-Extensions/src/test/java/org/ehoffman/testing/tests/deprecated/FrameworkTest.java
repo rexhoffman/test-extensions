@@ -1,4 +1,4 @@
-package org.ehoffman.testng.tests;
+package org.ehoffman.testing.tests.deprecated;
 
 import static org.fest.assertions.Assertions.assertThat;
 
@@ -7,16 +7,22 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
-import org.ehoffman.testing.fixture.FixtureContainer;
+import org.ehoffman.testing.tests.CountModule;
+import org.ehoffman.testing.tests.IntegerHolder;
+import org.ehoffman.testing.tests.MyEnforcer;
+import org.ehoffman.testing.tests.SimpleModule;
 import org.ehoffman.testng.extensions.Broken;
 import org.ehoffman.testng.extensions.Fixture;
+import org.ehoffman.testng.extensions.JUnitReportReporter;
+import org.ehoffman.testng.extensions.modules.FixtureContainer;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.testng.annotations.AfterSuite;
 import org.testng.annotations.Listeners;
 import org.testng.annotations.Test;
 
-@Listeners({MyEnforcer.class})
+@Listeners({MyAnnotationEnforcer.class, JUnitReportReporter.class})
 public class FrameworkTest {
   private static Set<String> results = Collections.synchronizedSet(new HashSet<String>());
   private static Set<String> expectedForUnitTests = new HashSet<String>(Arrays.asList("sharedTest","unit1"));
@@ -69,10 +75,10 @@ public class FrameworkTest {
 
   @AfterSuite()
   public void verifyTestMethods() {
-    if (MyEnforcer.isIdeMode()){
+    if (MyAnnotationEnforcer.isIdeMode()){
       logger.info("all: " + results);
       assertThat(results).containsOnly(all.toArray()).as("Should contain only the expected tests");
-    } else if (MyEnforcer.isIntegrationPhase()) {
+    } else if (MyAnnotationEnforcer.isIntegrationPhase()) {
       logger.info("integration: " + results);
       assertThat(results).containsOnly(expectedForIntegrationTests.toArray()).as("Should contain only the expected tests");
     } else {
