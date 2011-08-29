@@ -12,7 +12,7 @@ import net.sf.cglib.proxy.MethodProxy;
 import org.apache.commons.pool.ObjectPool;
 import org.ehoffman.module.Module;
 import org.ehoffman.module.PooledModule;
-import org.ehoffman.testng.extensions.modules.FixtureContainer;
+import org.ehoffman.testing.module.FixtureContainer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

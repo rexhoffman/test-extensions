@@ -91,12 +91,12 @@
           <systemPropertyVariables>
             <integration_phase>false</integration_phase>
           </systemPropertyVariables>
-          <properties>
+          <!-- properties>
             <property>
               <name>listener</name>
               <value>org.ehoffman.testng.tests.MyEnforcer</value>
             </property>
-          </properties>
+          </properties -->
         </configuration>
       </plugin>
       <plugin>
@@ -105,12 +105,12 @@
           <systemPropertyVariables>
             <integration_phase>true</integration_phase>
           </systemPropertyVariables>
-          <properties>
+          <!-- properties>
             <property>
               <name>listener</name>
               <value>org.ehoffman.testng.tests.MyEnforcer</value>
             </property>
-          </properties>
+          </properties -->
         </configuration>
       </plugin>
     </plugins>

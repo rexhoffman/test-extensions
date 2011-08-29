@@ -8,13 +8,11 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import org.ehoffman.testng.extensions.modules.DotProductIterator;
+import org.ehoffman.testing.module.DotProductIterator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.testng.annotations.Listeners;
 import org.testng.annotations.Test;
 
-@Listeners(MyEnforcer.class)
 public class DotProductIteratorTest {
 
   Logger logger = LoggerFactory.getLogger(DotProductIterator.class);

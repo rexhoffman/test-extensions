@@ -1,4 +1,4 @@
-package org.ehoffman.testng.extensions.modules;
+package org.ehoffman.testing.module;
 
 import java.util.Collection;
 import java.util.HashMap;

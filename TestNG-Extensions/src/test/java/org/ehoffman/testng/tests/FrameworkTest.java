@@ -7,17 +7,18 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
+import org.ehoffman.testing.testng.FixtureRunnerMethodInterceptor;
 import org.ehoffman.testng.extensions.AnnotationEnforcer;
 import org.ehoffman.testng.extensions.Broken;
 import org.ehoffman.testng.extensions.Fixture;
-import org.ehoffman.testng.extensions.modules.FixtureContainer;
+import org.ehoffman.testing.module.FixtureContainer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.testng.annotations.AfterSuite;
 import org.testng.annotations.Listeners;
 import org.testng.annotations.Test;
 
-@Listeners({ MyEnforcer.class })
+@Listeners({FixtureRunnerMethodInterceptor.class, AnnotationEnforcer.class})
 public class FrameworkTest {
   private static Set<String> results = Collections.synchronizedSet(new HashSet<String>());
   private static Set<String> expectedForUnitTests = new HashSet<String>(Arrays.asList("sharedTest","unit1"));

@@ -7,47 +7,25 @@ import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.concurrent.CompletionService;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.ExecutorCompletionService;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.Future;
 
-import org.ehoffman.logback.capture.LogbackCapture;
-import org.ehoffman.module.Module;
-import org.ehoffman.module.ModuleProvider;
-import org.ehoffman.testng.extensions.modules.FixtureContainer;
-import org.ehoffman.testng.extensions.modules.Modules;
-import org.ehoffman.testng.extensions.modules.MultiResultException;
-import org.ehoffman.testng.extensions.modules.MultimoduleCallable;
-import org.ehoffman.testng.extensions.modules.TestResult;
+import org.ehoffman.testing.module.FixtureContainer;
 import org.ehoffman.testng.extensions.services.FactoryUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.testng.IAnnotationTransformer;
-import org.testng.IHookCallBack;
-import org.testng.IHookable;
 import org.testng.IInvokedMethod;
 import org.testng.IInvokedMethodListener;
 import org.testng.IReporter;
-import org.testng.IResultMap;
 import org.testng.ISuite;
 import org.testng.ITestContext;
 import org.testng.ITestListener;
-import org.testng.ITestNGMethod;
 import org.testng.ITestResult;
 import org.testng.annotations.ITestAnnotation;
 import org.testng.annotations.Test;
 import org.testng.xml.XmlSuite;
 
-public class AnnotationEnforcer implements IHookable, ITestListener, IInvokedMethodListener, IAnnotationTransformer, IReporter {
+public class AnnotationEnforcer implements ITestListener, IInvokedMethodListener, IAnnotationTransformer, IReporter {
 
   private static final Logger logger = LoggerFactory.getLogger(AnnotationEnforcer.class);
 
@@ -255,130 +233,6 @@ public class AnnotationEnforcer implements IHookable, ITestListener, IInvokedMet
     return false;
   }
 
-  private Iterator<Set<Class<? extends Module<?>>>> fixtureIterator(Fixture fixture) {
-    Class<? extends ModuleProvider<?>>[] moduleArray = fixture.factory();
-    return Modules.getDotProductModuleCombinations(Arrays.asList(moduleArray), fixture.destructive());
-  }
-
-  private void addErrorToResults(List<TestResult> results, Throwable throwable, ITestResult parentResult) {
-    TestResult brokenTest = new TestResult(new HashSet<Class<? extends Module<?>>>(), parentResult);
-    brokenTest.setThrowable(throwable);
-    results.add(brokenTest);
-  }
-
-  private static final String INDIVIDUAL_RESULTS = "individual_Results";
-
-  private void processResults(ITestResult result, List<TestResult> individualResults) {
-    List<TestResult> failures = new ArrayList<TestResult>();
-    for (TestResult iresult : individualResults) {
-      if (iresult.getStatus() == ITestResult.FAILURE || iresult.getThrowable() != null) {
-        result.setStatus(ITestResult.FAILURE);
-        failures.add(iresult);
-      }
-    }
-    if (failures.size() > 0) {
-      MultiResultException exception = new MultiResultException(failures);
-      result.setThrowable(exception);
-    }
-    result.setAttribute(INDIVIDUAL_RESULTS, individualResults);
-  }
-
-  private Integer getMaxThreadCount(){
-    String count_string = System.getProperty("max_threadcount");
-    try {
-      int val = Integer.parseInt(count_string);
-      return val;
-    } catch (NumberFormatException e){
-      return null;
-    }
-  }
-
-  private static final String logAttributeName = "Log";
-
-  private void runMultpleTimesWithFixture(final IHookCallBack icb, ITestResult testResult, Fixture fixture) {
-    ExecutorService exService;
-    if (getMaxThreadCount() == null){
-      exService = Executors.newCachedThreadPool();
-    } else if (getMaxThreadCount() == 1){
-      exService = Executors.newSingleThreadExecutor();
-    } else {
-      exService = Executors.newFixedThreadPool(getMaxThreadCount());
-    }
-    CompletionService<TestResult> service = new ExecutorCompletionService<TestResult>(exService);
-    Iterator<Set<Class<? extends Module<?>>>> fixtureIterator = fixtureIterator(fixture);
-    boolean destructive = fixture.destructive();
-    List<Future<TestResult>> resultFutures = new ArrayList<Future<TestResult>>();
-    boolean firstRun = true;
-    while (fixtureIterator.hasNext()) {
-      Set<Class<? extends Module<?>>> modules = fixtureIterator.next();
-      if (firstRun) {
-        FixtureContainer.createServicesIfNeeded(modules);
-        firstRun = false;
-      }
-      @SuppressWarnings("deprecation")
-      MultimoduleCallable callable = new MultimoduleCallable(modules, testResult.getMethod().getMethod(), testResult.getInstance(),
-          testResult.getParameters(), destructive, testResult);
-      resultFutures.add(service.submit(callable));
-    }
-    List<TestResult> results = new ArrayList<TestResult>();
-    for (Future<TestResult> resultFuture : resultFutures) {
-      try {
-        results.add(resultFuture.get());
-      } catch (ExecutionException e){
-        e.printStackTrace();
-        Throwable t = e;
-        if (t.getCause() != null){
-          t = t.getCause();
-        }
-        addErrorToResults(results, t, testResult);
-      } catch (Throwable t) {
-        t.printStackTrace();
-        addErrorToResults(results, t, testResult);
-      }
-    }
-    processResults(testResult, results);
-  }
-
-  private void postProcessBrokenTests(Method method, ITestResult testResult) {
-    Broken broken = method.getAnnotation(Broken.class);
-    if (broken != null) {
-      testResult.setAttribute("Known Break", true);
-      testResult.setAttribute("True Status", "SUCCESS");
-      if (!testResult.isSuccess() && testResult.getStatus()!=ITestResult.SKIP) {
-        logger.error("\n@Broken method: " + method.toString() + " will be marked as a skip.  Fix this test\n");
-        testResult.setAttribute("True Status", "FAILURE");
-        testResult.setStatus(ITestResult.SKIP);
-        testResult.setThrowable(null);
-      }
-    }
-  }
-
-  @Override
-  @SuppressWarnings("deprecation")
-  public void run(final IHookCallBack icb, ITestResult testResult) {
-    AnnotatedElement element = testResult.getMethod().getMethod();
-    Test annotation = element.getAnnotation(Test.class);
-    if (!ideMode) {
-      checkMethodGroupsAreAllCorrect(annotation.groups(), element.toString());
-    }
-    if (!shouldSkip(annotation, element)) {
-      Fixture fixture = testResult.getMethod().getMethod().getAnnotation(Fixture.class);
-      if (fixture != null) {
-        runMultpleTimesWithFixture(icb, testResult, fixture);
-      } else {
-        LogbackCapture.start();
-        try {
-          icb.runTestMethod(testResult);
-        } finally {
-          testResult.setAttribute(logAttributeName, LogbackCapture.stop());
-        }
-      }
-    } else {
-      testResult.setStatus(ITestResult.SKIP);
-    }
-    postProcessBrokenTests(testResult.getMethod().getMethod(), testResult);
-  }
-
   /*********************************************************************************/
   /* ITestListenerMethods */
   /*********************************************************************************/
@@ -397,44 +251,11 @@ public class AnnotationEnforcer implements IHookable, ITestListener, IInvokedMet
     }
   }
 
-  private void explodeIResultMap(IResultMap results){
-    Map<ITestNGMethod, List<ITestResult>> map = new HashMap<ITestNGMethod, List<ITestResult>>();
-    for (ITestNGMethod method : results.getAllMethods()){
-      //ITestResult
-      Set<ITestResult> resultSet = results.getResults(method);
-      for (ITestResult result : resultSet){
-        @SuppressWarnings("unchecked")
-        List<TestResult> individualResults = (List<TestResult>)result.getAttribute(INDIVIDUAL_RESULTS);
-        if (map.get(method) == null){
-          map.put(method, new ArrayList<ITestResult>());
-        }
-        if (individualResults != null){
-          map.get(method).addAll(individualResults);
-        } else {
-          map.get(method).add(result);
-        }
-      }
-    }
-    for (ITestNGMethod method : map.keySet()){
-      results.removeResult(method);
-    }
-    for (ITestNGMethod method : map.keySet()){
-      ITestNGMethod method2 = method.clone();
-      for (ITestResult result : map.get(method)){
-        results.addResult(result, method2);
-      }
-    }
-  }
-
 
   @Override
   public void onFinish(ITestContext context) {
-    explodeIResultMap(context.getFailedTests());
-    explodeIResultMap(context.getFailedButWithinSuccessPercentageTests());
-    explodeIResultMap(context.getPassedTests());
     logger.trace("New Passed Tests: "+context.getPassedTests());
-    explodeIResultMap(context.getSkippedTests());
-    Modules.destroyAll();
+    FixtureContainer.destroyAll();
     FactoryUtil.destroy();
     failIfIncorrectGroups();
   }
