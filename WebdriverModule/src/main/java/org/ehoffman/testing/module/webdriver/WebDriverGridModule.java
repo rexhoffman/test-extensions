@@ -90,7 +90,7 @@ public class WebDriverGridModule implements ModuleProvider<WebDriver> {
     }
   }
 
-  public static class HtmlUnitIE extends WebDriverModule implements PooledModule<WebDriver> {
+  public static class HtmlUnitIE extends WebDriverGridModule implements PooledModule<WebDriver> {
     @Override
     public Object makeObject() throws Exception {
       DesiredCapabilities dc = DesiredCapabilities.htmlUnit();
