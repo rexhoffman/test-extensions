@@ -1,5 +1,6 @@
 package org.ehoffman.testing.module.webdriver;
 
+import java.util.Arrays;
 import java.util.Map;
 
 import org.ehoffman.module.ModuleProvider;
@@ -8,6 +9,7 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.htmlunit.HtmlUnitDriver;
+import org.openqa.selenium.remote.DesiredCapabilities;
 
 import com.gargoylesoftware.htmlunit.BrowserVersion;
 
@@ -16,8 +18,9 @@ public class WebDriverModule implements ModuleProvider<WebDriver> {
   public static class Chrome extends WebDriverModule implements PooledModule<WebDriver> {
     @Override
     public Object makeObject() throws Exception {
-      ChromeDriver driver = new ChromeDriver();
-      return driver;
+      DesiredCapabilities dc = DesiredCapabilities.chrome();
+      dc.setCapability("chrome.switches", Arrays.asList("--disable-popup-blocking"));
+      return new ChromeDriver(dc);
     }
   }
 
@@ -73,7 +76,7 @@ public class WebDriverModule implements ModuleProvider<WebDriver> {
 
   public void destroyObject(Object obj) throws Exception {
     WebDriver driver = (WebDriver) obj;
-    driver.close();
+    driver.quit();
   }
 
   public boolean validateObject(Object obj) {
