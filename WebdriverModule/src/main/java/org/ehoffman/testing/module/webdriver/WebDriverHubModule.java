@@ -52,8 +52,4 @@ public class WebDriverHubModule {
     stopRemote();
     stopHub();
   }
-  
-  
-  
-  
 }
