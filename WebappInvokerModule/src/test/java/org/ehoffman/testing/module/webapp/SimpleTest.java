@@ -19,6 +19,6 @@ public class SimpleTest {
     WebDriver driver = FixtureContainer.getService(WebDriverModule.class);
     Application application = FixtureContainer.getService(EmbeddedWebappModule.class);
     driver.navigate().to(application.getDefaultRootUrl());
-    assertThat(driver.findElement(By.id("message"))).isDisplayed().textContains("Rex says that the time is now : ");
+    assertThat(driver.findElement(By.id("message"))).isDisplayed().textContains("the time is now : ");
   }
 }
