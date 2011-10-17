@@ -10,20 +10,21 @@ import org.testng.annotations.Test;
 
 public class WebDriverHubModule {
 
-  private Hub h;
-  private SelfRegisteringRemote remote;
+  private static Hub h;
+  private static SelfRegisteringRemote remote;
   
-  private void stopHub() throws Exception {
+  public static void stopHub() throws Exception {
     h.stop();
   }
   
-  private void stopRemote(){
+  public static void stopRemote(){
     remote.stopRemoteServer();
   }
   
-  private void lauchGrid() throws Exception{
+  public static void lauchGrid() throws Exception{
     try {
-      GridHubConfiguration c = GridHubConfiguration.build(new String[] {"-port","0"});
+      String port = System.getProperty("hubport");
+      GridHubConfiguration c = GridHubConfiguration.build(new String[] {"-port",port});
       h = new Hub(c);
       h.start();
       System.out.println("Port is: "+h.getUrl());
@@ -33,7 +34,7 @@ public class WebDriverHubModule {
     }
   }
   
-  private void lauchNode(String huburl) throws Exception {
+  public static void lauchNode(String huburl) throws Exception {
     try {      
       RegistrationRequest c = RegistrationRequest.build(new String[] {"-role","webdriver","-hub",huburl,"-port","0"});
       remote = new SelfRegisteringRemote(c);
@@ -47,6 +48,7 @@ public class WebDriverHubModule {
   
   @Test
   public void startStopTest() throws Exception {
+    System.setProperty("hubport","4444");
     lauchGrid();
     lauchNode("http://localhost:4444/grid/register");
     stopRemote();

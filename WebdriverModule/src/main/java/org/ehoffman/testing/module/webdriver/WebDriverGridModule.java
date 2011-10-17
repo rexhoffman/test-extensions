@@ -15,11 +15,12 @@ import org.openqa.selenium.remote.RemoteWebDriver;
 public class WebDriverGridModule implements ModuleProvider<WebDriver> {
 
   // Make this a system variable or something?
-  private static final URL GRID_LOCATION = null;
+  private static URL GRID_LOCATION;
   
   static {
     try {
-	  new URL("http://localhost:4444/wd/hub");
+      GRID_LOCATION = new URL(System.getProperty("seleniumhub"));
+      System.out.println("grid location: "+GRID_LOCATION.toString());
 	} catch (MalformedURLException e) {}
   }
 
