@@ -72,6 +72,16 @@ public class WebDriverGridModule implements ModuleProvider<WebDriver> {
 	  return new RemoteWebDriver(GRID_LOCATION, dc);
     }
   }
+
+  public static class Firefox6 extends WebDriverGridModule implements PooledModule<WebDriver> {
+    @Override
+    public Object makeObject() throws Exception {
+      DesiredCapabilities dc = DesiredCapabilities.firefox();
+      dc.setVersion("6");
+      return new RemoteWebDriver(GRID_LOCATION, dc);
+    }
+  }
+  
   public static class Firefox7 extends WebDriverGridModule implements PooledModule<WebDriver> {
 	@Override
 	public Object makeObject() throws Exception {
@@ -81,6 +91,16 @@ public class WebDriverGridModule implements ModuleProvider<WebDriver> {
     }
   }
 
+  public static class Firefox8 extends WebDriverGridModule implements PooledModule<WebDriver> {
+    @Override
+    public Object makeObject() throws Exception {
+      DesiredCapabilities dc = DesiredCapabilities.firefox();
+      dc.setVersion("8");
+      return new RemoteWebDriver(GRID_LOCATION, dc);
+    }
+  }
+
+  
   public static class HtmlUnitFirefox extends WebDriverGridModule implements PooledModule<WebDriver> {
     @Override
     public Object makeObject() throws Exception {
