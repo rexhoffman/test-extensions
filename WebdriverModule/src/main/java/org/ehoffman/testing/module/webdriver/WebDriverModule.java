@@ -13,9 +13,9 @@ import org.openqa.selenium.remote.DesiredCapabilities;
 
 import com.gargoylesoftware.htmlunit.BrowserVersion;
 
-public class WebDriverModule implements ModuleProvider<WebDriver> {
+public class WebDriverModule implements ModuleProvider<RemoteWebDriverInterface> {
 
-  public static class Chrome extends WebDriverModule implements PooledModule<WebDriver> {
+  public static class Chrome extends WebDriverModule implements PooledModule<RemoteWebDriverInterface> {
     @Override
     public Object makeObject() throws Exception {
       DesiredCapabilities dc = DesiredCapabilities.chrome();
@@ -24,7 +24,7 @@ public class WebDriverModule implements ModuleProvider<WebDriver> {
     }
   }
 
-  public static class Firefox extends WebDriverModule implements PooledModule<WebDriver> {
+  public static class Firefox extends WebDriverModule implements PooledModule<RemoteWebDriverInterface> {
     @Override
     public Object makeObject() throws Exception {
       FirefoxDriver driver = new FirefoxDriver();
@@ -32,7 +32,7 @@ public class WebDriverModule implements ModuleProvider<WebDriver> {
     }
   }
 
-  public static class HtmlUnitFirefox extends WebDriverModule implements PooledModule<WebDriver> {
+  public static class HtmlUnitFirefox extends WebDriverModule implements PooledModule<RemoteWebDriverInterface> {
     @Override
     public Object makeObject() throws Exception {
       HtmlUnitDriver driver = new HtmlUnitDriver(BrowserVersion.FIREFOX_3_6);
@@ -41,7 +41,7 @@ public class WebDriverModule implements ModuleProvider<WebDriver> {
     }
   }
 
-  public static class HtmlUnitIE6 extends WebDriverModule implements PooledModule<WebDriver> {
+  public static class HtmlUnitIE6 extends WebDriverModule implements PooledModule<RemoteWebDriverInterface> {
     @Override
     public Object makeObject() throws Exception {
       HtmlUnitDriver driver = new HtmlUnitDriver(BrowserVersion.INTERNET_EXPLORER_6);
@@ -54,15 +54,15 @@ public class WebDriverModule implements ModuleProvider<WebDriver> {
     return this.getClass().getSimpleName();
   }
 
-  public Class<? extends WebDriver> getTargetClass() {
-    return WebDriver.class;
+  public Class<? extends RemoteWebDriverInterface> getTargetClass() {
+    return RemoteWebDriverInterface.class;
   }
 
   public Map<String, Class<?>> getDependencyDefinition() {
     return null;
   }
 
-  public WebDriver create(Map<String, ?> dependencies) {
+  public RemoteWebDriverInterface create(Map<String, ?> dependencies) {
     //not used... we're pooling
     return null;
   }
@@ -71,7 +71,7 @@ public class WebDriverModule implements ModuleProvider<WebDriver> {
   }
 
   public String getModuleType() {
-    return WebDriver.class.getSimpleName();
+    return RemoteWebDriverInterface.class.getSimpleName();
   }
 
   public void destroyObject(Object obj) throws Exception {
