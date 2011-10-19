@@ -12,7 +12,7 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.remote.DesiredCapabilities;
 import org.openqa.selenium.remote.RemoteWebDriver;
 
-public class WebDriverGridModule implements ModuleProvider<WebDriver> {
+public class WebDriverGridModule implements ModuleProvider<RemoteWebDriverInterface> {
 
   // Make this a system variable or something?
   private static URL GRID_LOCATION;
@@ -24,7 +24,7 @@ public class WebDriverGridModule implements ModuleProvider<WebDriver> {
 	} catch (MalformedURLException e) {}
   }
 
-  public static class IE6 extends WebDriverGridModule implements PooledModule<WebDriver> { 
+  public static class IE6 extends WebDriverGridModule implements PooledModule<RemoteWebDriverInterface> { 
     @Override
     public Object makeObject() throws Exception {
       DesiredCapabilities dc = DesiredCapabilities.internetExplorer();
@@ -32,7 +32,7 @@ public class WebDriverGridModule implements ModuleProvider<WebDriver> {
       return new RemoteWebDriver(GRID_LOCATION, dc);
     }
   }
-  public static class IE7 extends WebDriverGridModule implements PooledModule<WebDriver> { 
+  public static class IE7 extends WebDriverGridModule implements PooledModule<RemoteWebDriverInterface> { 
     @Override
     public Object makeObject() throws Exception {
       DesiredCapabilities dc = DesiredCapabilities.internetExplorer();
@@ -40,7 +40,7 @@ public class WebDriverGridModule implements ModuleProvider<WebDriver> {
       return new RemoteWebDriver(GRID_LOCATION, dc);
     }
   }
-  public static class IE8 extends WebDriverGridModule implements PooledModule<WebDriver> { 
+  public static class IE8 extends WebDriverGridModule implements PooledModule<RemoteWebDriverInterface> { 
     @Override
     public Object makeObject() throws Exception {
       DesiredCapabilities dc = DesiredCapabilities.internetExplorer();
@@ -48,7 +48,7 @@ public class WebDriverGridModule implements ModuleProvider<WebDriver> {
       return new RemoteWebDriver(GRID_LOCATION, dc);
     }
   }
-  public static class IE9 extends WebDriverGridModule implements PooledModule<WebDriver> { 
+  public static class IE9 extends WebDriverGridModule implements PooledModule<RemoteWebDriverInterface> { 
     @Override
     public Object makeObject() throws Exception {
       DesiredCapabilities dc = DesiredCapabilities.internetExplorer();
@@ -56,7 +56,7 @@ public class WebDriverGridModule implements ModuleProvider<WebDriver> {
       return new RemoteWebDriver(GRID_LOCATION, dc);
     }
   }
-  public static class Chrome extends WebDriverGridModule implements PooledModule<WebDriver> { 
+  public static class Chrome extends WebDriverGridModule implements PooledModule<RemoteWebDriverInterface> { 
     @Override
     public Object makeObject() throws Exception {
       DesiredCapabilities dc = DesiredCapabilities.chrome();
@@ -64,7 +64,15 @@ public class WebDriverGridModule implements ModuleProvider<WebDriver> {
       return new RemoteWebDriver(GRID_LOCATION, dc);
     }
   }
-  public static class Firefox36 extends WebDriverGridModule implements PooledModule<WebDriver> {
+
+  public static class Firefox extends WebDriverGridModule implements PooledModule<RemoteWebDriverInterface> {
+	@Override
+	public Object makeObject() throws Exception {
+	  return new RemoteWebDriver(GRID_LOCATION, DesiredCapabilities.firefox());
+    }
+  }
+
+  public static class Firefox36 extends WebDriverGridModule implements PooledModule<RemoteWebDriverInterface> {
 	@Override
 	public Object makeObject() throws Exception {
 	  DesiredCapabilities dc = DesiredCapabilities.firefox();
@@ -73,7 +81,7 @@ public class WebDriverGridModule implements ModuleProvider<WebDriver> {
     }
   }
 
-  public static class Firefox6 extends WebDriverGridModule implements PooledModule<WebDriver> {
+  public static class Firefox6 extends WebDriverGridModule implements PooledModule<RemoteWebDriverInterface> {
     @Override
     public Object makeObject() throws Exception {
       DesiredCapabilities dc = DesiredCapabilities.firefox();
@@ -82,7 +90,7 @@ public class WebDriverGridModule implements ModuleProvider<WebDriver> {
     }
   }
   
-  public static class Firefox7 extends WebDriverGridModule implements PooledModule<WebDriver> {
+  public static class Firefox7 extends WebDriverGridModule implements PooledModule<RemoteWebDriverInterface> {
 	@Override
 	public Object makeObject() throws Exception {
 	  DesiredCapabilities dc = DesiredCapabilities.firefox();
@@ -91,7 +99,7 @@ public class WebDriverGridModule implements ModuleProvider<WebDriver> {
     }
   }
 
-  public static class Firefox8 extends WebDriverGridModule implements PooledModule<WebDriver> {
+  public static class Firefox8 extends WebDriverGridModule implements PooledModule<RemoteWebDriverInterface> {
     @Override
     public Object makeObject() throws Exception {
       DesiredCapabilities dc = DesiredCapabilities.firefox();
@@ -101,7 +109,7 @@ public class WebDriverGridModule implements ModuleProvider<WebDriver> {
   }
 
   
-  public static class HtmlUnitFirefox extends WebDriverGridModule implements PooledModule<WebDriver> {
+  public static class HtmlUnitFirefox extends WebDriverGridModule implements PooledModule<RemoteWebDriverInterface> {
     @Override
     public Object makeObject() throws Exception {
       DesiredCapabilities dc = DesiredCapabilities.htmlUnit();
@@ -111,7 +119,7 @@ public class WebDriverGridModule implements ModuleProvider<WebDriver> {
     }
   }
 
-  public static class HtmlUnitIE extends WebDriverGridModule implements PooledModule<WebDriver> {
+  public static class HtmlUnitIE extends WebDriverGridModule implements PooledModule<RemoteWebDriverInterface> {
     @Override
     public Object makeObject() throws Exception {
       DesiredCapabilities dc = DesiredCapabilities.htmlUnit();
@@ -120,7 +128,7 @@ public class WebDriverGridModule implements ModuleProvider<WebDriver> {
       return new RemoteWebDriver(GRID_LOCATION, dc);
     }
   }
-  public static class Android extends WebDriverGridModule implements PooledModule<WebDriver> { 
+  public static class Android extends WebDriverGridModule implements PooledModule<RemoteWebDriverInterface> { 
     @Override
     public Object makeObject() throws Exception {
       DesiredCapabilities dc = DesiredCapabilities.android();
@@ -128,7 +136,7 @@ public class WebDriverGridModule implements ModuleProvider<WebDriver> {
       return new RemoteWebDriver(GRID_LOCATION, dc);
     }
   }
-  public static class IPhone extends WebDriverGridModule implements PooledModule<WebDriver> { 
+  public static class IPhone extends WebDriverGridModule implements PooledModule<RemoteWebDriverInterface> { 
     @Override
     public Object makeObject() throws Exception {
       DesiredCapabilities dc = DesiredCapabilities.iphone();
@@ -140,15 +148,15 @@ public class WebDriverGridModule implements ModuleProvider<WebDriver> {
     return this.getClass().getSimpleName();
   }
 
-  public Class<? extends WebDriver> getTargetClass() {
-    return WebDriver.class;
+  public Class<? extends RemoteWebDriverInterface> getTargetClass() {
+    return RemoteWebDriverInterface.class;
   }
 
   public Map<String, Class<?>> getDependencyDefinition() {
     return null;
   }
 
-  public WebDriver create(Map<String, ?> dependencies) {
+  public RemoteWebDriverInterface create(Map<String, ?> dependencies) {
     //not used... we're pooling
     return null;
   }
@@ -157,7 +165,7 @@ public class WebDriverGridModule implements ModuleProvider<WebDriver> {
   }
 
   public String getModuleType() {
-    return WebDriver.class.getSimpleName();
+    return RemoteWebDriverInterface.class.getSimpleName();
   }
 
   public void destroyObject(Object obj) throws Exception {

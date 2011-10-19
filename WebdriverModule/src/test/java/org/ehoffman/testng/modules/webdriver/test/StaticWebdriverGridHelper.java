@@ -2,11 +2,14 @@ package org.ehoffman.testng.modules.webdriver.test;
 
 import static org.fest.assertions.Assertions.*;
 
+import java.io.File;
 import java.net.BindException;
 
 import org.ehoffman.testing.module.webdriver.WebDriverGridModule;
 import org.ehoffman.testing.module.webdriver.WebDriverHubModule;
 import org.openqa.grid.common.exception.CapabilityNotPresentOnTheGridException;
+import org.openqa.selenium.OutputType;
+import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebDriverException;
 import org.testng.annotations.AfterClass;
@@ -50,10 +53,18 @@ public class StaticWebdriverGridHelper {
   @Test
   public void basicGridTest() throws Exception {
     //TODO: fix this (auto installer?)
-    WebDriverGridModule.Firefox6 module = new WebDriverGridModule.Firefox6();
+    WebDriverGridModule.Firefox module = new WebDriverGridModule.Firefox();
     WebDriver driver = (WebDriver) module.makeObject();
     assertThat(driver).isNotNull();
     driver.close();
+  }
+
+  @Test
+  public void testCanTakeScreenShotThroughGrid() throws Exception {
+    WebDriverGridModule.Firefox module = new WebDriverGridModule.Firefox();
+    WebDriver driver = (WebDriver) module.makeObject();
+    driver.get("http://www.google.com");
+    File screenshot = ((TakesScreenshot)driver).getScreenshotAs(OutputType.FILE);
   }
 
 }
