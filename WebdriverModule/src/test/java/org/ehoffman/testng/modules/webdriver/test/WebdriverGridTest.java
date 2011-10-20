@@ -4,9 +4,10 @@ import static org.fest.assertions.Assertions.*;
 
 import java.io.File;
 import java.net.BindException;
+import java.util.concurrent.CountDownLatch;
 
 import org.ehoffman.testing.module.webdriver.WebDriverGridModule;
-import org.ehoffman.testing.module.webdriver.WebDriverHubModule;
+import org.ehoffman.testing.module.webdriver.StaticWebdriverGridHelper;
 import org.openqa.grid.common.exception.CapabilityNotPresentOnTheGridException;
 import org.openqa.selenium.OutputType;
 import org.openqa.selenium.TakesScreenshot;
@@ -16,15 +17,15 @@ import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
-public class StaticWebdriverGridHelper {
+public class WebdriverGridTest {
 
   @BeforeClass
   public void startHub() {
     System.setProperty("hubport", "4444");
     System.setProperty("seleniumhub", "http://localhost:4444/wd/hub");
     try {
-      WebDriverHubModule.lauchGrid();
-      WebDriverHubModule.lauchNode("http://localhost:4444/grid");
+      StaticWebdriverGridHelper.lauchGrid();
+      StaticWebdriverGridHelper.lauchNode("http://localhost:4444/grid");
     } catch (Exception e) {
       // if this fails, it better be because the hub is already running.
       assertThat(e).isExactlyInstanceOf(BindException.class).hasMessage("Address already in use");
@@ -33,8 +34,8 @@ public class StaticWebdriverGridHelper {
 
   @AfterClass
   public void stopHub() throws Exception {
-    WebDriverHubModule.stopRemote();
-    WebDriverHubModule.stopHub();
+    StaticWebdriverGridHelper.stopRemote();
+    StaticWebdriverGridHelper.stopHub();
   }
   
   @Test
@@ -65,6 +66,7 @@ public class StaticWebdriverGridHelper {
     WebDriver driver = (WebDriver) module.makeObject();
     driver.get("http://www.google.com");
     File screenshot = ((TakesScreenshot)driver).getScreenshotAs(OutputType.FILE);
+    driver.close();
   }
 
 }
