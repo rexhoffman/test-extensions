@@ -40,33 +40,47 @@ public class WebdriverGridTest {
   
   @Test
   public void missingIE6GridTest() throws Exception {
+    WebDriver driver = null;
     try {
       WebDriverGridModule.IE6 module = new WebDriverGridModule.IE6();
-      WebDriver driver = (WebDriver) module.makeObject();
+      driver = (WebDriver) module.makeObject();
       assertThat(driver).isNotNull();
-      driver.close();
       assertThat(true).as("should not be reachable").isFalse();
     } catch (Throwable t) {
       assertThat(t).isExactlyInstanceOf(org.openqa.selenium.WebDriverException.class);
+    } finally {
+      if (driver != null) driver.close();
     }
   }
 
   @Test
-  public void basicGridTest() throws Exception {
+  public void basicGridTest() throws Throwable {
     //TODO: fix this (auto installer?)
-    WebDriverGridModule.Firefox module = new WebDriverGridModule.Firefox();
-    WebDriver driver = (WebDriver) module.makeObject();
-    assertThat(driver).isNotNull();
-    driver.close();
+    WebDriver driver = null;
+    try {
+      WebDriverGridModule.Firefox module = new WebDriverGridModule.Firefox();
+      driver = (WebDriver) module.makeObject();
+      assertThat(driver).isNotNull();
+    } catch (Throwable t){
+      throw t;
+    } finally {
+      if (driver != null) driver.close();
+    }
   }
 
   @Test
-  public void testCanTakeScreenShotThroughGrid() throws Exception {
+  public void testCanTakeScreenShotThroughGrid() throws Throwable {
     WebDriverGridModule.Firefox module = new WebDriverGridModule.Firefox();
-    WebDriver driver = (WebDriver) module.makeObject();
-    driver.get("http://www.google.com");
-    File screenshot = ((TakesScreenshot)driver).getScreenshotAs(OutputType.FILE);
-    driver.close();
+    WebDriver driver = null;
+    try {
+      driver = (WebDriver) module.makeObject();
+      driver.get("http://www.google.com");
+      File screenshot = ((TakesScreenshot)driver).getScreenshotAs(OutputType.FILE);
+    } catch (Throwable t){
+      throw t;
+    } finally {
+      if (driver != null) driver.close();
+    }
   }
 
 }
