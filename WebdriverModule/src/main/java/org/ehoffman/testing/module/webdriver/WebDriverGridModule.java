@@ -9,6 +9,7 @@ import org.ehoffman.module.ModuleProvider;
 import org.ehoffman.module.PooledModule;
 import org.openqa.selenium.Platform;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.remote.Augmenter;
 import org.openqa.selenium.remote.DesiredCapabilities;
 import org.openqa.selenium.remote.RemoteWebDriver;
 
@@ -68,7 +69,9 @@ public class WebDriverGridModule implements ModuleProvider<RemoteWebDriverInterf
   public static class Firefox extends WebDriverGridModule implements PooledModule<RemoteWebDriverInterface> {
 	@Override
 	public Object makeObject() throws Exception {
-	  return new RemoteWebDriver(GRID_LOCATION, DesiredCapabilities.firefox());
+	  WebDriver driver = new RemoteWebDriver(GRID_LOCATION, DesiredCapabilities.firefox());
+	  driver = new Augmenter().augment( driver );
+	  return driver;
     }
   }
 

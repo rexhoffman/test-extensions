@@ -2,24 +2,24 @@ package org.ehoffman.testng.modules.webdriver.test;
 
 import static org.fest.assertions.Assertions.*;
 
-import java.io.File;
 import java.net.BindException;
-import java.util.concurrent.CountDownLatch;
 
+import org.ehoffman.testing.fixture.FixtureContainer;
 import org.ehoffman.testing.module.webdriver.WebDriverGridModule;
 import org.ehoffman.testing.module.webdriver.StaticWebdriverGridHelper;
-import org.openqa.grid.common.exception.CapabilityNotPresentOnTheGridException;
+import org.ehoffman.testng.extensions.Fixture;
 import org.openqa.selenium.OutputType;
 import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebDriverException;
-import org.testng.annotations.AfterClass;
-import org.testng.annotations.BeforeClass;
+import org.testng.annotations.AfterSuite;
+import org.testng.annotations.BeforeSuite;
+import org.testng.annotations.Listeners;
 import org.testng.annotations.Test;
 
+@Listeners(MyEnforcer.class)
 public class WebdriverGridTest {
 
-  @BeforeClass
+  @BeforeSuite
   public void startHub() {
     System.setProperty("hubport", "4444");
     System.setProperty("seleniumhub", "http://localhost:4444/wd/hub");
@@ -32,7 +32,7 @@ public class WebdriverGridTest {
     }
   }
 
-  @AfterClass
+  @AfterSuite
   public void stopHub() throws Exception {
     StaticWebdriverGridHelper.stopRemote();
     StaticWebdriverGridHelper.stopHub();
@@ -44,7 +44,7 @@ public class WebdriverGridTest {
     try {
       WebDriverGridModule.IE6 module = new WebDriverGridModule.IE6();
       driver = (WebDriver) module.makeObject();
-      assertThat(driver).isNotNull();
+      assertThat(driver.getCurrentUrl()).isNotNull();
       assertThat(true).as("should not be reachable").isFalse();
     } catch (Throwable t) {
       assertThat(t).isExactlyInstanceOf(org.openqa.selenium.WebDriverException.class);
@@ -67,15 +67,16 @@ public class WebdriverGridTest {
       if (driver != null) driver.close();
     }
   }
-
+  
   @Test
+  @Fixture(factory={WebDriverGridModule.Firefox.class})
   public void testCanTakeScreenShotThroughGrid() throws Throwable {
     WebDriverGridModule.Firefox module = new WebDriverGridModule.Firefox();
     WebDriver driver = null;
     try {
-      driver = (WebDriver) module.makeObject();
+      driver = FixtureContainer.getService(WebDriverGridModule.class);
       driver.get("http://www.google.com");
-      File screenshot = ((TakesScreenshot)driver).getScreenshotAs(OutputType.FILE);
+      byte[] screenshot = ((TakesScreenshot)driver).getScreenshotAs(OutputType.BYTES);
     } catch (Throwable t){
       throw t;
     } finally {
