@@ -38,7 +38,7 @@ public class WebdriverGridTest {
     StaticWebdriverGridHelper.stopHub();
   }
   
-  @Test
+  @Test(groups={"unit"})
   public void missingIE6GridTest() throws Exception {
     WebDriver driver = null;
     try {
@@ -53,7 +53,7 @@ public class WebdriverGridTest {
     }
   }
 
-  @Test
+  @Test(groups={"unit"})
   public void basicGridTest() throws Throwable {
     //TODO: fix this (auto installer?)
     WebDriver driver = null;
@@ -68,7 +68,7 @@ public class WebdriverGridTest {
     }
   }
   
-  @Test
+  @Test(groups={"unit"})
   @Fixture(factory={WebDriverGridModule.Firefox.class})
   public void testCanTakeScreenShotThroughGrid() throws Throwable {
     WebDriverGridModule.Firefox module = new WebDriverGridModule.Firefox();
