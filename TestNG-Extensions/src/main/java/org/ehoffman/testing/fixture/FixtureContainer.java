@@ -16,6 +16,7 @@ import org.ehoffman.module.ModuleProvider;
 import org.ehoffman.testing.fixture.services.HotSwappableProxy;
 import org.ehoffman.testing.fixture.services.HotswapableThreadLocalInvocationHandler;
 import org.ehoffman.testing.fixture.services.HotswappableThreadLocalProxyFactory;
+import org.ehoffman.testing.testng.ExtensibleTestNGListener;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -25,6 +26,12 @@ public class FixtureContainer {
   private static final ConcurrentMap<String, HotSwappableProxy>             fixtureServices           = new ConcurrentHashMap<String, HotSwappableProxy>();
   private static ThreadLocal<Set<Class<? extends Module<?>>>>               moduleClasses             = new ThreadLocal<Set<Class<? extends Module<?>>>>();
 
+  private void throwRuntimeExceptionIfModuleClassesAreNotSet(){
+    if (moduleClasses.get() == null){
+      throw new RuntimeException("You must use extend the ExtensibleTestNGListener class and make sure it is applied as a TestNG listener to this test.  setInterceptors(");
+    }
+  }
+  
   static Iterator<Set<Class<? extends Module<?>>>> getDotProductModuleCombinations(Collection<Class<? extends ModuleProvider<?>>> moduleClasses, boolean destructive) {
     Collection<Set<Class<? extends Module<?>>>> listOfOptions = mergeListsOfSameModuleType(ModuleUtil.getAllPossibleModules(moduleClasses));
     return new DotProductIterator<Class<? extends Module<?>>>(listOfOptions);

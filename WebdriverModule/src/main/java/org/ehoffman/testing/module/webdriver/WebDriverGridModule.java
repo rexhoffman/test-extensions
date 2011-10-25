@@ -38,7 +38,9 @@ public class WebDriverGridModule implements ModuleProvider<RemoteWebDriverInterf
     public Object makeObject() throws Exception {
       DesiredCapabilities dc = DesiredCapabilities.internetExplorer();
       dc.setVersion("7");
-      return new RemoteWebDriver(GRID_LOCATION, dc);
+      WebDriver driver = new RemoteWebDriver(GRID_LOCATION, dc);
+      driver = new Augmenter().augment( driver );
+      return driver;
     }
   }
   public static class IE8 extends WebDriverGridModule implements PooledModule<RemoteWebDriverInterface> { 
@@ -46,7 +48,9 @@ public class WebDriverGridModule implements ModuleProvider<RemoteWebDriverInterf
     public Object makeObject() throws Exception {
       DesiredCapabilities dc = DesiredCapabilities.internetExplorer();
       dc.setVersion("8");
-      return new RemoteWebDriver(GRID_LOCATION, dc);
+      WebDriver driver = new RemoteWebDriver(GRID_LOCATION, dc);
+      driver = new Augmenter().augment( driver );
+      return driver;
     }
   }
   public static class IE9 extends WebDriverGridModule implements PooledModule<RemoteWebDriverInterface> { 
@@ -54,7 +58,9 @@ public class WebDriverGridModule implements ModuleProvider<RemoteWebDriverInterf
     public Object makeObject() throws Exception {
       DesiredCapabilities dc = DesiredCapabilities.internetExplorer();
       dc.setVersion("9");
-      return new RemoteWebDriver(GRID_LOCATION, dc);
+      WebDriver driver = new RemoteWebDriver(GRID_LOCATION, dc);
+      driver = new Augmenter().augment( driver );
+      return driver;
     }
   }
   public static class Chrome extends WebDriverGridModule implements PooledModule<RemoteWebDriverInterface> { 
@@ -62,7 +68,9 @@ public class WebDriverGridModule implements ModuleProvider<RemoteWebDriverInterf
     public Object makeObject() throws Exception {
       DesiredCapabilities dc = DesiredCapabilities.chrome();
       dc.setCapability("chrome.switches", Arrays.asList("--disable-popup-blocking"));
-      return new RemoteWebDriver(GRID_LOCATION, dc);
+      WebDriver driver = new RemoteWebDriver(GRID_LOCATION, dc);
+      driver = new Augmenter().augment( driver );
+      return driver;
     }
   }
 
@@ -80,8 +88,10 @@ public class WebDriverGridModule implements ModuleProvider<RemoteWebDriverInterf
 	public Object makeObject() throws Exception {
 	  DesiredCapabilities dc = DesiredCapabilities.firefox();
 	  dc.setVersion("3.6");
-	  return new RemoteWebDriver(GRID_LOCATION, dc);
-    }
+	  WebDriver driver = new RemoteWebDriver(GRID_LOCATION, dc);
+      driver = new Augmenter().augment( driver );
+      return driver;
+	}
   }
 
   public static class Firefox6 extends WebDriverGridModule implements PooledModule<RemoteWebDriverInterface> {
@@ -89,7 +99,9 @@ public class WebDriverGridModule implements ModuleProvider<RemoteWebDriverInterf
     public Object makeObject() throws Exception {
       DesiredCapabilities dc = DesiredCapabilities.firefox();
       dc.setVersion("6");
-      return new RemoteWebDriver(GRID_LOCATION, dc);
+      WebDriver driver = new RemoteWebDriver(GRID_LOCATION, dc);
+      driver = new Augmenter().augment( driver );
+      return driver;
     }
   }
   
@@ -98,7 +110,9 @@ public class WebDriverGridModule implements ModuleProvider<RemoteWebDriverInterf
 	public Object makeObject() throws Exception {
 	  DesiredCapabilities dc = DesiredCapabilities.firefox();
 	  dc.setVersion("7");
-	  return new RemoteWebDriver(GRID_LOCATION, dc);
+      WebDriver driver = new RemoteWebDriver(GRID_LOCATION, dc);
+      driver = new Augmenter().augment( driver );
+      return driver;
     }
   }
 
@@ -107,7 +121,9 @@ public class WebDriverGridModule implements ModuleProvider<RemoteWebDriverInterf
     public Object makeObject() throws Exception {
       DesiredCapabilities dc = DesiredCapabilities.firefox();
       dc.setVersion("8");
-      return new RemoteWebDriver(GRID_LOCATION, dc);
+      WebDriver driver = new RemoteWebDriver(GRID_LOCATION, dc);
+      driver = new Augmenter().augment( driver );
+      return driver;
     }
   }
 
@@ -118,7 +134,9 @@ public class WebDriverGridModule implements ModuleProvider<RemoteWebDriverInterf
       DesiredCapabilities dc = DesiredCapabilities.htmlUnit();
       dc.setBrowserName("firefox");
       dc.setJavascriptEnabled(true);
-      return new RemoteWebDriver(GRID_LOCATION, dc);
+      WebDriver driver = new RemoteWebDriver(GRID_LOCATION, dc);
+      driver = new Augmenter().augment( driver );
+      return driver;
     }
   }
 
@@ -128,22 +146,29 @@ public class WebDriverGridModule implements ModuleProvider<RemoteWebDriverInterf
       DesiredCapabilities dc = DesiredCapabilities.htmlUnit();
       dc.setBrowserName("internet explorer");
       dc.setJavascriptEnabled(true);
-      return new RemoteWebDriver(GRID_LOCATION, dc);
+      WebDriver driver = new RemoteWebDriver(GRID_LOCATION, dc);
+      driver = new Augmenter().augment( driver );
+      return driver;
     }
   }
+  
   public static class Android extends WebDriverGridModule implements PooledModule<RemoteWebDriverInterface> { 
     @Override
     public Object makeObject() throws Exception {
       DesiredCapabilities dc = DesiredCapabilities.android();
       dc.setPlatform(Platform.LINUX);
-      return new RemoteWebDriver(GRID_LOCATION, dc);
+      WebDriver driver = new RemoteWebDriver(GRID_LOCATION, dc);
+      driver = new Augmenter().augment( driver );
+      return driver;
     }
   }
   public static class IPhone extends WebDriverGridModule implements PooledModule<RemoteWebDriverInterface> { 
     @Override
     public Object makeObject() throws Exception {
       DesiredCapabilities dc = DesiredCapabilities.iphone();
-      return new RemoteWebDriver(GRID_LOCATION, dc);
+      WebDriver driver = new RemoteWebDriver(GRID_LOCATION, dc);
+      driver = new Augmenter().augment( driver );
+      return driver;
     }
   }
 
@@ -197,6 +222,6 @@ public class WebDriverGridModule implements ModuleProvider<RemoteWebDriverInterf
   
   public int getMaxPoolElements() {
 	return 10;
-}
+  }
 
 }

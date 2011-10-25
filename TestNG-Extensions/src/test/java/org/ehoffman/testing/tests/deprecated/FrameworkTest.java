@@ -7,14 +7,13 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
+import org.ehoffman.testing.fixture.FixtureContainer;
 import org.ehoffman.testing.tests.CountModule;
 import org.ehoffman.testing.tests.IntegerHolder;
-import org.ehoffman.testing.tests.MyEnforcer;
 import org.ehoffman.testing.tests.SimpleModule;
 import org.ehoffman.testng.extensions.Broken;
 import org.ehoffman.testng.extensions.Fixture;
 import org.ehoffman.testng.extensions.JUnitReportReporter;
-import org.ehoffman.testng.extensions.modules.FixtureContainer;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

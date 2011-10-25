@@ -39,6 +39,13 @@ public class GroupsInterceptor implements Interceptor {
 
   private boolean ideMode = false;
 
+  /**
+   * 
+   * @param unit_test_groups overrides {@link GroupsInterceptor#unit_test_groups}
+   * @param integration_test_groups overrides {@link GroupsInterceptor#integration_test_groups}
+   * @param integrationPhase overrides {@link GroupsInterceptor#integration_phase}
+   * @param ideMode 
+   */
   public GroupsInterceptor(String[] unit_test_groups, String[] integration_test_groups, boolean integrationPhase, boolean ideMode){
     this.unit_test_groups = unit_test_groups;
     this.integration_test_groups = integration_test_groups;
@@ -159,6 +166,9 @@ public class GroupsInterceptor implements Interceptor {
     return true;
   }
 
+  /**
+   * 
+   */
   @Override
   public List<IMethodInstance> intercept(List<IMethodInstance> methods) {
     List<IMethodInstance> output = new ArrayList<IMethodInstance>();
