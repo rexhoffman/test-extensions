@@ -82,7 +82,7 @@ public class FixtureInterceptor implements Interceptor {
 
   @Override
   public void beforeInvocation(ITestResult testResult) {
-    logger.info("in before method");
+    logger.info(FixtureInterceptor.class.getSimpleName()+" in beforeInvocation");
     ITestNGMethod testNGmethod = testResult.getMethod();
     Set<Class<? extends Module<?>>> moduleClasses = testNGMethodToSetOfModuleClassesForSingleInvocation.get(testNGmethod);
     if (moduleClasses != null){
@@ -100,7 +100,7 @@ public class FixtureInterceptor implements Interceptor {
       Collections.sort(names);
       testResult.setAttribute("module providers", names);
     }
-    logger.info("in after method");
+    logger.info(FixtureInterceptor.class.getSimpleName()+" in afterInvocation");
     FixtureContainer.wipeFixture();
   }
 
