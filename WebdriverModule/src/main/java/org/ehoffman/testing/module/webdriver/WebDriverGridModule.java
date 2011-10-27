@@ -181,13 +181,13 @@ public class WebDriverGridModule implements ModuleProvider<RemoteWebDriverInterf
   }
 
   public void destroyObject(Object obj) throws Exception {
-    WebDriver driver = (WebDriver) obj;
-    driver.quit();
   }
 
   public boolean validateObject(Object obj) {
-    WebDriver driver = (WebDriver) obj;
-    return (driver.getWindowHandle() != null);
+    //WebDriver driver = (WebDriver) obj;
+    //return (driver.getWindowHandle() != null);
+    //((RemoteWebDriver)obj).
+    return false;
   }
 
   public void activateObject(Object obj) throws Exception {
@@ -199,7 +199,7 @@ public class WebDriverGridModule implements ModuleProvider<RemoteWebDriverInterf
   }
   
   public int getMaxPoolElements() {
-	return -1;
+	return 5;
   }
 
 }

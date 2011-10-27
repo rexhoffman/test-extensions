@@ -68,7 +68,7 @@ public class StaticWebdriverGridHelper {
   
   public static void lauchNode(String huburl) throws Exception {
     try {      
-      RegistrationRequest c = RegistrationRequest.build(new String[] {"-role","webdriver","-hub",huburl,"-browser", "browserName=firefox,maxInstances=3","-browser", "browserName=chrome,maxInstances=3","-port","5555"});      
+      RegistrationRequest c = RegistrationRequest.build(new String[] {"-role","webdriver","-hub",huburl,"-browser", "browserName=firefox,maxInstances=3",/*"-browser", "browserName=chrome,maxInstances=3",*/"-port","5555"});      
       remote = new SelfRegisteringRemote(c);
       remote.startRemoteServer();
       remote.startRegistrationProcess();
