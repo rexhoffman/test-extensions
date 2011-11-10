@@ -21,4 +21,9 @@ public class SimpleTest {
     driver.navigate().to(application.getDefaultRootUrl());
     assertThat(driver.findElement(By.id("message"))).isDisplayed().textContains("Rex says that the time is now : ");
   }
+
+  @Test(groups="functional")
+  public void ideartTest(){
+     System.out.println(System.getProperty("java.class.path"));
+  }
 }

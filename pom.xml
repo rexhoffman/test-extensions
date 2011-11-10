@@ -67,7 +67,7 @@
     <logback.version>0.9.29</logback.version>
 
     <!-- Testing dependency versions -->
-    <selenium.version>2.9.0</selenium.version>
+    <selenium.version>2.11.0</selenium.version>
 
     <!-- maven plugin versiosn -->
     <maven.surefire.plugin.version>2.9</maven.surefire.plugin.version>

@@ -15,7 +15,7 @@ public class ApplicationUtil {
 
   private static List<Class<? extends ApplicationLookUpMethod>> lookupMethods = new ArrayList<Class<? extends ApplicationLookUpMethod>>();
   static {
-    if (System.getProperty("java.class.path").contains("org.testng.eclipse")){ //running in eclipse with testng
+    if (System.getProperty("java.class.path").contains("org.testng.eclipse") || System.getProperty("java.class.path").contains("idea_rt")){ //running in eclipse with testng, or idea
       lookupMethods.add(EclipseProjectWithMarkingProperty.class);
     }
     lookupMethods.add(ScanTargetDir.class);

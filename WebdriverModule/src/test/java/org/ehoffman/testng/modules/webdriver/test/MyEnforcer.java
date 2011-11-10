@@ -17,13 +17,13 @@ import org.ehoffman.testng.extensions.Broken;
  * @author rexhoffman
  */
 public class MyEnforcer extends ExtensibleTestNGListener {
-  private static boolean ideMode          = Boolean.valueOf(System.getProperty("java.class.path").contains("org.testng.eclipse"));
+  private static boolean ideMode          = Boolean.valueOf(System.getProperty("java.class.path").contains("org.testng.eclipse")
+                                                              || System.getProperty("java.class.path").contains("idea_rt"));
   private static boolean integrationPhase = Boolean.valueOf(System.getProperty("integration_phase"));
   private static boolean runBrokenTests   = false;
 
   static {
-    ideMode = false;
-    ExtensibleTestNGListener.setInterceptors(MyEnforcer.class, 
+    ExtensibleTestNGListener.setInterceptors(MyEnforcer.class,
         Arrays.asList(new LogBackInterceptor(), 
                       new BrokenInterceptor(runBrokenTests, Broken.class, ideMode), 
                       new GroupsInterceptor(new String[] { "unit", "functional" }, new String[] { "remote-integration" }, integrationPhase, ideMode),

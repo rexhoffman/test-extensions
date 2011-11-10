@@ -40,7 +40,7 @@ public class Application {
       } else {
         throw new RuntimeException("File not found or does not end in .war, file: "+warFile.getAbsolutePath());
       }
-      String fileName = warFile.getName().toLowerCase();
+      String fileName = warFile.getName();
       contextRoot = fileName.substring(0, fileName.indexOf(".war"));
     }
 
