@@ -13,9 +13,13 @@ import org.openqa.selenium.remote.Augmenter;
 import org.openqa.selenium.remote.DesiredCapabilities;
 import org.openqa.selenium.remote.HttpCommandExecutor;
 import org.openqa.selenium.remote.RemoteWebDriver;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class WebDriverGridModule implements ModuleProvider<RemoteWebDriverInterface> {
 
+  private static Logger logger = LoggerFactory.getLogger(WebDriverGridModule.class);
+  
   /**
    * See {@link HttpCommandExecutor#HttpCommandExecutor(URL)} it hard codes this system property.
    * 
@@ -37,8 +41,12 @@ public class WebDriverGridModule implements ModuleProvider<RemoteWebDriverInterf
     if (version != null && !"".equals(version)){
       dc.setVersion(version);
     }
+    System.out.println("About to create driver on " +GRID_LOCATION+ " with dc of "+dc);
     WebDriver driver = new RemoteWebDriver(GRID_LOCATION, dc);
-    driver = new Augmenter().augment( driver );
+    System.out.println("About to augment driver" +driver);
+    if (driver != null) {
+      driver = new Augmenter().augment( driver );
+    }
     return driver;
   }
   
@@ -181,19 +189,24 @@ public class WebDriverGridModule implements ModuleProvider<RemoteWebDriverInterf
   }
 
   public void destroyObject(Object obj) throws Exception {
+    System.out.println("Destroying driver on :" +Thread.currentThread() + " with object id : "+obj);
   }
 
   public boolean validateObject(Object obj) {
     //WebDriver driver = (WebDriver) obj;
     //return (driver.getWindowHandle() != null);
     //((RemoteWebDriver)obj).
+    System.out.println("Validating driver on :" +Thread.currentThread() + " with object id : "+obj);
+      
     return false;
   }
 
   public void activateObject(Object obj) throws Exception {
+    System.out.println("Activating driver on :" +Thread.currentThread() + " with object id : "+obj);
   }
 
   public void passivateObject(Object obj) throws Exception {
+    System.out.println("Passivating driver on :" +Thread.currentThread() + " with object id : "+obj);
     WebDriver driver = (WebDriver) obj;
     driver.quit();
   }

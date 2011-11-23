@@ -29,11 +29,6 @@
       <artifactId>selenium-server</artifactId>
     </dependency>
     <dependency>
-      <groupId>org.seleniumhq.selenium</groupId>
-      <artifactId>selenium-remote-driver</artifactId>
-      <version>2.9.0</version>
-    </dependency>
-    <dependency>
 	  <groupId>org.apache.tomcat</groupId>
 	  <artifactId>jasper</artifactId>
 	  <version>6.0.33</version>

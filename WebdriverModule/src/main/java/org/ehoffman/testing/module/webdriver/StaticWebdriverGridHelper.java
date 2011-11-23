@@ -1,7 +1,5 @@
 package org.ehoffman.testing.module.webdriver;
 
-import java.util.concurrent.locks.Lock;
-
 import org.openqa.grid.common.GridDocHelper;
 import org.openqa.grid.common.RegistrationRequest;
 import org.openqa.grid.common.exception.GridConfigurationException;
@@ -72,14 +70,10 @@ public class StaticWebdriverGridHelper {
       remote = new SelfRegisteringRemote(c);
       remote.startRemoteServer();
       remote.startRegistrationProcess();
-      
       boolean ready = false;
       while (!ready){
         Thread.sleep(1000L);
-        Lock luck = h.getRegistry().getLock();
-        luck.lock();
         ready = !h.getRegistry().getAllProxies().isEmpty();
-        luck.unlock();
       }
     } catch (GridConfigurationException e) {
       e.printStackTrace();

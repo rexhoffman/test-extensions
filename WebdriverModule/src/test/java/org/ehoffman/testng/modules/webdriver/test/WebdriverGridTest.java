@@ -12,7 +12,6 @@ import org.ehoffman.testng.extensions.Fixture;
 import org.openqa.selenium.OutputType;
 import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.remote.RemoteWebDriver;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.testng.annotations.AfterSuite;
@@ -82,6 +81,7 @@ public class WebdriverGridTest {
       logger.info("\n\nbasicGridTest, got driver instance\n\n");
       assertThat(driver).isNotNull();
     } catch (Throwable t) {
+      logger.info("\n\nbasicGridTest, caught unexpectd throwable "+t);
       throw t;
     } finally {
       logger.info("\n\nbasicGridTest, quit driver instance\n\n");

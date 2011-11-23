@@ -38,7 +38,7 @@ public class HotswapableThreadLocalInvocationHandler implements InvocationHandle
   private static final String getUnwrappedServiceMethodName = getMethodNameOnClassName("getUnwrappedService", HotSwappableProxy.class);
   
   /**
-   * Verfies the method with the expected inputs exists on the class...  this is done as a sanity check on classloading.
+   * Verifies the method with the expected inputs exists on the class...  this is done as a sanity check on classloading.
    * 
    * @param methodName
    * @param clazz
