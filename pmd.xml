@@ -1,3 +1,25 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<pmd version="4.2.5" timestamp="2011-11-29T21:46:05.119">
+<pmd version="4.2.5" timestamp="2011-11-29T21:49:45.927">
+<file name="/Users/rexhoffman/git/test-extensions/WebdriverModule/src/main/java/org/ehoffman/testing/module/webdriver/WebDriverGridModule.java">
+<violation beginline="21" endline="21" begincolumn="25" endcolumn="30" rule="UnusedPrivateField" ruleset="Unused Code Rules" package="org.ehoffman.testing.module.webdriver" class="WebDriverGridModule" variable="logger" externalInfoUrl="http://pmd.sourceforge.net/rules/unusedcode.html#UnusedPrivateField" priority="3">
+Avoid unused private fields such as 'logger'.
+</violation>
+<violation beginline="37" endline="37" begincolumn="11" endcolumn="44" rule="EmptyCatchBlock" ruleset="Basic Rules" package="org.ehoffman.testing.module.webdriver" class="WebDriverGridModule" externalInfoUrl="http://pmd.sourceforge.net/rules/basic.html#EmptyCatchBlock" priority="3">
+Avoid empty catch blocks
+</violation>
+</file>
+<file name="/Users/rexhoffman/git/test-extensions/WebdriverModule/src/main/java/org/ehoffman/testing/module/webdriver/WebDriverModule.java">
+<violation beginline="10" endline="10" begincolumn="1" endcolumn="40" rule="UnusedImports" ruleset="Import Statement Rules" package="org.ehoffman.testing.module.webdriver" externalInfoUrl="http://pmd.sourceforge.net/rules/imports.html#UnusedImports" priority="4">
+Avoid unused imports such as 'org.ehoffman.module.PooledModule'
+</violation>
+<violation beginline="11" endline="11" begincolumn="1" endcolumn="51" rule="UnusedImports" ruleset="Import Statement Rules" package="org.ehoffman.testing.module.webdriver" externalInfoUrl="http://pmd.sourceforge.net/rules/imports.html#UnusedImports" priority="4">
+Avoid unused imports such as 'org.openqa.selenium.htmlunit.HtmlUnitDriver'
+</violation>
+<violation beginline="14" endline="14" begincolumn="1" endcolumn="52" rule="UnusedImports" ruleset="Import Statement Rules" package="org.ehoffman.testing.module.webdriver" externalInfoUrl="http://pmd.sourceforge.net/rules/imports.html#UnusedImports" priority="4">
+Avoid unused imports such as 'com.gargoylesoftware.htmlunit.BrowserVersion'
+</violation>
+<violation beginline="33" endline="33" begincolumn="7" endcolumn="40" rule="EmptyCatchBlock" ruleset="Basic Rules" package="org.ehoffman.testing.module.webdriver" class="WebDriverModule" externalInfoUrl="http://pmd.sourceforge.net/rules/basic.html#EmptyCatchBlock" priority="3">
+Avoid empty catch blocks
+</violation>
+</file>
 </pmd>
