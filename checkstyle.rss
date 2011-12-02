@@ -2,20 +2,20 @@
 
 <rss version="0.91">
   <channel>
-    <title>FestWebDriver - Checkstyle report</title>
-    <link>http://www.e-hoffman.org/FestWebDriver</link>
-    <description>FestWebDriver - Checkstyle report</description>
+    <title>TestNG-Extensions - Checkstyle report</title>
+    <link>http://www.e-hoffman.org/TestNG-Extensions</link>
+    <description>TestNG-Extensions - Checkstyle report</description>
     <language>en-us</language>
-    <copyright>&#169;2011</copyright>
+    <copyright>&#169;2010 - 2011</copyright>
     <item>
-      <title>File: 6,
-             Errors: 984,
+      <title>File: 27,
+             Errors: 1034,
              Warnings: 0,
              Infos: 0
       </title>
-            <link>http://www.e-hoffman.org/FestWebDriver/checkstyle.html</link>
+            <link>http://www.e-hoffman.org/TestNG-Extensions/checkstyle.html</link>
       <description>
-        <p>Click <a href="http://www.e-hoffman.org/FestWebDriver/checkstyle.html">here</a> for the full Checkstyle report.</p>
+        <p>Click <a href="http://www.e-hoffman.org/TestNG-Extensions/checkstyle.html">here</a> for the full Checkstyle report.</p>
 
         <table summary="Files" boder="1">
           <thead>
@@ -29,7 +29,7 @@
           <tbody>
                           <tr>
                 <td>
-                  <a href="http://www.e-hoffman.org/FestWebDriver/checkstyle.html#org.ehoffman.testing.fest.webdriver.FluentAssertionsTest.java">org/ehoffman/testing/fest/webdriver/FluentAssertionsTest.java</a>
+                  <a href="http://www.e-hoffman.org/TestNG-Extensions/checkstyle.html#org.ehoffman.testing.fixture.services.HotswappableThreadLocalProxyFactory.java">org/ehoffman/testing/fixture/services/HotswappableThreadLocalProxyFactory.java</a>
                 </td>
                 <td>
                   0
@@ -38,12 +38,12 @@
                   0
                 </td>
                 <td>
-                  585
+                  9
                 </td>
               </tr>
                           <tr>
                 <td>
-                  <a href="http://www.e-hoffman.org/FestWebDriver/checkstyle.html#org.ehoffman.testing.fest.webdriver.PageObjectExtension.java">org/ehoffman/testing/fest/webdriver/PageObjectExtension.java</a>
+                  <a href="http://www.e-hoffman.org/TestNG-Extensions/checkstyle.html#org.ehoffman.testng.extensions.AnnotationEnforcer.java">org/ehoffman/testng/extensions/AnnotationEnforcer.java</a>
                 </td>
                 <td>
                   0
@@ -52,12 +52,12 @@
                   0
                 </td>
                 <td>
-                  72
+                  47
                 </td>
               </tr>
                           <tr>
                 <td>
-                  <a href="http://www.e-hoffman.org/FestWebDriver/checkstyle.html#org.ehoffman.testing.fest.webdriver.WebElementExtension.java">org/ehoffman/testing/fest/webdriver/WebElementExtension.java</a>
+                  <a href="http://www.e-hoffman.org/TestNG-Extensions/checkstyle.html#org.ehoffman.testng.extensions.modules.FixtureContainer.java">org/ehoffman/testng/extensions/modules/FixtureContainer.java</a>
                 </td>
                 <td>
                   0
@@ -66,12 +66,12 @@
                   0
                 </td>
                 <td>
-                  139
+                  2
                 </td>
               </tr>
                           <tr>
                 <td>
-                  <a href="http://www.e-hoffman.org/FestWebDriver/checkstyle.html#org.ehoffman.testing.fest.webdriver.WebElementAssert.java">org/ehoffman/testing/fest/webdriver/WebElementAssert.java</a>
+                  <a href="http://www.e-hoffman.org/TestNG-Extensions/checkstyle.html#org.ehoffman.testing.testng.BrokenInterceptor.java">org/ehoffman/testing/testng/BrokenInterceptor.java</a>
                 </td>
                 <td>
                   0
@@ -80,12 +80,12 @@
                   0
                 </td>
                 <td>
-                  6
+                  45
                 </td>
               </tr>
                           <tr>
                 <td>
-                  <a href="http://www.e-hoffman.org/FestWebDriver/checkstyle.html#org.ehoffman.testing.fest.webdriver.FakeWebElement.java">org/ehoffman/testing/fest/webdriver/FakeWebElement.java</a>
+                  <a href="http://www.e-hoffman.org/TestNG-Extensions/checkstyle.html#org.ehoffman.testing.fixture.DotProductIterator.java">org/ehoffman/testing/fixture/DotProductIterator.java</a>
                 </td>
                 <td>
                   0
@@ -94,12 +94,12 @@
                   0
                 </td>
                 <td>
-                  119
+                  32
                 </td>
               </tr>
                           <tr>
                 <td>
-                  <a href="http://www.e-hoffman.org/FestWebDriver/checkstyle.html#org.ehoffman.testing.fest.webdriver.IndexPage.java">org/ehoffman/testing/fest/webdriver/IndexPage.java</a>
+                  <a href="http://www.e-hoffman.org/TestNG-Extensions/checkstyle.html#org.ehoffman.testing.fixture.services.HotswapableThreadLocalInvocationHandler.java">org/ehoffman/testing/fixture/services/HotswapableThreadLocalInvocationHandler.java</a>
                 </td>
                 <td>
                   0
@@ -108,7 +108,301 @@
                   0
                 </td>
                 <td>
-                  63
+                  133
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://www.e-hoffman.org/TestNG-Extensions/checkstyle.html#org.ehoffman.testing.tests.deprecated.FrameworkTest.java">org/ehoffman/testing/tests/deprecated/FrameworkTest.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  45
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://www.e-hoffman.org/TestNG-Extensions/checkstyle.html#org.ehoffman.testing.tests.IntegerHolder.java">org/ehoffman/testing/tests/IntegerHolder.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  8
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://www.e-hoffman.org/TestNG-Extensions/checkstyle.html#org.ehoffman.testing.fixture.FixtureInterceptor.java">org/ehoffman/testing/fixture/FixtureInterceptor.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  55
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://www.e-hoffman.org/TestNG-Extensions/checkstyle.html#org.ehoffman.testng.extensions.Broken.java">org/ehoffman/testng/extensions/Broken.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  10
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://www.e-hoffman.org/TestNG-Extensions/checkstyle.html#org.ehoffman.testng.extensions.JUnitReportReporter.java">org/ehoffman/testng/extensions/JUnitReportReporter.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  84
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://www.e-hoffman.org/TestNG-Extensions/checkstyle.html#org.ehoffman.testing.testng.ExtensibleTestNGListener.java">org/ehoffman/testing/testng/ExtensibleTestNGListener.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  61
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://www.e-hoffman.org/TestNG-Extensions/checkstyle.html#org.ehoffman.testing.tests.deprecated.MyAnnotationEnforcer.java">org/ehoffman/testing/tests/deprecated/MyAnnotationEnforcer.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  3
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://www.e-hoffman.org/TestNG-Extensions/checkstyle.html#org.ehoffman.testing.fixture.ModuleUtil.java">org/ehoffman/testing/fixture/ModuleUtil.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  35
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://www.e-hoffman.org/TestNG-Extensions/checkstyle.html#org.ehoffman.testing.tests.SimpleTest.java">org/ehoffman/testing/tests/SimpleTest.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  15
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://www.e-hoffman.org/TestNG-Extensions/checkstyle.html#org.ehoffman.testing.testng.Interceptor.java">org/ehoffman/testing/testng/Interceptor.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  16
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://www.e-hoffman.org/TestNG-Extensions/checkstyle.html#org.ehoffman.testing.tests.DotProductIteratorTest.java">org/ehoffman/testing/tests/DotProductIteratorTest.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  77
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://www.e-hoffman.org/TestNG-Extensions/checkstyle.html#org.ehoffman.testing.fixture.FixtureContainer.java">org/ehoffman/testing/fixture/FixtureContainer.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  68
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://www.e-hoffman.org/TestNG-Extensions/checkstyle.html#org.ehoffman.testing.testng.LogBackInterceptor.java">org/ehoffman/testing/testng/LogBackInterceptor.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  27
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://www.e-hoffman.org/TestNG-Extensions/checkstyle.html#org.ehoffman.testng.extensions.Fixture.java">org/ehoffman/testng/extensions/Fixture.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  8
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://www.e-hoffman.org/TestNG-Extensions/checkstyle.html#org.ehoffman.testing.testng.GroupsInterceptor.java">org/ehoffman/testing/testng/GroupsInterceptor.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  73
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://www.e-hoffman.org/TestNG-Extensions/checkstyle.html#org.ehoffman.testing.fixture.services.HotSwappableProxy.java">org/ehoffman/testing/fixture/services/HotSwappableProxy.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  5
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://www.e-hoffman.org/TestNG-Extensions/checkstyle.html#org.ehoffman.testing.tests.CountModule.java">org/ehoffman/testing/tests/CountModule.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  50
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://www.e-hoffman.org/TestNG-Extensions/checkstyle.html#org.ehoffman.testing.tests.TestNiceMessageOnDependencyNotSet.java">org/ehoffman/testing/tests/TestNiceMessageOnDependencyNotSet.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  24
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://www.e-hoffman.org/TestNG-Extensions/checkstyle.html#org.ehoffman.testing.tests.MyEnforcer.java">org/ehoffman/testing/tests/MyEnforcer.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  21
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://www.e-hoffman.org/TestNG-Extensions/checkstyle.html#org.ehoffman.testing.fixture.services.FactoryUtil.java">org/ehoffman/testing/fixture/services/FactoryUtil.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  52
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://www.e-hoffman.org/TestNG-Extensions/checkstyle.html#org.ehoffman.testing.tests.SimpleModule.java">org/ehoffman/testing/tests/SimpleModule.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  29
                 </td>
               </tr>
                       </tbody>

@@ -1,1 +1,2 @@
-org.ehoffman.testing.fest.webdriver
+org.ehoffman.testing.tests
+org.ehoffman.testing.tests.deprecated

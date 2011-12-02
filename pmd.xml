@@ -1,3 +1,46 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<pmd version="4.2.5" timestamp="2011-11-29T21:44:22.437">
+<pmd version="4.2.5" timestamp="2011-11-29T21:44:56.993">
+<file name="/Users/rexhoffman/git/test-extensions/TestNG-Extensions/src/main/java/org/ehoffman/testing/fixture/FixtureContainer.java">
+<violation beginline="19" endline="19" begincolumn="1" endcolumn="60" rule="UnusedImports" ruleset="Import Statement Rules" package="org.ehoffman.testing.fixture" externalInfoUrl="http://pmd.sourceforge.net/rules/imports.html#UnusedImports" priority="4">
+Avoid unused imports such as 'org.ehoffman.testing.testng.ExtensibleTestNGListener'
+</violation>
+<violation beginline="24" endline="24" begincolumn="77" endcolumn="82" rule="UnusedPrivateField" ruleset="Unused Code Rules" package="org.ehoffman.testing.fixture" class="FixtureContainer" variable="logger" externalInfoUrl="http://pmd.sourceforge.net/rules/unusedcode.html#UnusedPrivateField" priority="3">
+Avoid unused private fields such as 'logger'.
+</violation>
+<violation beginline="29" endline="29" begincolumn="16" endcolumn="62" rule="UnusedPrivateMethod" ruleset="Unused Code Rules" package="org.ehoffman.testing.fixture" class="FixtureContainer" method="throwRuntimeExceptionIfModuleClassesAreNotSet" externalInfoUrl="http://pmd.sourceforge.net/rules/unusedcode.html#UnusedPrivateMethod" priority="3">
+Avoid unused private methods such as 'throwRuntimeExceptionIfModuleClassesAreNotSet()'.
+</violation>
+</file>
+<file name="/Users/rexhoffman/git/test-extensions/TestNG-Extensions/src/main/java/org/ehoffman/testing/fixture/services/FactoryUtil.java">
+<violation beginline="30" endline="41" begincolumn="18" endcolumn="3" rule="UnusedFormalParameter" ruleset="Unused Code Rules" package="org.ehoffman.testing.fixture.services" class="FactoryUtil" externalInfoUrl="http://pmd.sourceforge.net/rules/unusedcode.html#UnusedFormalParameter" priority="3">
+Avoid unused method parameters such as 'dependencies'.
+</violation>
+</file>
+<file name="/Users/rexhoffman/git/test-extensions/TestNG-Extensions/src/main/java/org/ehoffman/testing/testng/BrokenInterceptor.java">
+<violation beginline="41" endline="46" begincolumn="10" endcolumn="3" rule="UnusedFormalParameter" ruleset="Unused Code Rules" package="org.ehoffman.testing.testng" class="BrokenInterceptor" externalInfoUrl="http://pmd.sourceforge.net/rules/unusedcode.html#UnusedFormalParameter" priority="3">
+Avoid unused constructor parameters such as 'ideMode'.
+</violation>
+<violation beginline="65" endline="65" begincolumn="67" endcolumn="67" rule="EmptyStatementNotInLoop" ruleset="Basic Rules" package="org.ehoffman.testing.testng" class="BrokenInterceptor" method="shouldExecuteMethod" externalInfoUrl="http://pmd.sourceforge.net/rules/basic.html#EmptyStatementNotInLoop" priority="3">
+An empty statement (semicolon) not part of a loop
+</violation>
+</file>
+<file name="/Users/rexhoffman/git/test-extensions/TestNG-Extensions/src/main/java/org/ehoffman/testing/testng/GroupsInterceptor.java">
+<violation beginline="3" endline="3" begincolumn="1" endcolumn="37" rule="UnusedImports" ruleset="Import Statement Rules" package="org.ehoffman.testing.testng" externalInfoUrl="http://pmd.sourceforge.net/rules/imports.html#UnusedImports" priority="4">
+Avoid unused imports such as 'java.lang.reflect.Constructor'
+</violation>
+<violation beginline="4" endline="4" begincolumn="1" endcolumn="32" rule="UnusedImports" ruleset="Import Statement Rules" package="org.ehoffman.testing.testng" externalInfoUrl="http://pmd.sourceforge.net/rules/imports.html#UnusedImports" priority="4">
+Avoid unused imports such as 'java.lang.reflect.Method'
+</violation>
+<violation beginline="14" endline="14" begincolumn="1" endcolumn="46" rule="UnusedImports" ruleset="Import Statement Rules" package="org.ehoffman.testing.testng" externalInfoUrl="http://pmd.sourceforge.net/rules/imports.html#UnusedImports" priority="4">
+Avoid unused imports such as 'org.testng.annotations.ITestAnnotation'
+</violation>
+</file>
+<file name="/Users/rexhoffman/git/test-extensions/TestNG-Extensions/src/main/java/org/ehoffman/testng/extensions/JUnitReportReporter.java">
+<violation beginline="123" endline="124" begincolumn="19" endcolumn="17" rule="EmptyCatchBlock" ruleset="Basic Rules" package="org.ehoffman.testng.extensions" class="JUnitReportReporter" method="generateReport" externalInfoUrl="http://pmd.sourceforge.net/rules/basic.html#EmptyCatchBlock" priority="3">
+Avoid empty catch blocks
+</violation>
+<violation beginline="148" endline="150" begincolumn="9" endcolumn="7" rule="EmptyCatchBlock" ruleset="Basic Rules" package="org.ehoffman.testng.extensions" class="JUnitReportReporter" method="generateReport" externalInfoUrl="http://pmd.sourceforge.net/rules/basic.html#EmptyCatchBlock" priority="3">
+Avoid empty catch blocks
+</violation>
+</file>
 </pmd>

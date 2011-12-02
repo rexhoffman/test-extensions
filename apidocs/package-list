@@ -1,1 +1,5 @@
-org.ehoffman.testing.fest.webdriver
+org.ehoffman.testing.fixture
+org.ehoffman.testing.fixture.services
+org.ehoffman.testing.testng
+org.ehoffman.testng.extensions
+org.ehoffman.testng.extensions.modules
