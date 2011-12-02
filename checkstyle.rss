@@ -2,20 +2,20 @@
 
 <rss version="0.91">
   <channel>
-    <title>EmbeddedWebapp - Checkstyle report</title>
-    <link>http://www.e-hoffman.org/EmbeddedWebapp</link>
-    <description>EmbeddedWebapp - Checkstyle report</description>
+    <title>WebAppInvoker - Checkstyle report</title>
+    <link>http://www.e-hoffman.org/WebAppInvoker</link>
+    <description>WebAppInvoker - Checkstyle report</description>
     <language>en-us</language>
     <copyright>&#169;2011</copyright>
     <item>
-      <title>File: 1,
-             Errors: 8,
+      <title>File: 8,
+             Errors: 313,
              Warnings: 0,
              Infos: 0
       </title>
-            <link>http://www.e-hoffman.org/EmbeddedWebapp/checkstyle.html</link>
+            <link>http://www.e-hoffman.org/WebAppInvoker/checkstyle.html</link>
       <description>
-        <p>Click <a href="http://www.e-hoffman.org/EmbeddedWebapp/checkstyle.html">here</a> for the full Checkstyle report.</p>
+        <p>Click <a href="http://www.e-hoffman.org/WebAppInvoker/checkstyle.html">here</a> for the full Checkstyle report.</p>
 
         <table summary="Files" boder="1">
           <thead>
@@ -29,7 +29,49 @@
           <tbody>
                           <tr>
                 <td>
-                  <a href="http://www.e-hoffman.org/EmbeddedWebapp/checkstyle.html#org.ehoffman.testing.example.webapp.Simple.java">org/ehoffman/testing/example/webapp/Simple.java</a>
+                  <a href="http://www.e-hoffman.org/WebAppInvoker/checkstyle.html#org.ehoffman.embedded.jetty.TestJettyStartUp.java">org/ehoffman/embedded/jetty/TestJettyStartUp.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  23
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://www.e-hoffman.org/WebAppInvoker/checkstyle.html#org.ehoffman.webapp.invoker.lookups.EclipseProjectWithMarkingProperty.java">org/ehoffman/webapp/invoker/lookups/EclipseProjectWithMarkingProperty.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  38
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://www.e-hoffman.org/WebAppInvoker/checkstyle.html#org.ehoffman.webapp.invoker.XpathValueExtractor.java">org/ehoffman/webapp/invoker/XpathValueExtractor.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  12
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://www.e-hoffman.org/WebAppInvoker/checkstyle.html#org.ehoffman.webapp.invoker.lookups.ApplicationLookUpMethod.java">org/ehoffman/webapp/invoker/lookups/ApplicationLookUpMethod.java</a>
                 </td>
                 <td>
                   0
@@ -39,6 +81,62 @@
                 </td>
                 <td>
                   8
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://www.e-hoffman.org/WebAppInvoker/checkstyle.html#org.ehoffman.webapp.invoker.ApplicationUtil.java">org/ehoffman/webapp/invoker/ApplicationUtil.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  43
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://www.e-hoffman.org/WebAppInvoker/checkstyle.html#org.ehoffman.webapp.invoker.Application.java">org/ehoffman/webapp/invoker/Application.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  175
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://www.e-hoffman.org/WebAppInvoker/checkstyle.html#org.ehoffman.webapp.invoker.lookups.ScanTargetDir.java">org/ehoffman/webapp/invoker/lookups/ScanTargetDir.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  10
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://www.e-hoffman.org/WebAppInvoker/checkstyle.html#org.ehoffman.webapp.invoker.lookups.ScanForRunningApplication.java">org/ehoffman/webapp/invoker/lookups/ScanForRunningApplication.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  4
                 </td>
               </tr>
                       </tbody>
