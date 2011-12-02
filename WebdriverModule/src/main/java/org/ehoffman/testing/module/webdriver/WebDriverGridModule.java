@@ -185,7 +185,7 @@ public class WebDriverGridModule implements ModuleProvider<RemoteWebDriverInterf
   }
 
   public String getModuleType() {
-    return RemoteWebDriverInterface.class.getSimpleName();
+    return WebDriverModule.class.getSimpleName();
   }
 
   public void destroyObject(Object obj) throws Exception {

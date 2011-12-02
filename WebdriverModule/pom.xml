@@ -34,4 +34,20 @@
 	  <version>6.0.33</version>
     </dependency>
   </dependencies>
+  <build>
+    <plugins>
+      <plugin>
+          <artifactId>maven-surefire-plugin</artifactId>
+          <configuration>
+            <parallel>false</parallel>
+          </configuration>
+        </plugin>
+        <plugin>
+          <artifactId>maven-failsafe-plugin</artifactId>
+          <configuration>
+            <parallel>false</parallel>
+          </configuration>
+       </plugin>  
+    </plugins>
+  </build>
 </project>
