@@ -1,13 +1,1 @@
-org.ehoffman.logback.capture
 org.ehoffman.module
-org.ehoffman.testing.example.webapp
-org.ehoffman.testing.fest.webdriver
-org.ehoffman.testing.fixture
-org.ehoffman.testing.fixture.services
-org.ehoffman.testing.module.webapp
-org.ehoffman.testing.module.webdriver
-org.ehoffman.testing.testng
-org.ehoffman.testng.extensions
-org.ehoffman.testng.extensions.modules
-org.ehoffman.webapp.invoker
-org.ehoffman.webapp.invoker.lookups

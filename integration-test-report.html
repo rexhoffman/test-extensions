@@ -3,7 +3,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-    <title>Surefire Report</title>
+    <title></title>
     <link rel="stylesheet" href="./css/apache-maven-fluido.min.css" />
     <link rel="stylesheet" href="./css/site.css" />
     <link rel="stylesheet" href="./css/print.css" media="print" />
@@ -20,7 +20,15 @@
         
     
         <div class="container-fluid">
-          
+                <div id="banner">
+        <div class="pull-left">              <div id="bannerLeft">
+                <h2>parent</h2>
+                </div>
+      </div>
+        <div class="pull-right">  </div>
+        <div class="clear"><hr/></div>
+      </div>
+      
       <div id="breadcrumbs">
         <ul class="breadcrumb">
                 
@@ -39,37 +47,37 @@
                                    <h5>Overview</h5>
                   <ul>
                   <li class="none">
-                          <a href="index.html" title="Description and Usage">Description and Usage</a>
+                          <a href="../index.html" title="Description and Usage">Description and Usage</a>
             </li>
                   <li class="none">
-                          <a href="usage.html" title="Usage">Usage</a>
+                          <a href="../usage.html" title="Usage">Usage</a>
             </li>
                   <li class="none">
-                          <a href="faq.html" title="FAQ">FAQ</a>
+                          <a href="../faq.html" title="FAQ">FAQ</a>
             </li>
           </ul>
                        <h5>Project Documentation</h5>
                   <ul>
-                                                                                                                                                                                                                                                                                                                                <li class="collapsed">
+                                                                                                                                                                                                                                                                                                              <li class="collapsed">
                           <a href="project-info.html" title="Project Information">Project Information</a>
                   </li>
-                                                                                                                                                                                                            <li class="expanded">
+                                                                                                                                                                                                                              <li class="expanded">
                           <a href="project-reports.html" title="Project Reports">Project Reports</a>
                     <ul>
                       <li class="none">
                           <a href="apidocs/index.html" title="JavaDocs">JavaDocs</a>
             </li>
                       <li class="none">
-                          <a href="testapidocs/index.html" title="Test JavaDocs">Test JavaDocs</a>
-            </li>
-                      <li class="none">
-                          <a href="checkstyle-aggregate.html" title="Checkstyle">Checkstyle</a>
+                          <a href="checkstyle.html" title="Checkstyle">Checkstyle</a>
             </li>
                       <li class="none">
                           <a href="xref/index.html" title="Source Xref">Source Xref</a>
             </li>
                       <li class="none">
-                          <a href="xref-test/index.html" title="Test Source Xref">Test Source Xref</a>
+                          <a href="pmd.html" title="PMD Report">PMD Report</a>
+            </li>
+                      <li class="none">
+                          <a href="cpd.html" title="CPD Report">CPD Report</a>
             </li>
                       <li class="none">
             <strong>Surefire Report</strong>
@@ -79,6 +87,9 @@
             </li>
                       <li class="none">
                           <a href="overview.html" title="Dependency Overview">Dependency Overview</a>
+            </li>
+                      <li class="none">
+                          <a href="cobertura/index.html" title="Cobertura Test Coverage">Cobertura Test Coverage</a>
             </li>
               </ul>
         </li>
@@ -98,30 +109,14 @@
       <div id="bodyColumn" class="content">
         <div id="contentBox">
                               
-          <script type="text/javascript">
-//<![CDATA[
-function toggleDisplay(elementId) {
- var elm = document.getElementById(elementId + 'error');
- if (elm && typeof elm.style != "undefined") {
- if (elm.style.display == "none") {
- elm.style.display = "";
- document.getElementById(elementId + 'off').style.display = "none";
- document.getElementById(elementId + 'on').style.display = "inline";
- } else if (elm.style.display == "") { elm.style.display = "none";
- document.getElementById(elementId + 'off').style.display = "inline";
- document.getElementById(elementId + 'on').style.display = "none";
- } 
- } 
- }
-//]]>
-</script><div class="section"><h2>Surefire Report<a name="Surefire_Report"></a></h2></div><div class="section"><h2>Summary<a name="Summary"></a></h2><a name="Summary"></a><p>[<a href="#Summary">Summary</a>] [<a href="#Package_List">Package List</a>] [<a href="#Test_Cases">Test Cases</a>]</p><br /><table border="0" class="zebra-striped"><tr class="a"><th>Tests</th><th>Errors </th><th>Failures</th><th>Skipped</th><th>Success Rate</th><th>Time</th></tr><tr class="b"><td>33</td><td>0</td><td>0</td><td>0</td><td>100%</td><td>88.542</td></tr></table><br /><p>Note: failures are anticipated and checked for with assertions while errors are unanticipated.</p><br /></div><div class="section"><h2>Package List<a name="Package_List"></a></h2><a name="Package_List"></a><p>[<a href="#Summary">Summary</a>] [<a href="#Package_List">Package List</a>] [<a href="#Test_Cases">Test Cases</a>]</p><br /><table border="0" class="zebra-striped"><tr class="a"><th>Package</th><th>Tests</th><th>Errors </th><th>Failures</th><th>Skipped</th><th>Success Rate</th><th>Time</th></tr><tr class="b"><td><a href="#org.ehoffman.testng.modules.webdriver.test">org.ehoffman.testng.modules.webdriver.test</a></td><td>3</td><td>0</td><td>0</td><td>0</td><td>100%</td><td>16.375</td></tr><tr class="a"><td><a href="#org.ehoffman.testing.fest.webdriver">org.ehoffman.testing.fest.webdriver</a></td><td>4</td><td>0</td><td>0</td><td>0</td><td>100%</td><td>36.507</td></tr><tr class="b"><td><a href="#org.ehoffman.embedded.jetty">org.ehoffman.embedded.jetty</a></td><td>1</td><td>0</td><td>0</td><td>0</td><td>100%</td><td>1.375</td></tr><tr class="a"><td><a href="#org.ehoffman.testing.tests">org.ehoffman.testing.tests</a></td><td>10</td><td>0</td><td>0</td><td>0</td><td>100%</td><td>0.031</td></tr><tr class="b"><td><a href="#org.ehoffman.testing.module.webapp">org.ehoffman.testing.module.webapp</a></td><td>3</td><td>0</td><td>0</td><td>0</td><td>100%</td><td>34.167</td></tr><tr class="a"><td><a href="#org.ehoffman.testing.tests.deprecated">org.ehoffman.testing.tests.deprecated</a></td><td>12</td><td>0</td><td>0</td><td>0</td><td>100%</td><td>0.087</td></tr></table><br /><p>Note: package statistics are not computed recursively, they only sum up all of its testsuites numbers.</p><div class="section"><h3>org.ehoffman.testng.modules.webdriver.test<a name="org.ehoffman.testng.modules.webdriver.test"></a></h3><a name="org.ehoffman.testng.modules.webdriver.test"></a><table border="0" class="zebra-striped"><tr class="b"><th></th><th>Class</th><th>Tests</th><th>Errors </th><th>Failures</th><th>Skipped</th><th>Success Rate</th><th>Time</th></tr><tr class="a"><td><a href="#org.ehoffman.testng.modules.webdriver.testWebdriverGridTest"><img src="images/icon_success_sml.gif" alt="" /></a></td><td><a href="#org.ehoffman.testng.modules.webdriver.testWebdriverGridTest">WebdriverGridTest</a></td><td>3</td><td>0</td><td>0</td><td>0</td><td>100%</td><td>16.375</td></tr></table></div><div class="section"><h3>org.ehoffman.testing.fest.webdriver<a name="org.ehoffman.testing.fest.webdriver"></a></h3><a name="org.ehoffman.testing.fest.webdriver"></a><table border="0" class="zebra-striped"><tr class="b"><th></th><th>Class</th><th>Tests</th><th>Errors </th><th>Failures</th><th>Skipped</th><th>Success Rate</th><th>Time</th></tr><tr class="a"><td><a href="#org.ehoffman.testing.fest.webdriverFluentAssertionsTest"><img src="images/icon_success_sml.gif" alt="" /></a></td><td><a href="#org.ehoffman.testing.fest.webdriverFluentAssertionsTest">FluentAssertionsTest</a></td><td>4</td><td>0</td><td>0</td><td>0</td><td>100%</td><td>36.507</td></tr></table></div><div class="section"><h3>org.ehoffman.embedded.jetty<a name="org.ehoffman.embedded.jetty"></a></h3><a name="org.ehoffman.embedded.jetty"></a><table border="0" class="zebra-striped"><tr class="b"><th></th><th>Class</th><th>Tests</th><th>Errors </th><th>Failures</th><th>Skipped</th><th>Success Rate</th><th>Time</th></tr><tr class="a"><td><a href="#org.ehoffman.embedded.jettyTestJettyStartUp"><img src="images/icon_success_sml.gif" alt="" /></a></td><td><a href="#org.ehoffman.embedded.jettyTestJettyStartUp">TestJettyStartUp</a></td><td>1</td><td>0</td><td>0</td><td>0</td><td>100%</td><td>1.375</td></tr></table></div><div class="section"><h3>org.ehoffman.testing.tests<a name="org.ehoffman.testing.tests"></a></h3><a name="org.ehoffman.testing.tests"></a><table border="0" class="zebra-striped"><tr class="b"><th></th><th>Class</th><th>Tests</th><th>Errors </th><th>Failures</th><th>Skipped</th><th>Success Rate</th><th>Time</th></tr><tr class="a"><td><a href="#org.ehoffman.testing.testsSimpleTest"><img src="images/icon_success_sml.gif" alt="" /></a></td><td><a href="#org.ehoffman.testing.testsSimpleTest">SimpleTest</a></td><td>10</td><td>0</td><td>0</td><td>0</td><td>100%</td><td>0.031</td></tr></table></div><div class="section"><h3>org.ehoffman.testing.module.webapp<a name="org.ehoffman.testing.module.webapp"></a></h3><a name="org.ehoffman.testing.module.webapp"></a><table border="0" class="zebra-striped"><tr class="b"><th></th><th>Class</th><th>Tests</th><th>Errors </th><th>Failures</th><th>Skipped</th><th>Success Rate</th><th>Time</th></tr><tr class="a"><td><a href="#org.ehoffman.testing.module.webappSimpleTest"><img src="images/icon_success_sml.gif" alt="" /></a></td><td><a href="#org.ehoffman.testing.module.webappSimpleTest">SimpleTest</a></td><td>3</td><td>0</td><td>0</td><td>0</td><td>100%</td><td>34.167</td></tr></table></div><div class="section"><h3>org.ehoffman.testing.tests.deprecated<a name="org.ehoffman.testing.tests.deprecated"></a></h3><a name="org.ehoffman.testing.tests.deprecated"></a><table border="0" class="zebra-striped"><tr class="b"><th></th><th>Class</th><th>Tests</th><th>Errors </th><th>Failures</th><th>Skipped</th><th>Success Rate</th><th>Time</th></tr><tr class="a"><td><a href="#org.ehoffman.testing.tests.deprecatedFrameworkTest"><img src="images/icon_success_sml.gif" alt="" /></a></td><td><a href="#org.ehoffman.testing.tests.deprecatedFrameworkTest">FrameworkTest</a></td><td>12</td><td>0</td><td>0</td><td>0</td><td>100%</td><td>0.087</td></tr></table></div><br /></div><div class="section"><h2>Test Cases<a name="Test_Cases"></a></h2><a name="Test_Cases"></a><p>[<a href="#Summary">Summary</a>] [<a href="#Package_List">Package List</a>] [<a href="#Test_Cases">Test Cases</a>]</p><div class="section"><h3>FluentAssertionsTest<a name="FluentAssertionsTest"></a></h3><a name="org.ehoffman.testing.fest.webdriverFluentAssertionsTest"></a><table border="0" class="zebra-striped"><tr class="b"><td><img src="images/icon_success_sml.gif" alt="" /></td><td>testWithFakeWebElements</td><td>1.633</td></tr><tr class="a"><td><img src="images/icon_success_sml.gif" alt="" /></td><td>pageObjectAssertionsTest</td><td>1.662</td></tr><tr class="b"><td><img src="images/icon_success_sml.gif" alt="" /></td><td>testWithLocalPageHtmlUnit</td><td>2.01</td></tr><tr class="a"><td><img src="images/icon_success_sml.gif" alt="" /></td><td>FirefoxDriverTest</td><td>31.202</td></tr></table></div><div class="section"><h3>SimpleTest<a name="SimpleTest"></a></h3><a name="org.ehoffman.testing.testsSimpleTest"></a><table border="0" class="zebra-striped"><tr class="b"><td><img src="images/icon_success_sml.gif" alt="" /></td><td>sharedTest</td><td>0.011</td></tr><tr class="a"><td><img src="images/icon_success_sml.gif" alt="" /></td><td>sharedTest</td><td>0.001</td></tr><tr class="b"><td><img src="images/icon_success_sml.gif" alt="" /></td><td>sharedTest</td><td>0.001</td></tr><tr class="a"><td><img src="images/icon_success_sml.gif" alt="" /></td><td>sharedTest</td><td>0.005</td></tr><tr class="b"><td><img src="images/icon_success_sml.gif" alt="" /></td><td>sharedTest</td><td>0.003</td></tr><tr class="a"><td><img src="images/icon_success_sml.gif" alt="" /></td><td>sharedTest</td><td>0.004</td></tr><tr class="b"><td><img src="images/icon_success_sml.gif" alt="" /></td><td>sharedTest</td><td>0</td></tr><tr class="a"><td><img src="images/icon_success_sml.gif" alt="" /></td><td>sharedTest</td><td>0.001</td></tr><tr class="b"><td><img src="images/icon_success_sml.gif" alt="" /></td><td>sharedTest</td><td>0.002</td></tr><tr class="a"><td><img src="images/icon_success_sml.gif" alt="" /></td><td>sharedTest</td><td>0.003</td></tr></table></div><div class="section"><h3>FrameworkTest<a name="FrameworkTest"></a></h3><a name="org.ehoffman.testing.tests.deprecatedFrameworkTest"></a><table border="0" class="zebra-striped"><tr class="b"><td><img src="images/icon_success_sml.gif" alt="" /></td><td>remote1</td><td>0.015</td></tr><tr class="a"><td><img src="images/icon_success_sml.gif" alt="" /></td><td>sharedTest</td><td>0.026</td></tr><tr class="b"><td><img src="images/icon_success_sml.gif" alt="" /></td><td>sharedTest</td><td>0.028</td></tr><tr class="a"><td><img src="images/icon_success_sml.gif" alt="" /></td><td>sharedTest</td><td>0.002</td></tr><tr class="b"><td><img src="images/icon_success_sml.gif" alt="" /></td><td>sharedTest</td><td>0.003</td></tr><tr class="a"><td><img src="images/icon_success_sml.gif" alt="" /></td><td>sharedTest</td><td>0.001</td></tr><tr class="b"><td><img src="images/icon_success_sml.gif" alt="" /></td><td>sharedTest</td><td>0.002</td></tr><tr class="a"><td><img src="images/icon_success_sml.gif" alt="" /></td><td>sharedTest</td><td>0.005</td></tr><tr class="b"><td><img src="images/icon_success_sml.gif" alt="" /></td><td>sharedTest</td><td>0.001</td></tr><tr class="a"><td><img src="images/icon_success_sml.gif" alt="" /></td><td>sharedTest</td><td>0.002</td></tr><tr class="b"><td><img src="images/icon_success_sml.gif" alt="" /></td><td>sharedTest</td><td>0.001</td></tr><tr class="a"><td><img src="images/icon_success_sml.gif" alt="" /></td><td>sharedTest2</td><td>0.001</td></tr></table></div><div class="section"><h3>TestJettyStartUp<a name="TestJettyStartUp"></a></h3><a name="org.ehoffman.embedded.jettyTestJettyStartUp"></a><table border="0" class="zebra-striped"><tr class="b"><td><img src="images/icon_success_sml.gif" alt="" /></td><td>runJetty</td><td>1.113</td></tr></table></div><div class="section"><h3>WebdriverGridTest<a name="WebdriverGridTest"></a></h3><a name="org.ehoffman.testng.modules.webdriver.testWebdriverGridTest"></a><table border="0" class="zebra-striped"><tr class="a"><td><img src="images/icon_success_sml.gif" alt="" /></td><td>basicGridTest</td><td>13.146</td></tr><tr class="b"><td><img src="images/icon_success_sml.gif" alt="" /></td><td>missingIE6GridTest</td><td>0.03</td></tr><tr class="a"><td><img src="images/icon_success_sml.gif" alt="" /></td><td>testCanTakeScreenShotThroughGrid</td><td>3.199</td></tr></table></div><div class="section"><h3>SimpleTest<a name="SimpleTest"></a></h3><a name="org.ehoffman.testing.module.webappSimpleTest"></a><table border="0" class="zebra-striped"><tr class="b"><td><img src="images/icon_success_sml.gif" alt="" /></td><td>ideartTest</td><td>0.017</td></tr><tr class="a"><td><img src="images/icon_success_sml.gif" alt="" /></td><td>simpleTestOfApplication</td><td>1.963</td></tr><tr class="b"><td><img src="images/icon_success_sml.gif" alt="" /></td><td>simpleTestOfApplication</td><td>32.187</td></tr></table></div><br /></div>
+          
                   </div>
       </div>
     </div>
 
     <footer class="footer">
             <div class="container-fluid">
-              <div class="row span16">Copyright &copy;                   2011.
+              <div class="row span16">Copyright &copy;                   2010-2011.
           All Rights Reserved.      
                 
       </div>
