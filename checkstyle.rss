@@ -2,20 +2,20 @@
 
 <rss version="0.91">
   <channel>
-    <title>DynamicModuleAPI - Checkstyle report</title>
-    <link>http://www.e-hoffman.org/DynamicModuleAPI</link>
-    <description>DynamicModuleAPI - Checkstyle report</description>
+    <title>LogBackCapture - Checkstyle report</title>
+    <link>http://www.e-hoffman.org/LogBackCapture</link>
+    <description>LogBackCapture - Checkstyle report</description>
     <language>en-us</language>
-    <copyright>&#169;2010 - 2011</copyright>
+    <copyright>&#169;2011</copyright>
     <item>
-      <title>File: 4,
-             Errors: 52,
+      <title>File: 1,
+             Errors: 48,
              Warnings: 0,
              Infos: 0
       </title>
-            <link>http://www.e-hoffman.org/DynamicModuleAPI/checkstyle.html</link>
+            <link>http://www.e-hoffman.org/LogBackCapture/checkstyle.html</link>
       <description>
-        <p>Click <a href="http://www.e-hoffman.org/DynamicModuleAPI/checkstyle.html">here</a> for the full Checkstyle report.</p>
+        <p>Click <a href="http://www.e-hoffman.org/LogBackCapture/checkstyle.html">here</a> for the full Checkstyle report.</p>
 
         <table summary="Files" boder="1">
           <thead>
@@ -29,7 +29,7 @@
           <tbody>
                           <tr>
                 <td>
-                  <a href="http://www.e-hoffman.org/DynamicModuleAPI/checkstyle.html#org.ehoffman.module.PooledModule.java">org/ehoffman/module/PooledModule.java</a>
+                  <a href="http://www.e-hoffman.org/LogBackCapture/checkstyle.html#org.ehoffman.logback.capture.LogbackCapture.java">org/ehoffman/logback/capture/LogbackCapture.java</a>
                 </td>
                 <td>
                   0
@@ -38,49 +38,7 @@
                   0
                 </td>
                 <td>
-                  3
-                </td>
-              </tr>
-                          <tr>
-                <td>
-                  <a href="http://www.e-hoffman.org/DynamicModuleAPI/checkstyle.html#org.ehoffman.module.ModuleProvider.java">org/ehoffman/module/ModuleProvider.java</a>
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  18
-                </td>
-              </tr>
-                          <tr>
-                <td>
-                  <a href="http://www.e-hoffman.org/DynamicModuleAPI/checkstyle.html#org.ehoffman.module.ModuleGroup.java">org/ehoffman/module/ModuleGroup.java</a>
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  5
-                </td>
-              </tr>
-                          <tr>
-                <td>
-                  <a href="http://www.e-hoffman.org/DynamicModuleAPI/checkstyle.html#org.ehoffman.module.Module.java">org/ehoffman/module/Module.java</a>
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  26
+                  48
                 </td>
               </tr>
                       </tbody>
