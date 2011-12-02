@@ -1,0 +1,6 @@
+org.ehoffman.embedded.jetty
+org.ehoffman.testing.fest.webdriver
+org.ehoffman.testing.module.webapp
+org.ehoffman.testing.tests
+org.ehoffman.testing.tests.deprecated
+org.ehoffman.testng.modules.webdriver.test
