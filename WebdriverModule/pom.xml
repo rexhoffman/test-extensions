@@ -32,6 +32,7 @@
 	  <groupId>org.apache.tomcat</groupId>
 	  <artifactId>jasper</artifactId>
 	  <version>6.0.33</version>
+	  <optional>true</optional>
     </dependency>
   </dependencies>
   <build>
@@ -39,13 +40,13 @@
       <plugin>
           <artifactId>maven-surefire-plugin</artifactId>
           <configuration>
-            <parallel>false</parallel>
+            <parallel>true</parallel>
           </configuration>
         </plugin>
         <plugin>
           <artifactId>maven-failsafe-plugin</artifactId>
           <configuration>
-            <parallel>false</parallel>
+            <parallel>true</parallel>
           </configuration>
        </plugin>  
     </plugins>

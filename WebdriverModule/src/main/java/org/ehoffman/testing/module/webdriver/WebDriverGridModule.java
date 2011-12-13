@@ -189,26 +189,36 @@ public class WebDriverGridModule implements ModuleProvider<RemoteWebDriverInterf
   }
 
   public void destroyObject(Object obj) throws Exception {
-    System.out.println("Destroying driver on :" +Thread.currentThread() + " with object id : "+obj);
+    System.out.println("\nDestroying driver on :" +Thread.currentThread() + " with object id : "+obj);
+    if (obj != null){
+      WebDriver driver = (WebDriver) obj;
+      try {
+        driver.quit();
+      } catch (Exception e){
+      }
+    }
   }
 
   public boolean validateObject(Object obj) {
     //WebDriver driver = (WebDriver) obj;
     //return (driver.getWindowHandle() != null);
     //((RemoteWebDriver)obj).
-    System.out.println("Validating driver on :" +Thread.currentThread() + " with object id : "+obj);
+    System.out.println("\nValidating driver on :" +Thread.currentThread() + " with object id : "+obj);
       
     return false;
   }
 
   public void activateObject(Object obj) throws Exception {
-    System.out.println("Activating driver on :" +Thread.currentThread() + " with object id : "+obj);
+    System.out.println("\nActivating driver on :" +Thread.currentThread() + " with object id : "+obj);
   }
 
   public void passivateObject(Object obj) throws Exception {
-    System.out.println("Passivating driver on :" +Thread.currentThread() + " with object id : "+obj);
+    System.out.println("\nPassivating driver on :" +Thread.currentThread() + " with object id : "+obj);
     WebDriver driver = (WebDriver) obj;
-    driver.quit();
+    try {
+      driver.quit();
+    } catch (Exception e){
+    }
   }
   
   public int getMaxPoolElements() {
