@@ -10,6 +10,7 @@ import org.apache.commons.pool.impl.GenericObjectPool;
 import org.apache.commons.pool.impl.GenericObjectPool.Config;
 import org.ehoffman.module.Module;
 import org.ehoffman.module.PooledModule;
+import org.ehoffman.module.PrototypeModule;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -27,6 +28,14 @@ public class FactoryUtil {
     return output;
   }
   
+  /**
+   * TODO: expose more functionality here.  Surprised that the validation methods are fully ignored.
+   * Test this with remote web driver where the test on borrow/return is set to true.
+   * 
+   * @param factory
+   * @param dependencies
+   * @return
+   */
   private static ObjectPool createObjectPool(PooledModule<?> factory, Map<String, HotSwappableProxy> dependencies){
     Config config = new Config();
     config.maxActive = factory.getMaxPoolElements();
@@ -48,7 +57,9 @@ public class FactoryUtil {
       preCreatedInstancesFromFactory = factoryClassToMapOfDependenciesToInstance.get(factory.getClass());
       if (preCreatedInstancesFromFactory == null){
         preCreatedInstancesFromFactory = Collections.synchronizedMap(new HashMap<Map<String,Object>, Object>());
-        factoryClassToMapOfDependenciesToInstance.put((Class<? extends Module<?>>) factory.getClass(), preCreatedInstancesFromFactory);
+        if (!factory.getClass().isAssignableFrom(PrototypeModule.class)) {
+          factoryClassToMapOfDependenciesToInstance.put((Class<? extends Module<?>>) factory.getClass(), preCreatedInstancesFromFactory);
+        }
       }
     }
     Object output = null;

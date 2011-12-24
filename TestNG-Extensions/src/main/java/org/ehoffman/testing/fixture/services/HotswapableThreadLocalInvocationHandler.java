@@ -12,6 +12,7 @@ import net.sf.cglib.proxy.MethodProxy;
 import org.apache.commons.pool.ObjectPool;
 import org.ehoffman.module.Module;
 import org.ehoffman.module.PooledModule;
+import org.ehoffman.module.PrototypeModule;
 import org.ehoffman.testing.fixture.FixtureContainer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -87,7 +88,7 @@ public class HotswapableThreadLocalInvocationHandler implements InvocationHandle
 	  return module.get().getClass().getSimpleName();
   }
   
- 
+  
   private void createIfHolderInstanceNotSet() throws Exception {
     if (holderOfInstance.get() == null) {
       if (module.get() != null){
@@ -108,6 +109,8 @@ public class HotswapableThreadLocalInvocationHandler implements InvocationHandle
         if (PooledModule.class.isAssignableFrom(module.get().getClass())){
           holderOfPool.set((ObjectPool)FactoryUtil.buildObject(module.get(), dependencies));
           holderOfInstance.set(holderOfPool.get().borrowObject());
+        } else  if (PrototypeModule.class.isAssignableFrom(module.get().getClass())) {
+          
         } else {
           holderOfInstance.set(FactoryUtil.buildObject(module.get(), dependencies));
         }
