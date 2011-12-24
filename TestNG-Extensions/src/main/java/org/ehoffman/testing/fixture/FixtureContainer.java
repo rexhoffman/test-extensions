@@ -16,7 +16,6 @@ import org.ehoffman.module.ModuleProvider;
 import org.ehoffman.testing.fixture.services.HotSwappableProxy;
 import org.ehoffman.testing.fixture.services.HotswapableThreadLocalInvocationHandler;
 import org.ehoffman.testing.fixture.services.HotswappableThreadLocalProxyFactory;
-import org.ehoffman.testing.testng.ExtensibleTestNGListener;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -26,7 +25,7 @@ public class FixtureContainer {
   private static final ConcurrentMap<String, HotSwappableProxy>             fixtureServices           = new ConcurrentHashMap<String, HotSwappableProxy>();
   private static ThreadLocal<Set<Class<? extends Module<?>>>>               moduleClasses             = new ThreadLocal<Set<Class<? extends Module<?>>>>();
 
-  private void throwRuntimeExceptionIfModuleClassesAreNotSet(){
+  private static void throwRuntimeExceptionIfModuleClassesAreNotSet(){
     if (moduleClasses.get() == null){
       throw new RuntimeException("You must use extend the ExtensibleTestNGListener class and make sure it is applied as a TestNG listener to this test.  setInterceptors(");
     }
@@ -74,6 +73,7 @@ public class FixtureContainer {
     }
   }
   
+  
   static Collection<Set<Class<? extends Module<?>>>> mergeListsOfSameModuleType(Collection<Class<? extends Module<?>>> input) {
     Map<String, Set<Class<? extends Module<?>>>> output = new HashMap<String, Set<Class<? extends Module<?>>>>();
     if (input != null) {
@@ -92,7 +92,13 @@ public class FixtureContainer {
     return output.values();
   }
 
-  static void createServiceIfNeeded(Class<? extends Module<?>> moduleClass) {
+  /**
+   * Given a the class of a {@link Module}, ensure that a {@link HotSwappableProxy} for the Service needed, for this {@link Module} class is put in the {@link FixtureContainer#fixtureServices}
+   * When the {@link HotSwappableProxy} is accessed in a test it will then invoke the {@link Module#create(Map)} method after instantiating a object from the {@link Module} class.
+   * 
+   * @param moduleClass
+   */
+  protected static void createServiceIfNeeded(Class<? extends Module<?>> moduleClass) {
     Module<?> module = getModuleFromClass(moduleClass, false);
     String serviceName = module.getModuleType();
     HotSwappableProxy proxy = fixtureServices.get(serviceName);
@@ -102,7 +108,12 @@ public class FixtureContainer {
     }
   }
 
-  static void createServicesIfNeeded(Set<Class<? extends Module<?>>> moduleClasses) {
+  /**
+   * Given a module class, ensure that the Service needed for this class is put in the {@link FixtureContainer#fixtureServices}
+   * 
+   * @param moduleClass
+   */
+  protected static void createServicesIfNeeded(Set<Class<? extends Module<?>>> moduleClasses) {
     for (Class<? extends Module<?>> moduleClass : moduleClasses) {
       createServiceIfNeeded(moduleClass);
     }
@@ -114,9 +125,12 @@ public class FixtureContainer {
 
   @SuppressWarnings("unchecked")
   public static <T> T getService(Class<? extends ModuleProvider<T>> clazz) {
+    throwRuntimeExceptionIfModuleClassesAreNotSet();
     try {
       ModuleProvider<T> provider = clazz.newInstance();
-      return (T) fixtureServices.get(provider.getModuleType());
+      HotSwappableProxy proxy = (HotSwappableProxy) fixtureServices.get(provider.getModuleType());
+      T nakedService = (T) proxy.getUnwrappedService();
+      return nakedService;
     } catch (IllegalAccessException e) {
       throw new RuntimeException("Module Provider could not be constructed", e);
     } catch (InstantiationException e) {
@@ -124,10 +138,18 @@ public class FixtureContainer {
     }
   }
 
+  /**
+   * Should the test need to access the list of {@link Module} classes that are made available to it (your test shouldn't)
+   * they are available as an unmodifiable set return from this method.
+   */
   public static Set<Class<? extends Module<?>>> getModuleClasses() {
     return Collections.unmodifiableSet(moduleClasses.get());
   }
 
+  /**
+   * Primarily for logging purposes, this method will return a {@link Set} of {@link String} that are the {@link Class#getSimpleName()}
+   * of the {@link Module} classes provided to a test through the {@link FixtureContainer}.
+   */
   public static Set<String> getModuleClassesSimpleName() {
     if (moduleClasses.get() == null){
       throw new RuntimeException("The FixtureRunnerMethodInterceptor is not configure as a TestNG Listener method.");
@@ -139,6 +161,11 @@ public class FixtureContainer {
     return Collections.unmodifiableSet(output);
   }
 
+  /**
+   * Called after a test run to clear the {@link ThreadLocal} {@link FixtureContainer#moduleClasses}, to ensure
+   * that module information is not accidentally accessible to a test through the static methods on this class
+   * to the next test to execute on this thread.
+   */
   static void wipeFixture() {
     for (Entry<String, HotSwappableProxy> serviceEntry : fixtureServices.entrySet()) {
       serviceEntry.getValue().setProxyTargetModule(null);

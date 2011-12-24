@@ -9,6 +9,12 @@ import org.ehoffman.module.Module;
 import org.ehoffman.module.ModuleGroup;
 import org.ehoffman.module.ModuleProvider;
 
+/**
+ * Provides utility methods to take a list of {@link Module} and {@link ModuleGroup}, and expand them out by drilling in to all modules and groups provided by the {@link ModuleGroup#getModuleClasses()} method.
+ * The end result returned is a {@link Set} of {@link Module}.
+ * 
+ * @author rexhoffman
+ */
 public class ModuleUtil {
     
   /**

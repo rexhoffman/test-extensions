@@ -61,15 +61,6 @@ public class HotswapableThreadLocalInvocationHandler implements InvocationHandle
   private ThreadLocal<Object> holderOfInstance = new ThreadLocal<Object>();
   private ThreadLocal<ObjectPool> holderOfPool = new ThreadLocal<ObjectPool>();
   
-  
-  public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
-    return invocation(method, args);
-  }
-
-  public Object intercept(Object obj, Method method, Object[] args, MethodProxy proxy) throws Throwable {
-    return invocation(method, args);
-  }
-  
   /**
    * Given a map of required dependencies, mapped from name to expected class/interface implemented by the dependency,
    * and a map of name to the available dependency object instance, determine if the object is not null and is an instance of 
@@ -126,7 +117,32 @@ public class HotswapableThreadLocalInvocationHandler implements InvocationHandle
     }
   }
   
+
+  /**
+   * When class is used as the {@link InvocationHandler} for a {@link java.lang.reflect.Proxy} this method will
+   * delegate all the method invocation to the {@link HotswapableThreadLocalInvocationHandler#invocation(Method, Object[])} method.
+   */
+  public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
+    return invocation(method, args);
+  }
+
+  /**
+   * When class is used as the {@link MethodInterceptor} for a {@link net.sf.cglib.proxy.Proxy} this method will
+   * delegate all the method invocation to the {@link HotswapableThreadLocalInvocationHandler#invocation(Method, Object[])} method.
+   */
+  public Object intercept(Object obj, Method method, Object[] args, MethodProxy proxy) throws Throwable {
+    return invocation(method, args);
+  }
   
+  
+  /**
+   * This is the the execution entry point for all calls to a proxied object.  
+   * 
+   * @param method
+   * @param args
+   * @return
+   * @throws Exception
+   */
   public Object invocation(Method method, Object[] args) throws Exception {
     if (method.getName().endsWith(setProxyTargetModuleMethodName) && args.length == 1) {
       if (module.get() != null && PooledModule.class.isAssignableFrom(module.get().getClass()) && holderOfPool.get() != null && holderOfInstance.get() != null){

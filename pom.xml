@@ -61,7 +61,7 @@
     </snapshotRepository>
     <site>
       <id>github-project-site</id>
-      <url>scm:git:https://github.com/rexhoffman/test-extensions.git</url>
+      <url>scm:git:git://github.com/rexhoffman/test-extensions.git:gh-pages</url>
     </site>
   </distributionManagement>
   <modules>
@@ -195,6 +195,22 @@
     </plugins>
     <pluginManagement>
       <plugins>
+        <plugin>
+          <artifactId>maven-scm-plugin</artifactId>
+          <version>1.6.1</version>
+          <dependencies>
+          <dependency>
+	        <groupId>org.apache.maven.scm</groupId>
+	        <artifactId>maven-scm-provider-gitexe</artifactId>
+	        <version>1.6</version>
+	      </dependency>
+	      <dependency>
+	        <groupId>org.apache.maven.scm</groupId>
+	        <artifactId>maven-scm-provider-git-commons</artifactId>
+	        <version>1.6</version>
+	      </dependency>
+	      </dependencies>
+        </plugin>
         <plugin>
           <artifactId>maven-compiler-plugin</artifactId>
           <version>${maven.compiler.plugin.version}</version>
@@ -347,6 +363,38 @@
 		      </plugin>
             </reportPlugins>
           </configuration>
+          <dependencies>
+          <dependency>
+	        <groupId>org.apache.maven.wagon</groupId>
+	        <artifactId>wagon-scm</artifactId>
+	        <version>2.1</version>
+	      </dependency>
+	      <dependency>
+	        <groupId>org.apache.maven.scm</groupId>
+	        <artifactId>maven-scm-api</artifactId>
+	        <version>1.6</version>
+	      </dependency>
+	      <dependency>
+	        <groupId>org.apache.maven.scm</groupId>
+	        <artifactId>maven-scm-manager-plexus</artifactId>
+	        <version>1.6</version>
+	      </dependency>
+	      <dependency>
+	        <groupId>org.apache.maven.scm</groupId>
+	        <artifactId>maven-scm-provider-gitexe</artifactId>
+	        <version>1.6</version>
+	      </dependency>
+	      <dependency>
+	        <groupId>org.apache.maven.scm</groupId>
+	        <artifactId>maven-scm-provider-gittest</artifactId>
+	        <version>1.6</version>
+	      </dependency>
+	      <dependency>
+	        <groupId>org.apache.maven.scm</groupId>
+	        <artifactId>maven-scm-provider-git-commons</artifactId>
+	        <version>1.6</version>
+	      </dependency>
+          </dependencies>
         </plugin>
         <plugin>
           <artifactId>maven-source-plugin</artifactId>
@@ -378,25 +426,28 @@
         </plugin>
       </plugins>
     </pluginManagement>
-    
-    <!-- used to push the generated site to github -->
     <extensions>
-      <extension>
-        <groupId>org.apache.maven.wagon</groupId>
-        <artifactId>wagon-scm</artifactId>
-        <version>2.1</version>
-      </extension>
-      <extension>
-        <groupId>org.apache.maven.scm</groupId>
-        <artifactId>maven-scm-manager-plexus</artifactId>
-        <version>1.6</version>
-      </extension>
-      <extension>
-        <groupId>org.apache.maven.scm</groupId>
-        <artifactId>maven-scm-provider-git-commons</artifactId>
-        <version>1.6</version>
-      </extension>
-    </extensions>
+    <extension>
+	        <groupId>org.apache.maven.wagon</groupId>
+	        <artifactId>wagon-scm</artifactId>
+	        <version>2.1</version>
+	      </extension>
+	      <extension>
+	        <groupId>org.apache.maven.scm</groupId>
+	        <artifactId>maven-scm-manager-plexus</artifactId>
+	        <version>1.6</version>
+	      </extension>
+	      <extension>
+	        <groupId>org.apache.maven.scm</groupId>
+	        <artifactId>maven-scm-provider-gitexe</artifactId>
+	        <version>1.6</version>
+	      </extension>
+	      <extension>
+	        <groupId>org.apache.maven.scm</groupId>
+	        <artifactId>maven-scm-provider-git-commons</artifactId>
+	        <version>1.6</version>
+	      </extension>
+          </extensions>
   </build>
   <dependencyManagement>
     <dependencies>

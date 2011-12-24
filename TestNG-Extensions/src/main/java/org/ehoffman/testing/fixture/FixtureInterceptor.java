@@ -27,8 +27,9 @@ public class FixtureInterceptor implements Interceptor {
   
   private static Logger logger = LoggerFactory.getLogger(FixtureInterceptor.class);
   
-  private static Map<ITestNGMethod, Set<Class<? extends Module<?>>>> testNGMethodToSetOfModuleClassesForSingleInvocation = Collections.synchronizedMap(new IdentityHashMap<ITestNGMethod, Set<Class<? extends Module<?>>>>());
-  
+  private Map<ITestNGMethod, Set<Class<? extends Module<?>>>> testNGMethodToSetOfModuleClassesForSingleInvocation = Collections.synchronizedMap(new IdentityHashMap<ITestNGMethod, Set<Class<? extends Module<?>>>>());
+  private final Set<Class<? extends Module<?>>> emptySet = new HashSet<Class<? extends Module<?>>>(); 
+
   
   private Iterator<Set<Class<? extends Module<?>>>> fixtureIterator(Fixture fixture) {
     Class<? extends ModuleProvider<?>>[] moduleArray = fixture.factory();
@@ -77,8 +78,6 @@ public class FixtureInterceptor implements Interceptor {
   public List<String> getConfigErrorMessages() {
     return new ArrayList<String>();
   }
-
-  private static final Set<Class<? extends Module<?>>> emptySet = new HashSet<Class<? extends Module<?>>>(); 
 
   @Override
   public void beforeInvocation(ITestResult testResult) {

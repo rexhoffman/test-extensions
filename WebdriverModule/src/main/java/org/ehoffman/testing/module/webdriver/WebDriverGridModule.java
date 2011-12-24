@@ -41,7 +41,7 @@ public class WebDriverGridModule implements ModuleProvider<RemoteWebDriverInterf
     if (version != null && !"".equals(version)){
       dc.setVersion(version);
     }
-    System.out.println("About to create driver on " +GRID_LOCATION+ " with dc of "+dc);
+    //System.out.println("About to create driver on " +GRID_LOCATION+ " with dc of "+dc);
     WebDriver driver = new RemoteWebDriver(GRID_LOCATION, dc);
     System.out.println("About to augment driver" +driver);
     if (driver != null) {
