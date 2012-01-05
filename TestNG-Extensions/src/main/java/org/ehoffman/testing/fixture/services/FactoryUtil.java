@@ -42,7 +42,7 @@ public class FactoryUtil {
     config.maxIdle = factory.getMaxPoolElements();
     config.minIdle = 0;
     config.testOnBorrow = false;
-    config.testOnReturn = false;
+    config.testOnReturn = true;
     config.testWhileIdle = false;
     config.whenExhaustedAction =  GenericObjectPool.WHEN_EXHAUSTED_BLOCK;
     config.maxWait = -1;
@@ -53,6 +53,10 @@ public class FactoryUtil {
   public static Object buildObject(Module<?> factory, Map<String, HotSwappableProxy> dependencies){
     Map<Map<String,Object>, Object> preCreatedInstancesFromFactory = null;
     Map<String, Object> unwrappedDependecies = unwrapDependencies(dependencies);
+    System.out.println("String factory class is assignableFrom? :"+PrototypeModule.class.isAssignableFrom(factory.getClass()) +" of class: "+factory.getClass().getSimpleName());
+    if (PrototypeModule.class.isAssignableFrom(factory.getClass())){
+      return factory.create(unwrappedDependecies);
+    }
     synchronized (factoryClassToMapOfDependenciesToInstance) {
       preCreatedInstancesFromFactory = factoryClassToMapOfDependenciesToInstance.get(factory.getClass());
       if (preCreatedInstancesFromFactory == null){

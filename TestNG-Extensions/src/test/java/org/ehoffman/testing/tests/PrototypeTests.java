@@ -16,11 +16,12 @@ public class PrototypeTests {
   public static class PrototypeSimpleModule extends SimpleModule implements PrototypeModule<IntegerHolder>{
   }
 
-  private AtomicReference<IntegerHolder> integerHolder = new AtomicReference<IntegerHolder>();
+  private static AtomicReference<IntegerHolder> integerHolder = new AtomicReference<IntegerHolder>();
   
   private void validateThisTestsPrototypeIsNotTheSameAsTheOthers(IntegerHolder testsValue){
     IntegerHolder otherTestsInstance = integerHolder.getAndSet(testsValue);
     if (otherTestsInstance != null){
+      System.out.println(testsValue.toString() + " vs " + otherTestsInstance.toString());
       assertThat(testsValue).as("Prototype modules appear to not be working").isNotSameAs(otherTestsInstance);
     }
   }
@@ -30,7 +31,7 @@ public class PrototypeTests {
   public void setSimpleModuleTest1(){
     IntegerHolder service = FixtureContainer.getService(PrototypeSimpleModule.class);
     IntegerHolder service2 = FixtureContainer.getService(PrototypeSimpleModule.class);
-    assertThat(service2).isSameAs(service);
+    assertThat(service2).isNotNull().isSameAs(service);
     validateThisTestsPrototypeIsNotTheSameAsTheOthers(service);
   }
 
@@ -39,16 +40,7 @@ public class PrototypeTests {
   public void setSimpleModuleTest2(){
     IntegerHolder service = FixtureContainer.getService(PrototypeSimpleModule.class);
     IntegerHolder service2 = FixtureContainer.getService(PrototypeSimpleModule.class);
-    assertThat(service2).isSameAs(service);
-    validateThisTestsPrototypeIsNotTheSameAsTheOthers(service);
-  }
-  
-  @Test(groups="unit")
-  @Fixture(factory=PrototypeSimpleModule.class)
-  public void setSimpleModuleTest2(){
-    IntegerHolder service = FixtureContainer.getService(PrototypeSimpleModule.class);
-    IntegerHolder service2 = FixtureContainer.getService(PrototypeSimpleModule.class);
-    assertThat(service2).isSameAs(service);
+    assertThat(service2).isNotNull().isSameAs(service);
     validateThisTestsPrototypeIsNotTheSameAsTheOthers(service);
   }
   

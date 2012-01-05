@@ -21,7 +21,7 @@ import org.slf4j.LoggerFactory;
 
 public class FixtureContainer {
   private static final Logger                                               logger                    = LoggerFactory.getLogger(FixtureContainer.class);
-  private static final ConcurrentMap<Class<? extends Module<?>>, Module<?>> reusableThreadSafeModules = new ConcurrentHashMap<Class<? extends Module<?>>, Module<?>>();
+  private static final ConcurrentMap<Class<? extends Module<?>>, Module<?>> reusableModulesInstances  = new ConcurrentHashMap<Class<? extends Module<?>>, Module<?>>();
   private static final ConcurrentMap<String, HotSwappableProxy>             fixtureServices           = new ConcurrentHashMap<String, HotSwappableProxy>();
   private static ThreadLocal<Set<Class<? extends Module<?>>>>               moduleClasses             = new ThreadLocal<Set<Class<? extends Module<?>>>>();
 
@@ -49,26 +49,22 @@ public class FixtureContainer {
     return module;
   }
 
-  private static Module<?> getModuleFromClass(Class<? extends Module<?>> moduleClass, boolean destructive) {
+  private static Module<?> getModuleFromClass(Class<? extends Module<?>> moduleClass) {
     Module<?> module = null;
-    if (!destructive) {
-      module = reusableThreadSafeModules.get(moduleClass);
-      if (module == null) {
+    module = reusableModulesInstances.get(moduleClass);
+    if (module == null) {
         module = getNewInstance(moduleClass);
-        reusableThreadSafeModules.putIfAbsent(moduleClass, module);
-      }
-      if (module != reusableThreadSafeModules.get(moduleClass)) {
+        reusableModulesInstances.putIfAbsent(moduleClass, module);
+    }
+    if (module != reusableModulesInstances.get(moduleClass)) { //another thread has already added the module
         module.destroy();
-        module = reusableThreadSafeModules.get(moduleClass);
-      }
-    } else {
-      module = getNewInstance(moduleClass);
+        module = reusableModulesInstances.get(moduleClass);
     }
     return module;
   }
 
   static void destroyAll(){
-    for (Module<?> module : reusableThreadSafeModules.values()){
+    for (Module<?> module : reusableModulesInstances.values()){
       module.destroy();
     }
   }
@@ -78,7 +74,7 @@ public class FixtureContainer {
     Map<String, Set<Class<? extends Module<?>>>> output = new HashMap<String, Set<Class<? extends Module<?>>>>();
     if (input != null) {
       for (Class<? extends Module<?>> clazz : input) {
-        Module<?> module = getModuleFromClass(clazz, false);
+        Module<?> module = getModuleFromClass(clazz);
         String type = module.getModuleType();
         if (output.get(type) == null) {
           Set<Class<? extends Module<?>>> newList = new HashSet<Class<? extends Module<?>>>();
@@ -99,7 +95,7 @@ public class FixtureContainer {
    * @param moduleClass
    */
   protected static void createServiceIfNeeded(Class<? extends Module<?>> moduleClass) {
-    Module<?> module = getModuleFromClass(moduleClass, false);
+    Module<?> module = getModuleFromClass(moduleClass);
     String serviceName = module.getModuleType();
     HotSwappableProxy proxy = fixtureServices.get(serviceName);
     if (proxy == null) {
@@ -185,11 +181,11 @@ public class FixtureContainer {
    * 
    * @param moduleClasses
    */
-  static void setModuleClasses(Set<Class<? extends Module<?>>> moduleClasses, boolean destructive) {
+  static void setModuleClasses(Set<Class<? extends Module<?>>> moduleClasses) {
     createServicesIfNeeded(moduleClasses);
     FixtureContainer.moduleClasses.set(moduleClasses);
     for (Class<? extends Module<?>> moduleClass : moduleClasses) {
-      Module<?> module = getModuleFromClass(moduleClass, destructive);
+      Module<?> module = getModuleFromClass(moduleClass);
       String serviceName = module.getModuleType();
       fixtureServices.get(serviceName).setProxyTargetModule(module);
     }

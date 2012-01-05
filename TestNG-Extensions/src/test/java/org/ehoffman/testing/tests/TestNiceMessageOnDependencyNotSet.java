@@ -7,14 +7,13 @@ import java.util.Map;
 
 import org.ehoffman.module.Module;
 import org.ehoffman.testing.fixture.FixtureContainer;
-import org.ehoffman.testing.tests.deprecated.MyAnnotationEnforcer;
 import org.ehoffman.testng.extensions.Fixture;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.testng.annotations.Listeners;
 import org.testng.annotations.Test;
 
-@Listeners(MyAnnotationEnforcer.class)
+@Listeners(MyEnforcer.class)
 public class TestNiceMessageOnDependencyNotSet {
   private static Logger logger = LoggerFactory.getLogger(TestNiceMessageOnDependencyNotSet.class);
 
@@ -53,9 +52,8 @@ public class TestNiceMessageOnDependencyNotSet {
   @Test(groups="unit")
   @Fixture(factory = {TestNiceMessageOnDependencyNotSet.TestModule.class})
   public void niceDependencyNotDefinedErrorMessage(){
-    IntegerHolder holder = FixtureContainer.getService(TestNiceMessageOnDependencyNotSet.TestModule.class);
     try {
-      logger.info(""+holder.getInteger());
+      IntegerHolder holder = FixtureContainer.getService(TestNiceMessageOnDependencyNotSet.TestModule.class);
     } catch (RuntimeException e){
       assertThat(e.getMessage()).contains("Module TestModule has missing dependencies.  They are {DNE=class org.ehoffman.testing.tests.IntegerHolder}");
     }

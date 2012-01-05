@@ -27,8 +27,8 @@ public class FixtureInterceptor implements Interceptor {
   
   private static Logger logger = LoggerFactory.getLogger(FixtureInterceptor.class);
   
-  private Map<ITestNGMethod, Set<Class<? extends Module<?>>>> testNGMethodToSetOfModuleClassesForSingleInvocation = Collections.synchronizedMap(new IdentityHashMap<ITestNGMethod, Set<Class<? extends Module<?>>>>());
-  private final Set<Class<? extends Module<?>>> emptySet = new HashSet<Class<? extends Module<?>>>(); 
+  private static Map<ITestNGMethod, Set<Class<? extends Module<?>>>> testNGMethodToSetOfModuleClassesForSingleInvocation = Collections.synchronizedMap(new IdentityHashMap<ITestNGMethod, Set<Class<? extends Module<?>>>>());
+  private static final Set<Class<? extends Module<?>>> emptySet = new HashSet<Class<? extends Module<?>>>(); 
 
   
   private Iterator<Set<Class<? extends Module<?>>>> fixtureIterator(Fixture fixture) {
@@ -85,9 +85,9 @@ public class FixtureInterceptor implements Interceptor {
     ITestNGMethod testNGmethod = testResult.getMethod();
     Set<Class<? extends Module<?>>> moduleClasses = testNGMethodToSetOfModuleClassesForSingleInvocation.get(testNGmethod);
     if (moduleClasses != null){
-      FixtureContainer.setModuleClasses(moduleClasses, testNGmethod.getConstructorOrMethod().getMethod().getAnnotation(Fixture.class).destructive());
+      FixtureContainer.setModuleClasses(moduleClasses);
     } else {
-      FixtureContainer.setModuleClasses(emptySet, false);
+      FixtureContainer.setModuleClasses(emptySet);
       FixtureContainer.wipeFixture();
     }
   }

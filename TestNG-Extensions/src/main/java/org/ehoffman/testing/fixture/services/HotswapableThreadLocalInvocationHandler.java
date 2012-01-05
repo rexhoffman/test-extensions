@@ -109,8 +109,6 @@ public class HotswapableThreadLocalInvocationHandler implements InvocationHandle
         if (PooledModule.class.isAssignableFrom(module.get().getClass())){
           holderOfPool.set((ObjectPool)FactoryUtil.buildObject(module.get(), dependencies));
           holderOfInstance.set(holderOfPool.get().borrowObject());
-        } else  if (PrototypeModule.class.isAssignableFrom(module.get().getClass())) {
-          
         } else {
           holderOfInstance.set(FactoryUtil.buildObject(module.get(), dependencies));
         }
