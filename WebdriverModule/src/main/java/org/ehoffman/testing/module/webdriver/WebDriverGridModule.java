@@ -6,7 +6,7 @@ import java.util.Arrays;
 import java.util.Map;
 
 import org.ehoffman.module.ModuleProvider;
-import org.ehoffman.module.PooledModule;
+import org.ehoffman.module.PrototypeModule;
 import org.openqa.selenium.Platform;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.remote.Augmenter;
@@ -16,7 +16,7 @@ import org.openqa.selenium.remote.RemoteWebDriver;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class WebDriverGridModule implements ModuleProvider<RemoteWebDriverInterface> {
+public class WebDriverGridModule implements ModuleProvider<WebDriver> {
 
   private static Logger logger = LoggerFactory.getLogger(WebDriverGridModule.class);
   
@@ -50,79 +50,79 @@ public class WebDriverGridModule implements ModuleProvider<RemoteWebDriverInterf
     return driver;
   }
   
-  public static class IE6 extends WebDriverGridModule implements PooledModule<RemoteWebDriverInterface> { 
+  public static class IE6 extends WebDriverGridModule implements PrototypeModule<WebDriver> { 
     @Override
-    public WebDriver getDriver() throws Exception {
+    public WebDriver getDriver() {
       return getRemoteWithVersion(DesiredCapabilities.internetExplorer(), "6");
     }
   }
-  public static class IE7 extends WebDriverGridModule implements PooledModule<RemoteWebDriverInterface> { 
+  public static class IE7 extends WebDriverGridModule implements PrototypeModule<WebDriver> { 
     @Override
-    public WebDriver getDriver() throws Exception {
+    public WebDriver getDriver() {
       return getRemoteWithVersion(DesiredCapabilities.internetExplorer(), "7");
     }
   }
-  public static class IE8 extends WebDriverGridModule implements PooledModule<RemoteWebDriverInterface> { 
+  public static class IE8 extends WebDriverGridModule implements PrototypeModule<WebDriver> { 
     @Override
-    public WebDriver getDriver() throws Exception {
+    public WebDriver getDriver() {
       return getRemoteWithVersion(DesiredCapabilities.internetExplorer(), "8");
     }
   }
-  public static class IE9 extends WebDriverGridModule implements PooledModule<RemoteWebDriverInterface> { 
+  public static class IE9 extends WebDriverGridModule implements PrototypeModule<WebDriver> { 
     @Override
-    public WebDriver getDriver() throws Exception {
+    public WebDriver getDriver() {
       return getRemoteWithVersion(DesiredCapabilities.internetExplorer(), "9");
     }
   }
 
-  public static class Chrome extends WebDriverGridModule implements PooledModule<RemoteWebDriverInterface> { 
+  public static class Chrome extends WebDriverGridModule implements PrototypeModule<WebDriver> { 
     @Override
-    public WebDriver getDriver() throws Exception {
+    public WebDriver getDriver() {
       DesiredCapabilities dc = DesiredCapabilities.chrome();
       dc.setCapability("chrome.switches", Arrays.asList("--disable-popup-blocking"));
       return getRemoteWithVersion(dc, null);
     }
   }
   
-  public static class Firefox extends WebDriverGridModule implements PooledModule<RemoteWebDriverInterface> {
+  public static class Firefox extends WebDriverGridModule implements PrototypeModule<WebDriver> {
     @Override
-    public WebDriver getDriver() throws Exception {
+    public WebDriver getDriver() {
       return getRemoteWithVersion(DesiredCapabilities.firefox(), null);
     }
   }  
 
-  public static class Firefox36 extends WebDriverGridModule implements PooledModule<RemoteWebDriverInterface> {
+  public static class Firefox36 extends WebDriverGridModule implements PrototypeModule<WebDriver> {
 	@Override
-    public WebDriver getDriver() throws Exception {
+    public WebDriver getDriver() {
       return getRemoteWithVersion(DesiredCapabilities.firefox(), "3.6");
 	}
   }
 
-  public static class Firefox6 extends WebDriverGridModule implements PooledModule<RemoteWebDriverInterface> {
+  public static class Firefox6 extends WebDriverGridModule implements PrototypeModule<WebDriver> {
     @Override
-    public WebDriver getDriver() throws Exception {
+    public WebDriver getDriver() {
       return getRemoteWithVersion(DesiredCapabilities.firefox(), "6");
     }
   }
   
-  public static class Firefox7 extends WebDriverGridModule implements PooledModule<RemoteWebDriverInterface> {
+  public static class Firefox7 extends WebDriverGridModule implements PrototypeModule<WebDriver> {
 	@Override
-    public WebDriver getDriver() throws Exception {
+    public WebDriver getDriver() {
       return getRemoteWithVersion(DesiredCapabilities.firefox(), "7");
     }
   }
 
-  public static class Firefox8 extends WebDriverGridModule implements PooledModule<RemoteWebDriverInterface> {
+  public static class Firefox8 extends WebDriverGridModule implements PrototypeModule<WebDriver> {
     @Override
-    public WebDriver getDriver() throws Exception {
+    public WebDriver getDriver() {
       return getRemoteWithVersion(DesiredCapabilities.firefox(), "8");
     }
   }
 
   
-  public static class HtmlUnitFirefox extends WebDriverGridModule implements PooledModule<RemoteWebDriverInterface> {
+  public static class HtmlUnitFirefox extends WebDriverGridModule implements PrototypeModule<WebDriver> {
     @Override
-    public WebDriver getDriver() throws Exception {
+    public WebDriver getDriver() {
       DesiredCapabilities dc = DesiredCapabilities.htmlUnit();
       dc.setBrowserName("firefox");
       dc.setJavascriptEnabled(true);
@@ -130,9 +130,9 @@ public class WebDriverGridModule implements ModuleProvider<RemoteWebDriverInterf
     }
   }
 
-  public static class HtmlUnitIE extends WebDriverGridModule implements PooledModule<RemoteWebDriverInterface> {
+  public static class HtmlUnitIE extends WebDriverGridModule implements PrototypeModule<WebDriver> {
     @Override
-    public WebDriver getDriver() throws Exception {
+    public WebDriver getDriver() {
       DesiredCapabilities dc = DesiredCapabilities.htmlUnit();
       dc.setBrowserName("internet explorer");
       dc.setJavascriptEnabled(true);
@@ -140,28 +140,24 @@ public class WebDriverGridModule implements ModuleProvider<RemoteWebDriverInterf
     }
   }
   
-  public static class Android extends WebDriverGridModule implements PooledModule<RemoteWebDriverInterface> { 
+  public static class Android extends WebDriverGridModule implements PrototypeModule<WebDriver> { 
     @Override
-    public WebDriver getDriver() throws Exception {
+    public WebDriver getDriver() {
       DesiredCapabilities dc = DesiredCapabilities.android();
       dc.setPlatform(Platform.LINUX);
       return getRemoteWithVersion(dc, null);
     }
   }
-  public static class IPhone extends WebDriverGridModule implements PooledModule<RemoteWebDriverInterface> { 
+  public static class IPhone extends WebDriverGridModule implements PrototypeModule<WebDriver> { 
     @Override
-    public WebDriver getDriver() throws Exception {
+    public WebDriver getDriver()  {
       DesiredCapabilities dc = DesiredCapabilities.iphone();
       return getRemoteWithVersion(dc, null);
     }
   }
   
-  public WebDriver getDriver() throws Exception{
+  public WebDriver getDriver() {
     throw new RuntimeException("Must use a subclass of this class");
-  }
-
-  public Object makeObject() throws Exception {
-    return getDriver();
   }
   
   public String getName() {
@@ -176,9 +172,12 @@ public class WebDriverGridModule implements ModuleProvider<RemoteWebDriverInterf
     return null;
   }
 
-  public RemoteWebDriverInterface create(Map<String, ?> dependencies) {
-    //not used... we're pooling
-    return null;
+  public WebDriver create(Map<String, ?> dependencies) {
+    try {
+      return getDriver();
+    } catch (Exception e){
+      throw new RuntimeException(e);
+    }
   }
   
   public void destroy() {
@@ -186,43 +185,6 @@ public class WebDriverGridModule implements ModuleProvider<RemoteWebDriverInterf
 
   public String getModuleType() {
     return WebDriverModule.class.getSimpleName();
-  }
-
-  public void destroyObject(Object obj) throws Exception {
-    System.out.println("\nDestroying driver on :" +Thread.currentThread() + " with object id : "+obj);
-    if (obj != null){
-      WebDriver driver = (WebDriver) obj;
-      try {
-        driver.quit();
-      } catch (Exception e){
-      }
-    }
-  }
-
-  public boolean validateObject(Object obj) {
-    //WebDriver driver = (WebDriver) obj;
-    //return (driver.getWindowHandle() != null);
-    //((RemoteWebDriver)obj).
-    System.out.println("\nValidating driver on :" +Thread.currentThread() + " with object id : "+obj);
-      
-    return false;
-  }
-
-  public void activateObject(Object obj) throws Exception {
-    System.out.println("\nActivating driver on :" +Thread.currentThread() + " with object id : "+obj);
-  }
-
-  public void passivateObject(Object obj) throws Exception {
-    System.out.println("\nPassivating driver on :" +Thread.currentThread() + " with object id : "+obj);
-    WebDriver driver = (WebDriver) obj;
-    try {
-      driver.quit();
-    } catch (Exception e){
-    }
-  }
-  
-  public int getMaxPoolElements() {
-	return 5;
   }
 
 }

@@ -346,6 +346,7 @@ public class FluentAssertionsTest     {
         
         try {
           assertThat(element).doesNotHaveCssPropertyWithValue("color", "#00c000");//green
+          System.out.println(element.getCssValue("color"));
           assertThat("Should not be reachable").isNull();
         } catch (Throwable t){
           assertThat(t).hasNoCause().isExactlyInstanceOf(AssertionError.class);

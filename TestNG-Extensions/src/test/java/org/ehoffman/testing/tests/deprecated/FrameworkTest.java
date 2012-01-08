@@ -24,8 +24,14 @@ import org.testng.annotations.Test;
 @Listeners({MyAnnotationEnforcer.class, JUnitReportReporter.class})
 public class FrameworkTest {
   private static Set<String> results = Collections.synchronizedSet(new HashSet<String>());
-  private static Set<String> expectedForUnitTests = new HashSet<String>(Arrays.asList("sharedTest","unit1"));
-  private static Set<String> expectedForIntegrationTests = new HashSet<String>(Arrays.asList("sharedTest", "sharedTest2", "remote1"));
+  private static String SHARED_TEST = "sharedTest";
+  private static String REMOTE_TEST_2 = "remote2";
+  private static String UNIT_TEST = "unit1";
+  private static String REMOTE_TEST = "remote1";
+  private static String SHARED_BROKEN_TEST = "broken";
+  
+  private static Set<String> expectedForUnitTests = new HashSet<String>(Arrays.asList(SHARED_TEST,UNIT_TEST));
+  private static Set<String> expectedForIntegrationTests = new HashSet<String>(Arrays.asList(SHARED_TEST, REMOTE_TEST_2, REMOTE_TEST));
   private static Set<String> all = new HashSet<String>();
   static{
     all.addAll(expectedForIntegrationTests);
@@ -37,29 +43,26 @@ public class FrameworkTest {
   @Test(groups = { "unit","remote-integration" })
   @Fixture(factory = {CountModule.class, SimpleModule.class}, destructive = false)
   public void sharedTest() throws Exception {
-    logger.info("sharedTest "+FixtureContainer.getModuleClassesSimpleName());
     Object o = FixtureContainer.getService(SimpleModule.class);
     Integer fixture = ((IntegerHolder)o).getInteger();
     assertThat(fixture).isEqualTo(42);
-    results.add("sharedTest");
+    results.add(SHARED_TEST);
   }
 
   @Test(groups = { "remote-integration" })
-  public void sharedTest2() {
-    logger.info("SharedTest2");
-    results.add("sharedTest2");
+  public void remote2() {
+    results.add(REMOTE_TEST_2);
   }
 
   @Test(groups = {"remote-integration"})
   public void remote1() {
     logger.info("remote1");
     // assertThat(AnnotationEnforcer.isIntegrationTestPhase()).as("This test should not be run during the unit phase").isTrue();
-    results.add("remote1");
+    results.add(REMOTE_TEST);
   }
 
   @Test(groups = "unit")
   public void unit1() {
-    logger.info("unit1");
     results.add("unit1");
     // assertThat(AnnotationEnforcer.isIntegrationTestPhase()).as("This test should not be run during the integration phase").isFalse();
   }
@@ -67,8 +70,7 @@ public class FrameworkTest {
   @Test(groups = { "remote-integration", "unit"})
   @Broken(developer = "rex hoffman", issueInTracker = "???")
   public void shared3Broken() {
-    logger.info("shared3broken");
-    results.add("shared3Broken");
+    results.add(SHARED_BROKEN_TEST);
     assertThat(false).as("This test should not be run when known breaks is set to false").isTrue();
   }
 

@@ -58,7 +58,7 @@ public class WebdriverGridTest {
     WebDriver driver = null;
     try {
       WebDriverGridModule.IE6 module = new WebDriverGridModule.IE6();
-      driver = (WebDriver) module.makeObject();
+      driver = module.create(null);
       assertThat(driver.getCurrentUrl()).isNotNull();
       assertThat(true).as("should not be reachable").isFalse();
     } catch (Throwable t) {
@@ -77,9 +77,10 @@ public class WebdriverGridTest {
     try {
       WebDriverGridModule.Firefox module = new WebDriverGridModule.Firefox();
       logger.info("\n\nbasicGridTest, getting driver instance\n\n");
-      driver = (WebDriver) module.makeObject();
+      driver = module.create(null);
       logger.info("\n\nbasicGridTest, got driver instance\n\n");
       assertThat(driver).isNotNull();
+      driver.get("http://www.google.com");
     } catch (Throwable t) {
       logger.info("\n\nbasicGridTest, caught unexpectd throwable "+t);
       throw t;

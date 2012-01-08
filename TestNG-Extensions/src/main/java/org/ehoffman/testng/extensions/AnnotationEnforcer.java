@@ -21,7 +21,7 @@ import org.slf4j.LoggerFactory;
 public class AnnotationEnforcer extends ExtensibleTestNGListener {
 
   private static final Logger logger = LoggerFactory.getLogger(AnnotationEnforcer.class);
-  private static boolean ideMode;
+  private static boolean ideMode = false;
   private static boolean run_known_breaks = false; 
   private static Class<? extends Annotation> knownBreakAnnotation = null;
   
@@ -106,7 +106,9 @@ public class AnnotationEnforcer extends ExtensibleTestNGListener {
     } else {
       AnnotationEnforcer.integrationPhase = Boolean.valueOf(System.getProperty("integration_phase"));
     }
-    ideMode =  Boolean.valueOf(System.getProperty("java.class.path").contains("org.testng.eclipse"));
+    if (System.getProperty("java.class.path").contains("org.testng.eclipse")){
+      ideMode = true;
+    }
     ExtensibleTestNGListener.setInterceptors(clazz, Arrays.asList(
         new LogBackInterceptor(),
         new BrokenInterceptor(run_known_breaks, knownBreakAnnotation, ideMode),

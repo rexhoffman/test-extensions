@@ -87,17 +87,6 @@
     <plugins>
       <plugin>
         <artifactId>maven-surefire-plugin</artifactId>
-        <configuration>
-          <systemPropertyVariables>
-            <integration_phase>false</integration_phase>
-          </systemPropertyVariables>
-          <!-- properties>
-            <property>
-              <name>listener</name>
-              <value>org.ehoffman.testng.tests.MyEnforcer</value>
-            </property>
-          </properties -->
-        </configuration>
       </plugin>
       <plugin>
         <artifactId>maven-failsafe-plugin</artifactId>
@@ -105,12 +94,6 @@
           <systemPropertyVariables>
             <integration_phase>true</integration_phase>
           </systemPropertyVariables>
-          <!-- properties>
-            <property>
-              <name>listener</name>
-              <value>org.ehoffman.testng.tests.MyEnforcer</value>
-            </property>
-          </properties -->
         </configuration>
       </plugin>
     </plugins>

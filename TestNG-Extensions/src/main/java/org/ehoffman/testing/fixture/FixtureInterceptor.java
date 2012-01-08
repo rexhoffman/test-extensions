@@ -53,13 +53,13 @@ public class FixtureInterceptor implements Interceptor {
         ITestNGMethod testNGMethod = instance.getMethod().clone();
         IMethodInstance newMultiInstance = new MethodInstance(testNGMethod);
         testNGMethodToSetOfModuleClassesForSingleInvocation.put(testNGMethod, fixtureIterator.next());
-        logger.info("added "+testNGMethod.toString()+" with modules of "+testNGMethodToSetOfModuleClassesForSingleInvocation.get(testNGMethod));
+        logger.info("MethodInstance "+newMultiInstance+" with method "+testNGMethod.toString()+" with modules of "+testNGMethodToSetOfModuleClassesForSingleInvocation.get(testNGMethod));
         output.add(newMultiInstance);
       }
     } else {
       output.add(instance);
     }
-    logger.info("added all "+testNGMethodToSetOfModuleClassesForSingleInvocation);
+    //logger.info("added all "+testNGMethodToSetOfModuleClassesForSingleInvocation);
     return output;
   }
 
@@ -84,6 +84,7 @@ public class FixtureInterceptor implements Interceptor {
     logger.info(FixtureInterceptor.class.getSimpleName()+" in beforeInvocation");
     ITestNGMethod testNGmethod = testResult.getMethod();
     Set<Class<? extends Module<?>>> moduleClasses = testNGMethodToSetOfModuleClassesForSingleInvocation.get(testNGmethod);
+    System.out.println("Module classes should be: "+moduleClasses);
     if (moduleClasses != null){
       FixtureContainer.setModuleClasses(moduleClasses);
     } else {
@@ -95,7 +96,11 @@ public class FixtureInterceptor implements Interceptor {
   @Override
   public void afterInvocation(ITestResult testResult) {
     if (testNGMethodToSetOfModuleClassesForSingleInvocation.get(testResult.getMethod()) != null) {
-      List<String> names = new ArrayList<String>(FixtureContainer.getModuleClassesSimpleName());
+      Set<Class<? extends Module<?>>> classes = testNGMethodToSetOfModuleClassesForSingleInvocation.get(testResult.getMethod());
+      ArrayList<String> names = new ArrayList<String>();
+      for (Class<?> klass : classes){
+        names.add(klass.getSimpleName());
+      }
       Collections.sort(names);
       testResult.setAttribute("module providers", names);
     }

@@ -223,7 +223,8 @@
           <artifactId>maven-surefire-plugin</artifactId>
           <version>2.11</version>
           <configuration>
-            <parallel>true</parallel>
+            <parallel>methods</parallel>
+            <threadCount>10</threadCount>
             <includes>
               <include>**/*.java</include>
             </includes>
@@ -234,7 +235,8 @@
           <artifactId>maven-failsafe-plugin</artifactId>
           <version>2.11</version>
           <configuration>
-            <parallel>true</parallel>
+            <parallel>methods</parallel>
+            <threadCount>10</threadCount>
             <includes>
               <include>**/*.java</include>
             </includes>
