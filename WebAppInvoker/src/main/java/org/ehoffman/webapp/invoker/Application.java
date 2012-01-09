@@ -273,7 +273,7 @@ public class Application {
       context.setParentLoaderPriority(true);
     } else {
       context.setWar(this.getWarFile().getAbsolutePath());
-      context.setParentLoaderPriority(false);
+      context.setParentLoaderPriority(true);
     }
     server.setHandler(context);
     if (this.getContextRoot() != null && this.getContextRoot().length() > 0){
