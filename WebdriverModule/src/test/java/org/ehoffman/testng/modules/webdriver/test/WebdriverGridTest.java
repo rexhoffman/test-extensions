@@ -62,6 +62,7 @@ public class WebdriverGridTest {
       assertThat(driver.getCurrentUrl()).isNotNull();
       assertThat(true).as("should not be reachable").isFalse();
     } catch (Throwable t) {
+      t.printStackTrace();
       assertThat(t).isExactlyInstanceOf(org.openqa.selenium.WebDriverException.class);
     } finally {
       if (driver != null) driver.quit();

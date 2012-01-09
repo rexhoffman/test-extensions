@@ -173,11 +173,7 @@ public class WebDriverGridModule implements ModuleProvider<WebDriver> {
   }
 
   public WebDriver create(Map<String, ?> dependencies) {
-    try {
-      return getDriver();
-    } catch (Exception e){
-      throw new RuntimeException(e);
-    }
+    return getDriver();
   }
   
   public void destroy() {

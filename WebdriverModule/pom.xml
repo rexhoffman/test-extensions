@@ -40,13 +40,13 @@
       <plugin>
           <artifactId>maven-surefire-plugin</artifactId>
           <configuration>
-            <parallel>true</parallel>
+            <parallel>false</parallel>
           </configuration>
         </plugin>
         <plugin>
           <artifactId>maven-failsafe-plugin</artifactId>
           <configuration>
-            <parallel>true</parallel>
+            <parallel>false</parallel>
           </configuration>
        </plugin>  
     </plugins>
