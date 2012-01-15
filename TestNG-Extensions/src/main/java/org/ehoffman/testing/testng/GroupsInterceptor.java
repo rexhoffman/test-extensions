@@ -22,22 +22,22 @@ public class GroupsInterceptor implements Interceptor {
    * Contains the value of the System property "integration_phase", converted to
    * boolean, default is false
    */
-  protected boolean integration_phase;
+  protected static boolean integration_phase;
 
   /**
    * Will be populated with the contents of the system property
    * "unit_test_groups", split on the "," character.
    */
-  protected String[] unit_test_groups;
+  protected static String[] unit_test_groups;
 
   /**
    * Will be populated with the contents of the system property
    * "integration_test_groups", split on the "," character.
    */
-  protected String[] integration_test_groups;
+  protected static String[] integration_test_groups;
 
 
-  private boolean ideMode = false;
+  private static boolean ideMode = false;
 
   /**
    * 

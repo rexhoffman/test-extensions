@@ -5,6 +5,6 @@ import org.ehoffman.testng.extensions.Broken;
 
 public class MyAnnotationEnforcer extends AnnotationEnforcer {
   static {
-    configureAnnotationEnforcer(false, Broken.class, new String[]{"unit","local-integration"}, new String[]{"remote-integration"}, true, MyAnnotationEnforcer.class);
+    configureAnnotationEnforcer(false, Broken.class, new String[]{"unit","local-integration"}, new String[]{"remote-integration"}, null, MyAnnotationEnforcer.class);
   }
 }

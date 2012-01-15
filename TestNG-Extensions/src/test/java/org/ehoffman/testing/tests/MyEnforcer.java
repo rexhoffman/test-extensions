@@ -23,7 +23,7 @@ public class MyEnforcer extends ExtensibleTestNGListener {
   private static boolean runBrokenTests = false; 
   
   static {
-    ideMode = false;
+    //ideMode = false;
     ExtensibleTestNGListener.setInterceptors(MyEnforcer.class, Arrays.asList(
     //new LogBackInterceptor(),
     new BrokenInterceptor(runBrokenTests, Broken.class, ideMode),
