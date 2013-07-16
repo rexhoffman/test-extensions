@@ -32,7 +32,7 @@ public class LogbackCapture {
     if (INSTANCE.get() != null) {
       throw new IllegalStateException("already started");
     }
-    INSTANCE.set(new LogbackCapture("", Level.INFO, "[%p] %c.%M %m\n"));
+    INSTANCE.set(new LogbackCapture("", Level.INFO, "[%p] %c.%M %m\\n"));
   }
 
   /**
@@ -60,11 +60,13 @@ public class LogbackCapture {
   }
 
   private static final ThreadLocal<LogbackCapture> INSTANCE = new ThreadLocal<LogbackCapture>();
+  private static final LoggerContext loggerContext = (LoggerContext) LoggerFactory.getILoggerFactory();
 
   private final Logger logger;
   private final OutputStreamAppender<ILoggingEvent> appender;
   private final Encoder<ILoggingEvent> encoder;
   private final ByteArrayOutputStream logs;
+  
 
   private LogbackCapture(String loggerName, Level level, String layoutPattern) {
     logs = new ByteArrayOutputStream(4096);
@@ -111,9 +113,10 @@ public class LogbackCapture {
 
   private static Encoder<ILoggingEvent> buildEncoder(String layoutPattern) {
     if (layoutPattern == null) {
-      layoutPattern = "[%p] %c.%M %m\n";
+      layoutPattern = "[%p] %c.%M %m\\n";
     }
     PatternLayoutEncoder encoder = new PatternLayoutEncoder();
+    encoder.setContext(loggerContext);
     encoder.setPattern(layoutPattern);
     //encoder.setCharset(Charset.forName("UTF-16"));
     if (ContextSelectorStaticBinder.getSingleton() != null &&
@@ -132,6 +135,7 @@ public class LogbackCapture {
         ContextSelectorStaticBinder.getSingleton().getContextSelector() != null){
       appender.setContext(ContextSelectorStaticBinder.getSingleton().getContextSelector().getDefaultLoggerContext());
     }
+    appender.setContext(loggerContext);
     appender.setEncoder(encoder);
     appender.setOutputStream(outputStream);
     appender.addFilter( new Filter<ILoggingEvent>() {
